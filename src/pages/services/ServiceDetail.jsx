@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ChevronDown, CheckCircle2, Send } from 'lucide-react';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import CounsellingModal from '../../components/ui/CounsellingModal';
@@ -11,6 +11,25 @@ export default function ServiceDetail() {
   const { slug } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [isSent, setIsSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [question, setQuestion] = useState('');
+
+  const isFormInvalid = name.trim() === '' || email.trim() === '' || question.trim() === '';
+
+  const handleSend = () => {
+    setIsSending(true);
+    setTimeout(() => {
+      setIsSending(false);
+      setIsSent(true);
+      setName('');
+      setEmail('');
+      setQuestion('');
+      setTimeout(() => setIsSent(false), 3000);
+    }, 800);
+  };
   
   const service = services.find(s => s.slug === slug);
 
@@ -119,6 +138,46 @@ export default function ServiceDetail() {
                 </div>
               ))}
             </div>
+
+            {/* Ask Your Question Box */}
+            <div style={{ marginTop: '80px', padding: '48px', backgroundColor: '#FFFFFF', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <h3 style={{ fontSize: '28px', color: '#1F3A5C', fontWeight: 700, margin: '0 0 16px 0', textAlign: 'center' }}>Still have questions?</h3>
+              <p style={{ fontSize: '16px', color: '#6B7280', margin: '0 0 32px 0', textAlign: 'center' }}>Drop your question below and our experts will reply via email.</p>
+              
+              <div style={{ width: '100%', maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: '1 1 200px', padding: '16px 24px', borderRadius: '16px', border: '1px solid rgba(31,58,92,0.15)', backgroundColor: '#F8F9FA', fontSize: '16px', color: '#1F3A5C', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s' }} onFocus={(e) => e.target.style.borderColor = '#99B6F5'} onBlur={(e) => e.target.style.borderColor = 'rgba(31,58,92,0.15)'} />
+                  <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} style={{ flex: '1 1 200px', padding: '16px 24px', borderRadius: '16px', border: '1px solid rgba(31,58,92,0.15)', backgroundColor: '#F8F9FA', fontSize: '16px', color: '#1F3A5C', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s' }} onFocus={(e) => e.target.style.borderColor = '#99B6F5'} onBlur={(e) => e.target.style.borderColor = 'rgba(31,58,92,0.15)'} />
+                </div>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
+                  <input 
+                    type="text"
+                    placeholder="Type your question here..."
+                    value={question} 
+                    onChange={(e) => setQuestion(e.target.value)}
+                    style={{ flexGrow: 1, padding: '16px 24px', borderRadius: '16px', border: '1px solid rgba(31,58,92,0.15)', backgroundColor: '#F8F9FA', fontSize: '16px', color: '#1F3A5C', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
+                    onFocus={(e) => e.target.style.borderColor = '#99B6F5'}
+                    onBlur={(e) => e.target.style.borderColor = 'rgba(31,58,92,0.15)'}
+                  />
+                  <button 
+                    onClick={handleSend}
+                    disabled={isSending || isSent || isFormInvalid}
+                    style={{ backgroundColor: isSent ? '#10B981' : '#1F3A5C', opacity: (isFormInvalid && !isSent) ? 0.5 : 1, color: '#FFFFFF', border: 'none', borderRadius: '16px', padding: '0 32px', fontSize: '16px', fontWeight: 600, cursor: (isSending || isSent || isFormInvalid) ? 'default' : 'pointer', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}
+                    onMouseOver={(e) => { if(!isSending && !isSent && !isFormInvalid) { e.currentTarget.style.backgroundColor = '#99B6F5'; e.currentTarget.style.color = '#1F3A5C'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(153,182,245,0.3)'; } }}
+                    onMouseOut={(e) => { if(!isSending && !isSent && !isFormInvalid) { e.currentTarget.style.backgroundColor = '#1F3A5C'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; } }}
+                  >
+                    {isSending ? (
+                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }} style={{ width: '18px', height: '18px', border: '2px solid #FFF', borderTopColor: 'transparent', borderRadius: '50%' }} />
+                    ) : isSent ? (
+                      <>Sent! <CheckCircle2 size={18} /></>
+                    ) : (
+                      <>Send <Send size={18} /></>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </section>

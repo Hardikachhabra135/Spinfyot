@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx';
 const ServiceDetail = lazy(() => import('./pages/services/ServiceDetail.jsx'));
 const ContactPage = lazy(() => import('./pages/ContactPage.jsx'));
 const BlogPage = lazy(() => import('./pages/BlogPage.jsx'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
 
 // Context for reduced motion preference
 export const ReducedMotionContext = createContext(false);
@@ -62,6 +63,7 @@ function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blog" element={<BlogPage />} />
