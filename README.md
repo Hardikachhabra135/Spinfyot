@@ -1,10 +1,12 @@
-# Spinfyot ????
+<div align="center">
+  <img src="public/assets/logo/spinfyot-logo-transparent.png" alt="Spinfyot Logo" width="300" />
+  
+  <h3>Guiding your global education journey with precision and care.</h3>
+</div>
 
-<p align="center">
-  <strong>Guiding your global education journey with precision and care.</strong>
-</p>
+---
 
-Spinfyot is a premium, high-performance web application designed for an international study-abroad consultancy. Built with a focus on deep aesthetics, fluid animations, and a seamless user experience.
+**Spinfyot** is a premium, high-performance web application designed for an international study-abroad consultancy. Built with a focus on deep aesthetics, fluid animations, and a seamless user experience.
 
 ## ? Key Features
 
@@ -28,13 +30,13 @@ Spinfyot is a premium, high-performance web application designed for an internat
 
 The project follows a highly modular, component-driven architecture:
 
-```
+```text
 src/
 +-- assets/        # Static assets (images, logos)
 +-- components/    # Reusable React components
-¦   +-- layout/    # Global layout wrappers (Header, Footer)
-¦   +-- sections/  # Major page sections (Hero, Services, AboutUs, Testimonials)
-¦   +-- ui/        # Micro-components (Buttons, Modals, FoldText)
+ï¿½   +-- layout/    # Global layout wrappers (Header, Footer)
+ï¿½   +-- sections/  # Major page sections (Hero, Services, AboutUs, Testimonials)
+ï¿½   +-- ui/        # Micro-components (Buttons, Modals, FoldText)
 +-- data/          # Local JSON/JS data files (Services, Testimonials)
 +-- hooks/         # Custom React hooks
 +-- pages/         # Route components (Home, Blog, Contact, ServiceDetail)
@@ -45,8 +47,8 @@ src/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/spinfyot.git
-   cd spinfyot
+   git clone https://github.com/iamritikarsh/SPINFYOT.git
+   cd SPINFYOT
    ```
 
 2. **Install dependencies:**
@@ -70,7 +72,9 @@ Spinfyot completely avoids "cheap" elements like harsh borders or excessive emoj
 - High-contrast typography
 - Deep, seamless blending background gradients (`#050B14` to `#000000`)
 - Advanced SVG animations (e.g., looping airplane flight paths)
-- WebGL/Shader-inspired Specular buttons
+- Premium Specular buttons with dynamic hover states
 
 ---
-*Built with precision and care.*
+<div align="center">
+  <em>Built with precision and care.</em>
+</div>
