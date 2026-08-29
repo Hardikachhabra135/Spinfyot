@@ -237,15 +237,15 @@ export default function Hero({ onBookCounselling }) {
       </motion.div>
 
       {/* ── Sticky Hero Content ───────────────────────────────────────────── */}
-      <div className="sticky top-[120px] md:top-0 w-full h-[calc(100svh-120px)] md:h-[100svh] flex items-start md:items-center justify-center z-20 pt-16 md:pt-20 pb-10">
-        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between relative">
+      <div className="sticky top-0 w-full min-h-[100svh] md:min-h-0 md:h-[100svh] flex flex-col justify-center items-center z-20 pt-24 sm:pt-28 md:pt-20 pb-10">
+        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between relative">
 
           {/* Flight Path */}
           <FlightPathLine pathY={pathY} textOpacity={textOpacity} />
 
           {/* ── Airplane (cinematic entrance) ─────────────────────────────── */}
           <motion.div
-            className="absolute z-30 right-[10%] -top-[30px] md:left-[5%] md:top-[15%] md:right-auto"
+            className="absolute z-30 right-[2%] top-[5%] sm:top-[2%] md:left-[5%] md:top-[15%] md:right-auto"
             style={{
               scaleX: -1,
             }}
@@ -307,7 +307,7 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-[clamp(2.8rem,12vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
+            <h1 className="font-display text-[clamp(2.5rem,11vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
               <span className="block text-[#F8F9FA]">
                 <FoldText
                   text="Your Journey Abroad"
@@ -345,7 +345,7 @@ export default function Hero({ onBookCounselling }) {
             {/* CTA */}
             <motion.div
               variants={ctaVariant}
-              className="relative mt-8 md:mt-0 md:absolute left-0 md:-bottom-[140px] w-full flex justify-start"
+              className="relative mt-6 md:mt-0 md:absolute left-0 md:-bottom-[140px] w-full flex justify-start"
             >
               <div className="flex flex-col items-start md:items-center mt-0 md:mt-[72px]">
                 <SpecularButton
@@ -366,7 +366,7 @@ export default function Hero({ onBookCounselling }) {
                   proximity={250}
                   autoAnimate={false}
                   onClick={onBookCounselling}
-                  className="w-[220px] sm:w-[280px] md:w-[320px] shadow-2xl text-sm"
+                  className="w-[200px] sm:w-[240px] md:w-[320px] shadow-2xl text-[12px] md:text-sm"
                 >
                   BOOK FREE COUNSELING
                 </SpecularButton>
@@ -376,7 +376,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Right Content: Traveler ───────────────────────────────────── */}
           <motion.div
-            className="absolute bottom-0 right-[-10%] sm:right-[-5%] md:right-0 md:relative w-[75%] sm:w-[60%] md:w-[45%] h-[40%] md:h-full flex items-end justify-end z-20 pointer-events-none"
+            className="relative w-[95%] sm:w-[80%] md:w-[45%] mt-6 md:mt-0 h-[45svh] md:h-full flex items-end justify-end md:justify-end z-20 pointer-events-none self-end md:self-auto"
             style={{ y: travelerY }}
             variants={travelerVariant}
             initial="hidden"
@@ -386,7 +386,7 @@ export default function Hero({ onBookCounselling }) {
               <motion.img
                 src="/assets/images/female-traveler.png"
                 alt="Student Traveler"
-                className="w-full h-auto max-h-full max-w-[650px] object-contain object-bottom drop-shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
+                className="w-auto h-full max-h-full object-contain object-bottom drop-shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
                 style={{
                   maskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
                   WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
