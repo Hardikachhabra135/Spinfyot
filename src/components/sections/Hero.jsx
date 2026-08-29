@@ -237,8 +237,8 @@ export default function Hero({ onBookCounselling }) {
       </motion.div>
 
       {/* ── Sticky Hero Content ───────────────────────────────────────────── */}
-      <div className="sticky top-0 w-full min-h-[100svh] md:min-h-0 md:h-[100svh] flex flex-col justify-center items-center z-20 pt-24 sm:pt-28 md:pt-20 pb-10">
-        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between relative">
+      <div className="sticky top-0 w-full min-h-[100svh] md:min-h-0 md:h-[100svh] flex flex-col justify-start md:justify-center items-center z-20 pt-[150px] sm:pt-[160px] md:pt-20 pb-10">
+        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between relative">
 
           {/* Flight Path */}
           <FlightPathLine pathY={pathY} textOpacity={textOpacity} />
