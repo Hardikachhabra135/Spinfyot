@@ -120,25 +120,25 @@ export default function AboutUs() {
     {
       icon: Target,
       title: "Who We Are",
-      desc: "We transform ambitious dreams into international realities and architect careers beyond borders.",
+      desc: "Turning ambitious dreams into global opportunities.",
       delay: 0.1
     },
     {
       icon: Heart,
       title: "What We Believe",
-      desc: "We believe global education should be accessible, transparent, and focused on every student’s long-term success.",
+      desc: "Making global education accessible, transparent, and meaningful.",
       delay: 0.2
     },
     {
       icon: Compass,
       title: "Our Approach",
-      desc: "We combine personalized guidance and data-driven insights to support students at every step of their journey.",
+      desc: "Personalized, data-driven guidance at every step.",
       delay: 0.3
     },
     {
       icon: Shield,
       title: "Why Choose Us",
-      desc: "We build every journey on integrity, transparency, realistic expectations, and unwavering support.",
+      desc: "Built on integrity, transparency, and unwavering support.",
       delay: 0.4
     }
   ];
