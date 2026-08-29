@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import FoldText from '../ui/FoldText';
 import SpecularButton from '../ui/SpecularButton';
@@ -156,6 +156,16 @@ export default function Hero({ onBookCounselling }) {
   const airplaneX = useTransform(smoothScrollY, [0, 800], [0, -600]);
   const airplaneY = useTransform(smoothScrollY, [0, 800], [0, -100]);
 
+  // Detect mobile to disable parallax (which pushes text behind navbar)
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   // When reduced motion is preferred, skip entrance animations
   const animate = prefersReducedMotion ? 'visible' : 'visible';
 
@@ -237,20 +247,19 @@ export default function Hero({ onBookCounselling }) {
       </motion.div>
 
       {/* ── Sticky Hero Content ───────────────────────────────────────────── */}
-      <div className="sticky top-0 w-full h-screen flex items-center justify-center z-20 pt-20 pb-10">
-        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-center justify-between relative">
+      <div
+        className="sticky top-0 w-full h-auto min-h-screen md:h-screen flex flex-col md:flex-row md:items-center md:justify-center z-20 pb-10 overflow-hidden md:pt-20"
+        style={{ paddingTop: isMobile ? '160px' : undefined }}
+      >
+        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 md:h-full flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between relative">
 
           {/* Flight Path */}
           <FlightPathLine pathY={pathY} textOpacity={textOpacity} />
 
           {/* ── Airplane (cinematic entrance) ─────────────────────────────── */}
           <motion.div
-            className="absolute z-30"
-            style={{
-              left: '5%',
-              top: '15%',
-              scaleX: -1,
-            }}
+            className="absolute z-30 right-[4%] top-[8%] md:left-[5%] md:right-auto md:top-[15%]"
+            style={{ scaleX: -1 }}
             variants={prefersReducedMotion ? {} : airplaneEntryVariant}
             initial={prefersReducedMotion ? { opacity: 1, rotate: -155 } : 'hidden'}
             animate={prefersReducedMotion ? { rotate: -155 } : 'visible'}
@@ -279,8 +288,8 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Left Content: Headline & CTA ──────────────────────────────── */}
           <motion.div
-            className="relative z-30 w-full md:w-[65%] lg:w-[70%] flex flex-col items-start text-left pt-10 md:pt-0"
-            style={{ y: textY, opacity: textOpacity }}
+            className="relative z-30 w-full md:w-[65%] lg:w-[70%] flex flex-col items-start text-left"
+            style={{ y: isMobile ? 0 : textY, opacity: textOpacity }}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -309,7 +318,7 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-[clamp(3.5rem,10vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
+            <h1 className="font-display text-[clamp(2.2rem,8.5vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
               <span className="block text-[#F8F9FA]">
                 <FoldText
                   text="Your Journey Abroad"
@@ -347,9 +356,9 @@ export default function Hero({ onBookCounselling }) {
             {/* CTA */}
             <motion.div
               variants={ctaVariant}
-              className="absolute left-0 -bottom-[100px] md:-bottom-[140px] w-full flex justify-center md:justify-start"
+              className="relative md:absolute left-0 mt-7 md:mt-0 md:-bottom-[140px] w-full flex justify-start md:justify-start"
             >
-              <div className="flex flex-col items-center mt-[72px]">
+              <div className="flex flex-col items-start md:items-center md:mt-[72px]">
                 <SpecularButton
                   size="lg"
                   radius={18}
@@ -378,7 +387,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Right Content: Traveler ───────────────────────────────────── */}
           <motion.div
-            className="absolute bottom-0 right-[-5%] sm:right-[-10%] md:right-0 md:relative w-[90%] sm:w-[80%] md:w-[45%] h-[55%] md:h-full flex items-end justify-end z-20 pointer-events-none"
+            className="relative md:absolute md:bottom-0 md:right-0 w-full md:relative md:w-[45%] mt-6 md:mt-0 h-[52vw] md:h-full flex items-end justify-end md:justify-end z-20 pointer-events-none self-end md:self-auto"
             style={{ y: travelerY }}
             variants={travelerVariant}
             initial="hidden"
@@ -388,7 +397,7 @@ export default function Hero({ onBookCounselling }) {
               <motion.img
                 src="/assets/images/female-traveler.png"
                 alt="Student Traveler"
-                className="w-full h-auto max-h-full max-w-[650px] object-contain object-bottom drop-shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
+                className="w-auto h-full max-h-full md:max-w-[650px] md:w-full md:h-auto object-contain object-bottom drop-shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
                 style={{
                   maskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
                   WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
