@@ -237,15 +237,15 @@ export default function Hero({ onBookCounselling }) {
       </motion.div>
 
       {/* ── Sticky Hero Content ───────────────────────────────────────────── */}
-      <div className="sticky top-0 w-full h-[100svh] flex items-start md:items-center justify-center z-20 pt-[120px] md:pt-20 pb-10">
-        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-center justify-between relative">
+      <div className="sticky top-[120px] md:top-0 w-full h-[calc(100svh-120px)] md:h-[100svh] flex items-start md:items-center justify-center z-20 pt-16 md:pt-20 pb-10">
+        <div className="w-full max-w-[1250px] mx-auto px-6 md:px-12 h-full flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between relative">
 
           {/* Flight Path */}
           <FlightPathLine pathY={pathY} textOpacity={textOpacity} />
 
           {/* ── Airplane (cinematic entrance) ─────────────────────────────── */}
           <motion.div
-            className="absolute z-30 left-[2%] top-[5%] md:left-[5%] md:top-[15%]"
+            className="absolute z-30 right-[10%] -top-[30px] md:left-[5%] md:top-[15%] md:right-auto"
             style={{
               scaleX: -1,
             }}
