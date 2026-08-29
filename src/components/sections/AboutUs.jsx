@@ -33,8 +33,8 @@ const FlipBookCard = ({ card }) => {
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* The Inside Content (Revealed on hover) */}
-        <div className="absolute inset-0 p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+        {/* The Inside Content (Revealed on hover or tap) */}
+        <div className={`absolute inset-0 p-8 flex flex-col justify-center transition-opacity duration-500 delay-100 ${isFlipped ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
           <div className="mb-6 flex justify-center">
             <div style={{ width: '48px', height: '48px', background: 'rgba(153, 182, 245, 0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                <card.icon style={{ color: '#173B63', width: '24px', height: '24px' }} />
