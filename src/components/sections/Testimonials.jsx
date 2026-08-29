@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
-import testimonials from '../../data/testimonials';
+import testimonialsData from '../../data/testimonials';
+import { apiUrl, getImageUrl } from '../../utils/api';
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [testimonials, setTestimonials] = useState(testimonialsData);
+
+  useEffect(() => {
+    fetch(apiUrl('/api/public/testimonials'))
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data.length > 0) {
+          setTestimonials(data.data);
+        }
+      })
+      .catch(err => console.error('Failed to load testimonials:', err));
+  }, []);
 
   // Auto-play interval
   useEffect(() => {
+    if (testimonials.length === 0) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials]);
 
   if (!testimonials || testimonials.length === 0) return null;
 
@@ -136,14 +150,14 @@ export default function Testimonials() {
                   
                     <div style={{ width: '96px', height: '96px', marginBottom: '32px', borderRadius: '50%', overflow: 'hidden', border: '4px solid #FFFFFF', boxShadow: '0 10px 25px rgba(31, 58, 92, 0.15)', flexShrink: 0 }}>
                       <img 
-                        src={`https://i.pravatar.cc/150?img=${(idx % 70) + 1}`} 
+                        src={getImageUrl(testimonial.photoUrl, `https://i.pravatar.cc/150?img=${(idx % 70) + 1}`)} 
                         alt={testimonial.name} 
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                       />
                     </div>
                     
                     <p style={{ fontFamily: '"Poppins", sans-serif', fontSize: '18px', color: '#1F3A5C', fontWeight: 500, fontStyle: 'italic', marginBottom: 'auto', lineHeight: 1.6 }}>
-                      "{testimonial.quote.replace('\[PLACEHOLDER ?" Supply real testimonial\] ', '')}"
+                      "{testimonial.quote}"
                     </p>
                     
                     <div style={{ marginTop: '32px' }}>

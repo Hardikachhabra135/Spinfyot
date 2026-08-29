@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import emailjs from '@emailjs/browser';
-import { X, CheckCircle, Loader2 } from 'lucide-react';
+import { X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { apiUrl } from '../../utils/api';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -75,23 +76,24 @@ const CounsellingModal = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     setFormState('loading');
     try {
-      await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_TEMPLATE_ID',
-        data,
-        'YOUR_PUBLIC_KEY'
-      );
+      const response = await fetch(apiUrl('/api/public/appointments'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, sourcePage: window.location.pathname }),
+      });
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Submission failed');
+      }
+      
       setFormState('success');
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (error) {
-      console.error('Email sending failed:', error);
-      // fallback to success visually for demo purposes if emailjs isn't configured yet
-      setFormState('success');
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      console.error('Submission failed:', error);
+      alert('Failed to submit appointment: ' + error.message);
+      setFormState('idle');
     }
   };
 
@@ -169,6 +171,7 @@ const CounsellingModal = ({ isOpen, onClose }) => {
             initial="hidden"
             animate="visible"
             exit="exit"
+            data-lenis-prevent="true"
             style={{
               position: 'fixed',
               zIndex: 51,

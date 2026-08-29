@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import Button from '../ui/Button';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -12,7 +11,17 @@ const navLinks = [
   { name: 'Contact us', path: '/contact' },
 ];
 
-// Scrolled state — compact floating pill (user-approved size)
+// Determine the "active" nav item based on current location
+function getActiveLink(pathname, hash) {
+  if (pathname === '/' && hash === '#about') return 'About';
+  if (pathname === '/') return 'Home';
+  if (pathname.startsWith('/services')) return 'Services';
+  if (pathname.startsWith('/blog')) return 'Blog';
+  if (pathname.startsWith('/contact')) return 'Contact us';
+  return null;
+}
+
+// Scrolled state — compact floating pill
 const scrolledHeader = {
   position: 'fixed',
   left: '50%',
@@ -84,73 +93,28 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
   },
-  navLink: {
-    position: 'relative',
-    color: '#111827',
-    fontWeight: 600,
-    fontSize: '18px',
-    fontFamily: 'Poppins, Inter, sans-serif',
-    textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    transition: 'color 0.2s',
-  },
-  navLinkUnderline: {
-    position: 'absolute',
-    bottom: '-3px',
-    left: 0,
-    width: '100%',
-    height: '2px',
-    background: '#1F3A5C',
-    borderRadius: '2px',
-    transform: 'scaleX(0)',
-    transformOrigin: 'left',
-    transition: 'transform 0.3s ease',
-    opacity: 0.7,
-  },
-  btnWrap: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: '200px',
-    flexShrink: 0,
-  },
-  inquireBtn: {
-    background: '#1F3A5C',
-    color: '#ffffff',
-    fontFamily: 'Poppins, Inter, sans-serif',
-    fontWeight: 700,
-    fontSize: '18px',
-    padding: '14px 40px',
-    borderRadius: '14px',
-    border: 'none',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-    boxShadow: '0 4px 16px rgba(31,58,92,0.28)',
-    transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
-    display: 'inline-block',
-  },
 };
 
 export default function Header({ onInquireClick }) {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState(null);
-  const [btnHovered, setBtnHovered] = useState(false);
   const location = useLocation();
+
+  const activeLink = getActiveLink(location.pathname, location.hash);
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 80);
   });
 
-  // Listen for hash changes to scroll to elements even after page navigation
+  // Listen for hash changes to scroll to elements after navigation
   React.useEffect(() => {
     if (location.pathname === '/' && location.hash) {
       const id = location.hash.replace('#', '');
-      // Slight delay to allow DOM to render if we just navigated from another page
       setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
-          const y = element.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
+          const y = element.getBoundingClientRect().top + window.scrollY - 100;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 100);
@@ -159,13 +123,9 @@ export default function Header({ onInquireClick }) {
 
   const handleNavClick = (path) => {
     setIsMobileMenuOpen(false);
-    
-    // If clicking Home, ensure we scroll to top
     if (path === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } 
-    // If clicking a hash link and we are ALREADY on the home page, scroll manually immediately
-    else if (path.startsWith('/#') && location.pathname === '/') {
+    } else if (path.startsWith('/#') && location.pathname === '/') {
       const id = path.replace('/#', '');
       const element = document.getElementById(id);
       if (element) {
@@ -178,15 +138,6 @@ export default function Header({ onInquireClick }) {
   const currentHeaderStyle = isScrolled ? scrolledHeader : landingHeader;
   const currentInnerStyle = isScrolled ? styles.innerScrolled : styles.innerLanding;
   const currentLogoStyle = isScrolled ? styles.logoScrolled : styles.logoLanding;
-
-  const btnStyle = {
-    ...styles.inquireBtn,
-    background: btnHovered ? '#2b4f7a' : '#1F3A5C',
-    transform: btnHovered ? 'translateY(-2px)' : 'translateY(0)',
-    boxShadow: btnHovered
-      ? '0 8px 24px rgba(31,58,92,0.36)'
-      : '0 4px 16px rgba(31,58,92,0.28)',
-  };
 
   return (
     <>
@@ -206,30 +157,67 @@ export default function Header({ onInquireClick }) {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex" style={styles.nav}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => handleNavClick(link.path)}
-                style={{
-                  ...styles.navLink,
-                  color: hoveredLink === link.name ? '#1F3A5C' : '#111827',
-                }}
-                onMouseEnter={(e) => {
-                  setHoveredLink(link.name);
-                  const underline = e.currentTarget.querySelector('.nav-underline');
-                  if (underline) underline.style.transform = 'scaleX(1)';
-                }}
-                onMouseLeave={(e) => {
-                  setHoveredLink(null);
-                  const underline = e.currentTarget.querySelector('.nav-underline');
-                  if (underline) underline.style.transform = 'scaleX(0)';
-                }}
-              >
-                {link.name}
-                <span className="nav-underline" style={styles.navLinkUnderline} />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeLink === link.name;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => handleNavClick(link.path)}
+                  style={{
+                    position: 'relative',
+                    color: isActive ? '#1F3A5C' : '#111827',
+                    fontWeight: isActive ? 700 : 600,
+                    fontSize: '18px',
+                    fontFamily: 'Poppins, Inter, sans-serif',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.2s',
+                    paddingBottom: '4px',
+                  }}
+                  className="nav-link-item"
+                >
+                  {link.name}
+
+                  {/* Permanent active underline */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-underline"
+                      style={{
+                        position: 'absolute',
+                        bottom: '-2px',
+                        left: 0,
+                        right: 0,
+                        height: '2.5px',
+                        background: 'linear-gradient(90deg, #1F3A5C, #3a6fa8)',
+                        borderRadius: '2px',
+                      }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+
+                  {/* Hover underline (only for non-active) */}
+                  {!isActive && (
+                    <span
+                      className="nav-hover-underline"
+                      style={{
+                        position: 'absolute',
+                        bottom: '-2px',
+                        left: 0,
+                        width: '100%',
+                        height: '2px',
+                        background: '#1F3A5C',
+                        borderRadius: '2px',
+                        transform: 'scaleX(0)',
+                        transformOrigin: 'left',
+                        transition: 'transform 0.25s ease',
+                        opacity: 0.5,
+                      }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Inquire Button */}
@@ -291,22 +279,28 @@ export default function Header({ onInquireClick }) {
               </div>
 
               <nav style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => handleNavClick(link.path)}
-                    style={{
-                      fontSize: '22px',
-                      fontWeight: 700,
-                      color: '#1F3A5C',
-                      textDecoration: 'none',
-                      fontFamily: 'Poppins, Inter, sans-serif',
-                    }}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = activeLink === link.name;
+                  return (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      onClick={() => handleNavClick(link.path)}
+                      style={{
+                        fontSize: '22px',
+                        fontWeight: 700,
+                        color: isActive ? '#1F3A5C' : '#4a5568',
+                        textDecoration: 'none',
+                        fontFamily: 'Poppins, Inter, sans-serif',
+                        borderLeft: isActive ? '4px solid #1F3A5C' : '4px solid transparent',
+                        paddingLeft: '12px',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
               </nav>
 
               <div style={{ marginTop: 'auto', paddingBottom: '32px' }}>
@@ -335,6 +329,13 @@ export default function Header({ onInquireClick }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Hover underline CSS */}
+      <style>{`
+        .nav-link-item:hover .nav-hover-underline {
+          transform: scaleX(1) !important;
+        }
+      `}</style>
     </>
   );
 }

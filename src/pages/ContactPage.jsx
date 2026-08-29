@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, CheckCircle2, MessageSquareText } from 'lucide-rea
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import CounsellingModal from '../components/ui/CounsellingModal';
+import { apiUrl } from '../utils/api';
 
 export default function ContactPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,14 +18,36 @@ export default function ContactPage() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 4000);
+    try {
+      const data = {
+        name: e.target.name.value,
+        email: e.target.email.value,
+        phone: e.target.phone.value,
+        interest: e.target.interest.value,
+        message: e.target.message.value
+      };
+      const response = await fetch(apiUrl('/api/public/contacts'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Submission failed');
+      }
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 4000);
+      e.target.reset();
+    } catch (error) {
+      console.error('Contact submission failed:', error);
+      alert('Failed to submit: ' + error.message);
+    }
   };
 
   const contactInfo = [
-    { icon: Mail, label: "EMAIL ADDRESS", text: "info@spinfyot.com", link: "mailto:info@spinfyot.com" },
+    { icon: Mail, label: "EMAIL ADDRESS", text: "Ketan@spinfyot.in", link: "mailto:Ketan@spinfyot.in" },
     { icon: Phone, label: "PHONE NUMBER", text: "+91 98765 43210", link: "tel:+919876543210" },
     { icon: MapPin, label: "OFFICE LOCATION", text: "123 Education Hub, Global City, State, 123456", link: "https://maps.google.com/?q=123+Education+Hub" }
   ];

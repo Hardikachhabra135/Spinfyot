@@ -1,16 +1,17 @@
-import { useEffect, useState, createContext, lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useEffect, useState, lazy, Suspense } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import Home from './pages/Home.jsx';
+import { ReducedMotionContext } from './context/ReducedMotionContext';
 
 // Lazy-loaded pages
 const ServiceDetail = lazy(() => import('./pages/services/ServiceDetail.jsx'));
 const ContactPage = lazy(() => import('./pages/ContactPage.jsx'));
 const BlogPage = lazy(() => import('./pages/BlogPage.jsx'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
+const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage.jsx'));
 
-// Context for reduced motion preference
-export const ReducedMotionContext = createContext(false);
 
 // Loading fallback component
 function PageLoader() {
@@ -21,8 +22,23 @@ function PageLoader() {
   );
 }
 
+// Page transition wrapper — subtle fade + micro slide up
+function PageTransition({ children }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function App() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const location = useLocation();
 
   // Set up Lenis smooth scroll
   useEffect(() => {
@@ -61,13 +77,16 @@ function App() {
         Skip to content
       </a>
       <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/services/:slug" element={<ServiceDetail />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+            <Route path="/services" element={<PageTransition><ServicesPage /></PageTransition>} />
+            <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
+            <Route path="/testimonials" element={<PageTransition><TestimonialsPage /></PageTransition>} />
+            <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+            <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
       </Suspense>
     </ReducedMotionContext.Provider>
   );

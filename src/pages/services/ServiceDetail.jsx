@@ -6,6 +6,7 @@ import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import CounsellingModal from '../../components/ui/CounsellingModal';
 import services from '../../data/services';
+import { apiUrl } from '../../utils/api';
 
 export default function ServiceDetail() {
   const { slug } = useParams();
@@ -19,16 +20,31 @@ export default function ServiceDetail() {
 
   const isFormInvalid = name.trim() === '' || email.trim() === '' || question.trim() === '';
 
-  const handleSend = () => {
+  const handleSend = async () => {
     setIsSending(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch(apiUrl('/api/public/questions'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, question, serviceSlug: slug }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Submission failed');
+      }
+
       setIsSending(false);
       setIsSent(true);
       setName('');
       setEmail('');
       setQuestion('');
       setTimeout(() => setIsSent(false), 3000);
-    }, 800);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to send question: ' + error.message);
+      setIsSending(false);
+    }
   };
   
   const service = services.find(s => s.slug === slug);

@@ -411,3 +411,18 @@ body {
   --h-line: 1px;
   --gradient-b-line: #14d3f5;
 }
+
+/* ── Custom Blog Modal Scrollbar ── */
+.custom-blog-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-blog-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-blog-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(31, 58, 92, 0.2);
+  border-radius: 10px;
+}
+.custom-blog-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(31, 58, 92, 0.4);
+}
