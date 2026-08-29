@@ -11,6 +11,7 @@ import CounsellingModal from '../components/ui/CounsellingModal';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bgColor, setBgColor] = useState('#000000');
   const mainRef = useRef(null);
 
   const openModal = () => setIsModalOpen(true);
@@ -22,27 +23,19 @@ export default function Home() {
     let ctx = gsap.context(() => {
       
       // 2. Transition to About Us (Off-White)
-      gsap.to(mainRef.current, {
-        backgroundColor: '#F3F1EA',
-        ease: 'power1.inOut',
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top 90%',
-          end: 'top 10%',
-          scrub: 1.5,
-        }
+      ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top 50%',
+        onEnter: () => setBgColor('#F3F1EA'),
+        onLeaveBack: () => setBgColor('#000000'),
       });
 
       // 3. Transition to Testimonials (Navy Blue)
-      gsap.to(mainRef.current, {
-        backgroundColor: '#1F3A5C',
-        ease: 'power1.inOut',
-        scrollTrigger: {
-          trigger: '#testimonials',
-          start: 'top 90%',
-          end: 'top 10%',
-          scrub: 1.5,
-        }
+      ScrollTrigger.create({
+        trigger: '#testimonials',
+        start: 'top 50%',
+        onEnter: () => setBgColor('#1F3A5C'),
+        onLeaveBack: () => setBgColor('#F3F1EA'),
       });
 
     }, mainRef);
@@ -51,7 +44,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={mainRef} className="flex flex-col min-h-screen" style={{ backgroundColor: '#000000' }}>
+    <div 
+      ref={mainRef} 
+      className="flex flex-col min-h-screen" 
+      style={{ 
+        backgroundColor: bgColor,
+        transition: 'background-color 0.8s ease-in-out'
+      }}
+    >
       <Header onInquireClick={openModal} />
       
       <main id="main-content" className="flex-grow relative z-10">
