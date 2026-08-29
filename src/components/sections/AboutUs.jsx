@@ -2,8 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Target, Heart, Shield, Compass, Globe2 } from 'lucide-react';
 
-const FlipBookCard = ({ card }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+// ─── FlipBookCard ─────────────────────────────────────────────────────────────
+// Original 3D flip-book design, visually unchanged.
+// `isActive` prop replaces the local `isFlipped` state so the PARENT controls
+// which card is open, enforcing the single-open rule on mobile/tablet.
+// Desktop hover behaviour (group-hover CSS) is completely untouched.
+const FlipBookCard = ({ card, isActive, onToggle }) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
@@ -17,7 +21,7 @@ const FlipBookCard = ({ card }) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, delay: card.delay, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative w-full ${isTouchDevice ? 'cursor-pointer' : ''}`}
-      onClick={() => isTouchDevice && setIsFlipped(!isFlipped)}
+      onClick={() => isTouchDevice && onToggle()}
       style={{
         height: '420px',
         perspective: '2000px',
@@ -34,7 +38,7 @@ const FlipBookCard = ({ card }) => {
         }}
       >
         {/* The Inside Content (Revealed on hover or tap) */}
-        <div className={`absolute inset-0 p-8 flex flex-col justify-center transition-opacity duration-500 delay-100 ${isFlipped ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        <div className={`absolute inset-0 p-8 flex flex-col justify-center transition-opacity duration-500 delay-100 ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
           <div className="mb-6 flex justify-center">
             <div style={{ width: '48px', height: '48px', background: 'rgba(153, 182, 245, 0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                <card.icon style={{ color: '#173B63', width: '24px', height: '24px' }} />
@@ -50,7 +54,7 @@ const FlipBookCard = ({ card }) => {
         
         {/* The Cover Container (Flips open on hover or tap) */}
         <div 
-          className={`absolute inset-0 cursor-pointer transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] origin-left ${isFlipped ? '[transform:rotateY(-140deg)]' : 'group-hover:[transform:rotateY(-140deg)]'}`}
+          className={`absolute inset-0 cursor-pointer transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] origin-left ${isActive ? '[transform:rotateY(-140deg)]' : 'group-hover:[transform:rotateY(-140deg)]'}`}
           style={{ transformStyle: 'preserve-3d', zIndex: 10 }}
         >
           {/* Front of Cover */}
@@ -104,6 +108,13 @@ export default function AboutUs() {
 
   const yHeader = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const yGlobe = useTransform(scrollYProgress, [0, 1], [150, -150]);
+
+  // Single-open state: only one card can be flipped open at a time on touch devices.
+  // null = all closed. Desktop hover CSS is unaffected by this state.
+  const [activeCard, setActiveCard] = useState(null);
+  const handleToggle = (index) => {
+    setActiveCard((prev) => (prev === index ? null : index));
+  };
 
   const cards = [
     {
@@ -196,10 +207,15 @@ export default function AboutUs() {
           </motion.p>
         </motion.div>
 
-        {/* Balanced 3D Flip Book Grid */}
+        {/* Balanced 3D Flip Book Grid — layout unchanged */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {cards.map((card, i) => (
-            <FlipBookCard key={i} card={card} />
+            <FlipBookCard
+              key={i}
+              card={card}
+              isActive={activeCard === i}
+              onToggle={() => handleToggle(i)}
+            />
           ))}
         </div>
 
