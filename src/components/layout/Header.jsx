@@ -87,7 +87,6 @@ const styles = {
     width: 'clamp(120px, 35vw, 200px)',
   },
   nav: {
-    display: 'flex',
     alignItems: 'center',
     gap: '40px',
     flex: 1,
@@ -221,7 +220,7 @@ export default function Header({ onInquireClick }) {
           </nav>
 
           {/* Inquire Button */}
-          <div className="hidden md:flex" style={{ display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
+          <div className="hidden md:flex justify-end shrink-0">
             <button
               className="bubbles"
               onClick={onInquireClick}
