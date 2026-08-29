@@ -5,7 +5,10 @@
 
 // If VITE_API_URL is set (e.g. 'https://spinfyot-api.onrender.com'), use it without trailing slash.
 // Otherwise fallback to empty string (which uses relative paths like '/api' through Vite's dev proxy).
-export const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || 
+  (window.location.hostname.includes('localhost') ? '' : 'https://spinfyot-api.onrender.com')
+).replace(/\/+$/, '');
 
 /**
  * Returns full API URL for any endpoint path
