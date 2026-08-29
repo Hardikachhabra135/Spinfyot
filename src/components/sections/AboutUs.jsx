@@ -120,25 +120,25 @@ export default function AboutUs() {
     {
       icon: Target,
       title: "Who We Are",
-      desc: "We are a team of global education experts dedicated to transforming ambitious dreams into international realities. At SPINFYOT, we don't just process applications; we architect careers.",
+      desc: "We transform ambitious dreams into international realities and architect careers beyond borders.",
       delay: 0.1
     },
     {
       icon: Heart,
       title: "What We Believe",
-      desc: "We believe that global education should be accessible, transparent, and transformative. Every student deserves unbiased guidance that prioritizes their long-term success over short-term gains.",
+      desc: "We believe global education should be accessible, transparent, and focused on every student’s long-term success.",
       delay: 0.2
     },
     {
       icon: Compass,
       title: "Our Approach",
-      desc: "We take a deeply personalized, data-driven approach. From psychometric evaluations to forensic visa checks, our process is meticulous, ensuring you are supported at every single step.",
+      desc: "We combine personalized guidance and data-driven insights to support students at every step of their journey.",
       delay: 0.3
     },
     {
       icon: Shield,
       title: "Why Choose Us",
-      desc: "Integrity is our cornerstone. We offer end-to-end transparency, realistic expectations, and unwavering support. When you choose SPINFYOT, you choose a partner for your entire journey.",
+      desc: "We build every journey on integrity, transparency, realistic expectations, and unwavering support.",
       delay: 0.4
     }
   ];
