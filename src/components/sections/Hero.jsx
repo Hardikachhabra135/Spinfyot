@@ -410,23 +410,7 @@ export default function Hero({ onBookCounselling }) {
 
         </div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.0, duration: 1 }}
-          style={{ opacity: textOpacity }}
-        >
-          <span className="text-[9px] font-bold tracking-[0.25em] text-[#F8F9FA]/40 uppercase">Scroll</span>
-          <div className="w-[1px] h-8 md:h-12 bg-white/10 relative overflow-hidden">
-            <motion.div
-              className="w-full h-1/2 bg-[#99B6F5]"
-              animate={{ y: ['-100%', '200%'] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
-            />
-          </div>
-        </motion.div>
+
       </div>
 
       {/* Bottom Blend */}
