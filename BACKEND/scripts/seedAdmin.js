@@ -4,7 +4,6 @@ const { Admin, sequelize } = require('../models');
 async function seed() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
     
     const email = 'admin@spinfyot.com';
     const password = await bcrypt.hash('admin123', 10);

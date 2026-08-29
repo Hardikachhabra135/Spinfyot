@@ -1,15 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Target, Heart, Shield, Compass, Globe2 } from 'lucide-react';
 
 const FlipBookCard = ({ card }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, delay: card.delay, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative w-full"
+      className={`group relative w-full ${isTouchDevice ? 'cursor-pointer' : ''}`}
+      onClick={() => isTouchDevice && setIsFlipped(!isFlipped)}
       style={{
         height: '420px',
         perspective: '2000px',
@@ -40,9 +48,9 @@ const FlipBookCard = ({ card }) => {
           </p>
         </div>
         
-        {/* The Cover Container (Flips open on hover) */}
+        {/* The Cover Container (Flips open on hover or tap) */}
         <div 
-          className="absolute inset-0 cursor-pointer group-hover:[transform:rotateY(-140deg)] transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] origin-left"
+          className={`absolute inset-0 cursor-pointer transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] origin-left ${isFlipped ? '[transform:rotateY(-140deg)]' : 'group-hover:[transform:rotateY(-140deg)]'}`}
           style={{ transformStyle: 'preserve-3d', zIndex: 10 }}
         >
           {/* Front of Cover */}
@@ -64,7 +72,9 @@ const FlipBookCard = ({ card }) => {
             </h3>
             
             <div className="absolute bottom-8 flex items-center gap-2 opacity-60">
-              <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#99B6F5', letterSpacing: '1px' }}>Hover to explore</span>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#99B6F5', letterSpacing: '1px' }}>
+                {isTouchDevice ? 'Tap to explore' : 'Hover to explore'}
+              </span>
             </div>
           </div>
 
@@ -128,7 +138,7 @@ export default function AboutUs() {
       ref={sectionRef}
       style={{ 
         backgroundColor: 'transparent', 
-        padding: '160px 5% 120px', 
+        padding: 'clamp(80px, 15vw, 160px) 5% clamp(60px, 10vw, 120px)',
         position: 'relative', 
         overflow: 'hidden',
         width: '100%',
@@ -141,7 +151,7 @@ export default function AboutUs() {
         style={{ y: yGlobe, position: 'absolute', right: '-15%', top: '10%', zIndex: 0, opacity: 0.8 }} 
         className="pointer-events-none hidden md:block"
       >
-        <div style={{ position: 'relative', width: '800px', height: '800px' }}>
+        <div style={{ position: 'relative', width: 'clamp(400px, 80vw, 800px)', height: 'clamp(400px, 80vw, 800px)' }}>
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 60, ease: "linear" }} style={{ position: 'absolute', inset: 0, border: '1px solid rgba(153, 182, 245, 0.4)', borderRadius: '50%' }} />
           <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 80, ease: "linear" }} style={{ position: 'absolute', inset: '80px', border: '1px dashed rgba(31, 58, 92, 0.15)', borderRadius: '50%' }} />
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 100, ease: "linear" }} style={{ position: 'absolute', inset: '160px', border: '1px solid rgba(153, 182, 245, 0.2)', borderRadius: '50%' }} />

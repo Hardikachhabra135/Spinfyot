@@ -56,13 +56,13 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '12px 32px',
+    padding: '12px clamp(16px, 4vw, 32px)',
   },
   innerLanding: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '18px 48px',
+    padding: '16px clamp(16px, 5vw, 48px)',
   },
   logoScrolled: {
     height: '40px',
@@ -84,7 +84,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     flexShrink: 0,
-    width: '200px',
+    width: 'clamp(120px, 35vw, 200px)',
   },
   nav: {
     display: 'flex',

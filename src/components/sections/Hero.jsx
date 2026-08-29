@@ -162,7 +162,7 @@ export default function Hero({ onBookCounselling }) {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[130vh] bg-transparent flex flex-col items-center overflow-hidden"
+      className="relative w-full max-w-[100vw] h-[130vh] bg-transparent flex flex-col items-center overflow-hidden"
     >
       {/* Background Gradient */}
       <motion.div
@@ -175,7 +175,7 @@ export default function Hero({ onBookCounselling }) {
 
       {/* Radial depth glow */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[900px] h-[600px] md:h-[900px] bg-[#173B63] rounded-full blur-[200px] z-0 pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] sm:w-[600px] md:w-[900px] h-[150vw] sm:h-[600px] md:h-[900px] bg-[#173B63] rounded-full blur-[200px] z-0 pointer-events-none"
         initial={{ opacity: 0, scale: 0.7 }}
         animate={{ opacity: 0.18, scale: 1 }}
         transition={{ duration: 2.5, ease: 'easeOut' }}
@@ -272,7 +272,7 @@ export default function Hero({ onBookCounselling }) {
               <img
                 src="/assets/images/airplane-real.png"
                 alt="Airplane"
-                className="w-32 md:w-56 object-contain drop-shadow-[0_15px_30px_rgba(153,182,245,0.5)]"
+                className="w-20 sm:w-28 md:w-56 object-contain drop-shadow-[0_15px_30px_rgba(153,182,245,0.5)]"
               />
             </motion.div>
           </motion.div>
@@ -309,7 +309,7 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-[3.25rem] sm:text-6xl md:text-[5.5rem] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
+            <h1 className="font-display text-[clamp(3.5rem,10vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
               <span className="block text-[#F8F9FA]">
                 <FoldText
                   text="Your Journey Abroad"
@@ -368,7 +368,7 @@ export default function Hero({ onBookCounselling }) {
                   proximity={250}
                   autoAnimate={false}
                   onClick={onBookCounselling}
-                  className="min-w-[320px] shadow-2xl"
+                  className="w-[280px] sm:w-[320px] max-w-[90vw] shadow-2xl"
                 >
                   BOOK FREE COUNSELING
                 </SpecularButton>
@@ -378,7 +378,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Right Content: Traveler ───────────────────────────────────── */}
           <motion.div
-            className="absolute bottom-0 right-[-10%] md:right-0 md:relative w-[80%] md:w-[45%] h-[60%] md:h-full flex items-end justify-end z-20 pointer-events-none"
+            className="absolute bottom-0 right-[-5%] sm:right-[-10%] md:right-0 md:relative w-[90%] sm:w-[80%] md:w-[45%] h-[55%] md:h-full flex items-end justify-end z-20 pointer-events-none"
             style={{ y: travelerY }}
             variants={travelerVariant}
             initial="hidden"

@@ -66,6 +66,33 @@ src/
    npm run build
    ```
 
+## ⏱️ Uptime Monitoring
+
+Spinfyot includes a built-in lightweight uptime monitor for the production environment. It continuously pings the deployed Frontend, Admin Panel, and Backend API Health endpoints to ensure they are online and responding correctly.
+
+**How it works:**
+- The monitor script (`BACKEND/scripts/uptimeMonitor.js`) pings the services at a configured interval (default: 5 minutes).
+- If a service fails to respond with a successful HTTP status code, it retries after 30 seconds to prevent false positives.
+- If it fails again, it automatically sends an email alert to the configured admin email address.
+- When the service recovers, a recovery email is sent.
+
+**How to configure & run:**
+1. Navigate to the `BACKEND` directory and ensure your `.env` has the monitoring variables set:
+   ```env
+   MONITOR_INTERVAL_MS=300000
+   MONITOR_ALERT_EMAIL=admin@example.com
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=your_email@gmail.com
+   SMTP_PASS=your_app_password
+   ```
+2. Start the monitor in the background (e.g., using PM2 on a server):
+   ```bash
+   cd BACKEND
+   node scripts/uptimeMonitor.js
+   ```
+   *Note: If you are using a free tier hosting service that sleeps (like Render free tier), run this script on a separate always-on machine (or locally) to keep the servers awake and monitored.*
+
 ## ?? Design Philosophy
 
 Spinfyot completely avoids "cheap" elements like harsh borders or excessive emojis. Instead, it relies on:

@@ -12,7 +12,7 @@ const syncDatabase = async () => {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     // In production, use migrations instead of sync({ alter: true })
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('All models were synchronized successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);

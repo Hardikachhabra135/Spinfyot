@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.3.0",
     "mysql2": "^3.24.2",
+    "nodemailer": "^9.0.6",
     "pdfkit": "^0.20.1",
     "sequelize": "^6.37.8"
   }

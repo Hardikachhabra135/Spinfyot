@@ -90,7 +90,7 @@ export default function Footer() {
           zIndex: 1,
           maxWidth: '1080px',
           margin: '0 auto',
-          padding: '52px 32px 0',
+          padding: 'clamp(32px, 8vw, 52px) clamp(16px, 4vw, 32px) 0',
         }}
       >
         {/* ── Top row: Logo + tagline | Nav + socials ── */}
@@ -271,7 +271,7 @@ export default function Footer() {
         style={{
           background: T.bgDeep,
           borderTop: `1px solid ${T.divider}`,
-          padding: '14px 32px',
+          padding: '14px clamp(16px, 4vw, 32px)',
           marginTop: '0',
         }}
       >
