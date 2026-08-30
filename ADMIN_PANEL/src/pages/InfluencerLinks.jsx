@@ -111,12 +111,8 @@ export default function InfluencerLinks() {
   };
 
   const copyToClipboard = (slug) => {
-    let baseUrl = window.location.origin;
-    if (baseUrl.includes('5174')) {
-      baseUrl = baseUrl.replace('5174', '5173');
-    } else if (baseUrl.includes('admin')) {
-      baseUrl = baseUrl.replace('-admin', '').replace('admin.', '');
-    }
+    // Always use the public production domain for distributed links
+    const baseUrl = import.meta.env.VITE_PUBLIC_WEBSITE_URL || 'https://spinfyot.com';
     const url = `${baseUrl}/ref/${slug}`;
     navigator.clipboard.writeText(url);
     alert('Link copied!');
