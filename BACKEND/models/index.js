@@ -21,8 +21,17 @@ const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
-    // In production, use migrations instead of sync({ alter: true })
-    await sequelize.sync({ alter: true });
+    // Safely add columns using raw SQL since TiDB crashes on sync({ alter: true }) for unique keys
+    try {
+      await sequelize.query('ALTER TABLE `appointments` ADD COLUMN `referralSlug` VARCHAR(255);');
+    } catch (e) {}
+    
+    try {
+      await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `referralSlug` VARCHAR(255);');
+    } catch (e) {}
+
+    // Run normal sync to create missing tables without altering existing ones
+    await sequelize.sync();
     console.log('All models were synchronized successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
