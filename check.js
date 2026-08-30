@@ -1,0 +1,1 @@
+fetch('https://spinfyot-admin.vercel.app/').then(r=>r.text()).then(html=>{ const js=html.match(/src="(\/assets\/index-[^"]+)"/)[1]; fetch('https://spinfyot-admin.vercel.app'+js).then(r=>r.text()).then(code=>console.log(code.includes('parseFloat') ? 'Fix is live' : 'Fix NOT live')) })

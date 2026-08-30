@@ -343,14 +343,25 @@ router.post('/referrals', authMiddleware, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Slug is already in use.' });
     }
 
+    let parsedVal = null;
+    if (discountValue && discountValue !== '') {
+      parsedVal = parseFloat(discountValue);
+      if (isNaN(parsedVal)) parsedVal = null;
+    }
+
     const referral = await Referral.create({
-      influencerName, slug, promoCode, discountType, discountValue, status: 'Active'
+      influencerName, 
+      slug, 
+      promoCode: promoCode && promoCode.trim() !== '' ? promoCode.trim() : null, 
+      discountType, 
+      discountValue: parsedVal, 
+      status: 'Active'
     });
 
     res.status(201).json({ success: true, data: referral });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: 'Server error' });
+    console.error('Create Referral Error:', error);
+    res.status(500).json({ success: false, error: error.message || 'Server error' });
   }
 });
 
