@@ -29,14 +29,16 @@ export default function Testimonials() {
       .catch(err => console.error('Failed to load testimonials:', err));
   }, []);
 
+  const [isPaused, setIsPaused] = useState(false);
+
   // Auto-play interval
   useEffect(() => {
-    if (testimonials.length === 0) return;
+    if (testimonials.length === 0 || isPaused) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [testimonials]);
+  }, [testimonials, isPaused]);
 
   if (!testimonials || testimonials.length === 0) return null;
 
@@ -68,9 +70,18 @@ export default function Testimonials() {
       </div>
 
       {/* TESTIMONIAL SLIDER */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10, display: 'flex', justifySelf: 'center', justifyContent: 'center', marginTop: '20px', height: '560px' }}>
+      <div 
+        style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10, display: 'flex', justifySelf: 'center', justifyContent: 'center', marginTop: '20px', height: '560px' }}
+      >
         
-        <div style={{ position: 'relative', width: 'clamp(280px, 80vw, 360px)', height: 'clamp(420px, 120vw, 500px)' }}>
+        <div 
+          style={{ position: 'relative', width: 'clamp(280px, 80vw, 360px)', height: 'clamp(420px, 120vw, 500px)' }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+          onTouchCancel={() => setIsPaused(false)}
+        >
           <AnimatePresence initial={false}>
             {testimonials.map((testimonial, idx) => {
               // Calculate positional offset
