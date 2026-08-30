@@ -353,10 +353,10 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </h1>
 
-            {/* CTA */}
+            {/* Desktop CTA */}
             <motion.div
               variants={ctaVariant}
-              className="relative md:absolute left-0 mt-7 md:mt-0 md:-bottom-[140px] w-full flex justify-start md:justify-start"
+              className="hidden md:flex relative md:absolute left-0 mt-7 md:mt-0 md:-bottom-[140px] w-full justify-start"
             >
               <div className="flex flex-col items-start md:items-center md:mt-[72px]">
                 <SpecularButton
@@ -387,7 +387,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Right Content: Traveler ───────────────────────────────────── */}
           <motion.div
-            className="relative w-full mt-12 md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-[45%] h-auto md:h-full flex items-end justify-center md:justify-end z-20 pointer-events-none"
+            className="relative w-full mt-12 md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-[45%] h-auto md:h-full flex flex-col items-center justify-end md:justify-end z-20 pointer-events-none"
             style={{ y: isMobile ? 0 : travelerY }}
             variants={travelerVariant}
             initial="hidden"
@@ -406,6 +406,39 @@ export default function Hero({ onBookCounselling }) {
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
+            
+            {/* Mobile CTA */}
+            <motion.div
+              variants={ctaVariant}
+              initial="hidden"
+              animate="visible"
+              className="flex md:hidden relative w-full justify-center mt-8 pb-4 pointer-events-auto"
+            >
+              <div className="flex flex-col items-center">
+                <SpecularButton
+                  size="lg"
+                  radius={18}
+                  tint="#ffffff"
+                  tintOpacity={0}
+                  blur={0}
+                  textColor="#f5f5f5"
+                  lineColor="#ffffff"
+                  baseColor="#173B63"
+                  intensity={1}
+                  shineSize={10}
+                  shineFade={40}
+                  thickness={1}
+                  speed={0.35}
+                  followMouse
+                  proximity={250}
+                  autoAnimate={false}
+                  onClick={onBookCounselling}
+                  className="w-[280px] max-w-[90vw] shadow-2xl"
+                >
+                  BOOK FREE COUNSELING
+                </SpecularButton>
+              </div>
+            </motion.div>
           </motion.div>
 
         </div>
