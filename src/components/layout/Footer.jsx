@@ -25,18 +25,6 @@ const NAV_LINKS = [
   { label: 'Contact', to: '/contact' },
 ];
 
-/* ── Inline style tokens (scoped entirely to footer) ── */
-const T = {
-  bg: '#1F3A5C',            // Exact match of testimonials section bg — zero transition line
-  bgDeep: '#182F4A',        // Very subtly deeper at the bottom bar — barely perceptible
-  textPrimary: 'rgba(255,255,255,0.92)',
-  textMuted: 'rgba(180,205,255,0.55)',
-  textFaint: 'rgba(153,182,245,0.38)',
-  accent: 'rgba(153,182,245,0.22)',
-  divider: 'rgba(255,255,255,0.08)',
-  font: "'Poppins', sans-serif",
-};
-
 export default function Footer() {
   const fadeUp = {
     hidden: { opacity: 0, y: 14 },
@@ -51,83 +39,69 @@ export default function Footer() {
     <footer
       style={{
         width: '100%',
-        background: T.bg,          /* matches the section above — no hard edge */
-        fontFamily: T.font,
+        background: '#000000', /* Pure black base */
+        fontFamily: "'Poppins', sans-serif",
         position: 'relative',
         overflow: 'hidden',
+        borderTopLeftRadius: 'clamp(24px, 5vw, 48px)',
+        borderTopRightRadius: 'clamp(24px, 5vw, 48px)',
+        marginTop: '-24px', /* Pull it up slightly if needed to overlap cleanly, or remove if not needed */
       }}
     >
-      {/* Very subtle top fade to blend with the main page wrapper bg */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(to bottom, ${T.bg} 0%, ${T.bgDeep} 100%)`,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Faint radial atmospheric glow — premium depth without drama */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '600px',
-          height: '200px',
-          background: 'radial-gradient(ellipse at top, rgba(153,182,245,0.07) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* ── Main content ── */}
+      {/* ── Main content wrapper ── */}
       <div
         style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '1080px',
+          maxWidth: '1200px',
           margin: '0 auto',
-          padding: 'clamp(32px, 8vw, 52px) clamp(16px, 4vw, 32px) 0',
+          padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 32px)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'clamp(12px, 2vw, 16px)',
         }}
       >
-        {/* ── Top row: Logo + tagline | Nav + socials ── */}
+        {/* ══════════ TOP ROW: Logo Box + Content Box ══════════ */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
           style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '32px',
-            marginBottom: '40px',
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
+            gap: 'clamp(12px, 2vw, 16px)',
+            alignItems: 'stretch',
           }}
+          className="footer-top-row"
         >
-          {/* LEFT: Logo + tagline */}
-          <motion.div variants={fadeUp} custom={0} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {/* ── LEFT: Logo White Box ── */}
+          <motion.div
+            variants={fadeUp}
+            custom={0}
+            style={{
+              background: '#F5F3EE',
+              borderRadius: '16px',
+              padding: 'clamp(20px, 3vw, 32px) clamp(24px, 4vw, 40px)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '14px',
+              minWidth: '200px',
+            }}
+            className="footer-logo-box"
+          >
             <Link
               to="/"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{
-                display: 'inline-block',
-                textDecoration: 'none',
-                background: 'rgba(255,255,255,0.92)',
-                borderRadius: '10px',
-                padding: '6px 14px',
-                transition: 'background 0.25s ease',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,1)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.92)'; }}
+              style={{ display: 'inline-block', textDecoration: 'none' }}
             >
               <img
                 src="/assets/logo/spinfyot-logo-transparent.png"
                 alt="Spinfyot"
+                className="footer-logo-img"
                 style={{
-                  height: '36px',
+                  height: '58px',
                   width: 'auto',
                   objectFit: 'contain',
                   display: 'block',
@@ -135,44 +109,63 @@ export default function Footer() {
               />
             </Link>
             <p
+              className="footer-logo-desc"
               style={{
-                color: T.textMuted,
+                color: '#6B7280',
                 fontSize: '13px',
-                fontWeight: 300,
-                letterSpacing: '0.02em',
+                fontWeight: 400,
                 lineHeight: 1.6,
                 margin: 0,
-                maxWidth: '260px',
+                maxWidth: '240px',
+                letterSpacing: '0.01em',
               }}
             >
               Guiding your global education journey with precision and care.
             </p>
           </motion.div>
 
-          {/* RIGHT: Nav links + social icons */}
+          {/* ── RIGHT: Nav + Social White Box ── */}
           <motion.div
             variants={fadeUp}
             custom={1}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '20px' }}
+            style={{
+              background: '#F5F3EE',
+              borderRadius: '16px',
+              padding: 'clamp(20px, 3vw, 32px) clamp(24px, 4vw, 40px)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '20px',
+            }}
+            className="footer-content-box"
           >
-            {/* Nav links */}
-            <nav aria-label="Footer navigation" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 24px', justifyContent: 'flex-end' }}>
+            {/* Nav links row */}
+            <nav
+              className="footer-nav-links"
+              aria-label="Footer navigation"
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '8px 28px',
+                alignItems: 'center',
+              }}
+            >
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.label}
                   to={link.to}
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   style={{
-                    color: T.textMuted,
-                    fontSize: '12px',
+                    color: '#374151',
+                    fontSize: '14px',
                     fontWeight: 500,
-                    letterSpacing: '0.08em',
+                    letterSpacing: '0.02em',
                     textDecoration: 'none',
                     transition: 'color 0.2s ease',
                     padding: '2px 0',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = T.textPrimary; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = T.textMuted; }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
                 >
                   {link.label}
                 </Link>
@@ -180,7 +173,7 @@ export default function Footer() {
             </nav>
 
             {/* Social icons */}
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div className="footer-social-icons" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               {SOCIALS.map((s) => (
                 <motion.a
                   key={s.label}
@@ -188,27 +181,27 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  whileHover={{ scale: 1.1, opacity: 1 }}
+                  whileHover={{ scale: 1.1 }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '8px',
-                    background: T.accent,
-                    color: 'rgba(255,255,255,0.6)',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: '#E8E5DE',
+                    color: '#374151',
                     textDecoration: 'none',
                     transition: 'background 0.2s ease, color 0.2s ease',
                     flexShrink: 0,
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(153,182,245,0.35)';
+                    e.currentTarget.style.background = '#173B63';
                     e.currentTarget.style.color = '#ffffff';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.background = T.accent;
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.6)';
+                    e.currentTarget.style.background = '#E8E5DE';
+                    e.currentTarget.style.color = '#374151';
                   }}
                 >
                   <svg style={{ width: '16px', height: '16px', fill: 'currentColor' }} viewBox="0 0 24 24" aria-hidden="true">
@@ -220,10 +213,7 @@ export default function Footer() {
           </motion.div>
         </motion.div>
 
-        {/* ── Thin divider ── */}
-        <div style={{ width: '100%', height: '1px', background: T.divider, marginBottom: '20px' }} />
-
-        {/* ── Contact row ── */}
+        {/* ══════════ BOTTOM ROW: Full-width Contact Box ══════════ */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -231,87 +221,188 @@ export default function Footer() {
           variants={fadeUp}
           custom={2}
           style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: '6px 24px',
-            marginBottom: '20px',
-          }}
-        >
-          <a
-            href="mailto:Ketan@spinfyot.in"
-            style={{ color: T.textMuted, fontSize: '13px', textDecoration: 'none', transition: 'color 0.2s ease', fontWeight: 400 }}
-            onMouseEnter={e => { e.currentTarget.style.color = T.textPrimary; }}
-            onMouseLeave={e => { e.currentTarget.style.color = T.textMuted; }}
-          >
-            Ketan@spinfyot.in
-          </a>
-          <span style={{ color: T.divider, fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
-          <a
-            href="tel:+919876543210"
-            style={{ color: T.textMuted, fontSize: '13px', textDecoration: 'none', transition: 'color 0.2s ease', fontWeight: 400 }}
-            onMouseEnter={e => { e.currentTarget.style.color = T.textPrimary; }}
-            onMouseLeave={e => { e.currentTarget.style.color = T.textMuted; }}
-          >
-            +91 98765 43210
-          </a>
-          <span style={{ color: T.divider, fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
-          <span style={{ color: T.textFaint, fontSize: '12px', fontWeight: 300 }}>
-            123 Education Hub, Global City, State, 123456
-          </span>
-        </motion.div>
-      </div>
-
-      {/* ── Bottom bar ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, delay: 0.2 }}
-        style={{
-          background: T.bgDeep,
-          borderTop: `1px solid ${T.divider}`,
-          padding: '14px clamp(16px, 4vw, 32px)',
-          marginTop: '0',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1080px',
-            margin: '0 auto',
+            background: '#F5F3EE',
+            borderRadius: '16px',
+            padding: 'clamp(16px, 3vw, 24px) clamp(24px, 4vw, 40px)',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '8px 20px',
+            gap: '10px 32px',
           }}
+          className="footer-bottom-box"
         >
-          <span style={{ color: T.textFaint, fontSize: '11px', letterSpacing: '0.08em' }}>
-            &copy; 2026 SPINFYOT
-          </span>
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          {/* Contact info */}
+          <div className="footer-contact-info" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px 24px' }}>
+            <a
+              href="mailto:Ketan@spinfyot.in"
+              style={{
+                color: '#374151',
+                fontSize: '13px',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+                fontWeight: 500,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
+            >
+              Ketan@spinfyot.in
+            </a>
+            <span className="footer-separator" style={{ color: '#D1D5DB', fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
+            <a
+              href="tel:+919876543210"
+              style={{
+                color: '#374151',
+                fontSize: '13px',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+                fontWeight: 500,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
+            >
+              +91 98765 43210
+            </a>
+            <span className="footer-separator" style={{ color: '#D1D5DB', fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
+            <span style={{ color: '#6B7280', fontSize: '12px', fontWeight: 400 }}>
+              123 Education Hub, Global City, State, 123456
+            </span>
+          </div>
+
+          {/* Copyright + legal links */}
+          <div className="footer-legal" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px', alignItems: 'center' }}>
+            <span style={{ color: '#9CA3AF', fontSize: '11px', letterSpacing: '0.08em' }}>
+              &copy; 2026 SPINFYOT
+            </span>
             <Link
               to="/privacy"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{ color: T.textFaint, fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
-              onMouseEnter={e => { e.currentTarget.style.color = T.textMuted; }}
-              onMouseLeave={e => { e.currentTarget.style.color = T.textFaint; }}
+              style={{ color: '#9CA3AF', fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#374151'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF'; }}
             >
               Privacy Policy
             </Link>
             <Link
               to="/terms"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{ color: T.textFaint, fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
-              onMouseEnter={e => { e.currentTarget.style.color = T.textMuted; }}
-              onMouseLeave={e => { e.currentTarget.style.color = T.textFaint; }}
+              style={{ color: '#9CA3AF', fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#374151'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF'; }}
             >
               Terms of Service
             </Link>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
+      {/* ── Responsive styles ── */}
+      <style>{`
+        /* Desktop: side-by-side top row */
+        .footer-top-row {
+          grid-template-columns: auto 1fr !important;
+        }
+
+        /* Tablet (below 992px) */
+        @media (max-width: 992px) {
+          .footer-top-row {
+            grid-template-columns: 1fr 1.5fr !important;
+          }
+          .footer-logo-box {
+            min-width: 0 !important;
+          }
+          .footer-bottom-box {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 20px !important;
+          }
+        }
+        
+        /* Mobile (below 768px) */
+        @media (max-width: 768px) {
+          .footer-top-row {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 12px !important;
+          }
+          .footer-logo-box, .footer-content-box {
+            padding: 16px 12px !important;
+            gap: 12px !important;
+          }
+        }
+
+        /* Small Mobile (below 576px) */
+        @media (max-width: 576px) {
+          .footer-top-row {
+            gap: 8px !important;
+          }
+          .footer-logo-box, .footer-content-box {
+            padding: 12px 8px !important;
+            border-radius: 12px !important;
+          }
+          .footer-logo-img {
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: 48px !important;
+          }
+          .footer-logo-desc {
+            font-size: 11px !important;
+            line-height: 1.4 !important;
+          }
+          .footer-nav-links {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+          }
+          .footer-nav-links a {
+            font-size: 12px !important;
+          }
+          .footer-social-icons {
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+          }
+          .footer-social-icons a {
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+          }
+          .footer-social-icons svg {
+            width: 14px !important;
+            height: 14px !important;
+          }
+          .footer-contact-info {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+          }
+          .footer-contact-info a, .footer-contact-info span:not(.footer-separator) {
+            font-size: 12px !important;
+          }
+          .footer-separator {
+            display: none !important;
+          }
+          .footer-legal {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+          }
+        }
+        
+        /* Extra small devices (below 380px) */
+        @media (max-width: 380px) {
+           .footer-logo-img {
+             max-height: 40px !important;
+           }
+           .footer-logo-desc {
+             font-size: 10px !important;
+           }
+           .footer-nav-links a {
+             font-size: 11px !important;
+           }
+           .footer-contact-info a, .footer-contact-info span:not(.footer-separator) {
+             font-size: 11px !important;
+           }
+        }
+      `}</style>
     </footer>
   );
 }
