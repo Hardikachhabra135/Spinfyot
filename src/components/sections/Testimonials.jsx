@@ -54,10 +54,10 @@ export default function Testimonials() {
       {/* HERO / HEADER */}
       <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px', position: 'relative', zIndex: 10 }}>
         <motion.h2
-          initial={{ clipPath: "polygon(0 -20%, 0 -20%, 0 120%, 0 120%)", opacity: 0, y: 20 }}
-          whileInView={{ clipPath: "polygon(0 -20%, 110% -20%, 110% 120%, 0 120%)", opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "0px 0px -50px 0px" }}
+          transition={{ duration: 1.0, ease: "easeOut" }}
           style={{ fontFamily: '"Caveat", cursive', fontSize: 'clamp(3.5rem, 6vw, 4.5rem)', color: '#99B6F5', margin: '0 0 16px 0', lineHeight: 1.1, fontWeight: 700, textShadow: '0 4px 20px rgba(153, 182, 245, 0.15)' }}
         >
           Don't take our word for it!<br/>Hear it from our students.

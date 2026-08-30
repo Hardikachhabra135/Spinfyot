@@ -36,10 +36,10 @@ export default function Services() {
         {/* Premium Centered Heading */}
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 'clamp(40px, 8vw, 80px)' }}>
           <motion.h2
-            initial={{ clipPath: "polygon(0 -20%, 0 -20%, 0 120%, 0 120%)", opacity: 0, y: 20 }}
-            whileInView={{ clipPath: "polygon(0 -20%, 110% -20%, 110% 120%, 0 120%)", opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -50px 0px" }}
+            transition={{ duration: 1.0, ease: "easeOut" }}
             style={{
               fontFamily: '"Caveat", cursive',
               fontSize: 'clamp(4rem, 8vw, 6.5rem)',
