@@ -12,7 +12,7 @@ const ServiceCard = ({ service }) => {
         backgroundColor: '#F8F9FA',
         background: 'linear-gradient(to bottom, #F8F9FA, #DCE6FA)',
         borderRadius: '24px',
-        padding: '40px 32px',
+        padding: 'clamp(24px, 5vw, 40px) clamp(20px, 4vw, 32px)',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',

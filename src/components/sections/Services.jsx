@@ -24,7 +24,7 @@ export default function Services() {
       id="services" 
       style={{
         backgroundColor: 'transparent',
-        padding: '120px 5%',
+        padding: 'clamp(60px, 10vw, 120px) 5%',
         position: 'relative',
         overflow: 'hidden',
         width: '100%',
@@ -34,7 +34,7 @@ export default function Services() {
       <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Premium Centered Heading */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '80px' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 'clamp(40px, 8vw, 80px)' }}>
           <motion.h2
             initial={{ clipPath: "polygon(0 -20%, 0 -20%, 0 120%, 0 120%)", opacity: 0, y: 20 }}
             whileInView={{ clipPath: "polygon(0 -20%, 110% -20%, 110% 120%, 0 120%)", opacity: 1, y: 0 }}

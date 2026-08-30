@@ -23,7 +23,7 @@ const FlipBookCard = ({ card, isActive, onToggle }) => {
       className={`group relative w-full ${isTouchDevice ? 'cursor-pointer' : ''}`}
       onClick={() => isTouchDevice && onToggle()}
       style={{
-        height: '420px',
+        height: 'clamp(320px, 80vw, 420px)',
         perspective: '2000px',
         transformStyle: 'preserve-3d',
       }}
@@ -149,11 +149,12 @@ export default function AboutUs() {
       ref={sectionRef}
       style={{ 
         backgroundColor: 'transparent', 
-        padding: 'clamp(80px, 15vw, 160px) 5% clamp(60px, 10vw, 120px)',
+        padding: 'clamp(60px, 10vw, 160px) 5% clamp(60px, 10vw, 120px)',
         position: 'relative', 
         overflow: 'hidden',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        scrollMarginTop: '100px'
       }}
     >
 
@@ -179,7 +180,7 @@ export default function AboutUs() {
         
         {/* Storytelling Header */}
         <motion.div 
-          style={{ y: yHeader, marginBottom: '80px', display: 'flex', flexDirection: 'column', maxWidth: '800px' }}
+          style={{ y: yHeader, marginBottom: 'clamp(40px, 8vw, 80px)', display: 'flex', flexDirection: 'column', maxWidth: '800px' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
             

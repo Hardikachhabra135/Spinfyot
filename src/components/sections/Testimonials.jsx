@@ -8,6 +8,16 @@ export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState(testimonialsData);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   useEffect(() => {
     fetch(apiUrl('/api/public/testimonials'))
       .then(res => res.json())
@@ -31,7 +41,7 @@ export default function Testimonials() {
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" style={{ padding: '120px 5% 40px', backgroundColor: 'transparent', position: 'relative', overflow: 'hidden' }}>
+    <section id="testimonials" style={{ padding: 'clamp(60px, 10vw, 120px) 5% 40px', backgroundColor: 'transparent', position: 'relative', overflow: 'hidden' }}>
 
       
       {/* Decorative Background Elements */}
@@ -58,7 +68,7 @@ export default function Testimonials() {
       </div>
 
       {/* TESTIMONIAL SLIDER */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'center', marginTop: '20px', height: '560px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10, display: 'flex', justifySelf: 'center', justifyContent: 'center', marginTop: '20px', height: '560px' }}>
         
         <div style={{ position: 'relative', width: 'clamp(280px, 80vw, 360px)', height: 'clamp(420px, 120vw, 500px)' }}>
           <AnimatePresence initial={false}>
@@ -73,50 +83,68 @@ export default function Testimonials() {
               let opacity = 0;
               let zIndex = 10;
               
-              // Center card
-              if (offset === 0) {
-                x = "0px";
-                y = 0;
-                rotate = 0;
-                scale = 1;
-                opacity = 1;
-                zIndex = 50;
-              } 
-              // Right 1 card
-              else if (offset === 1) {
-                x = "min(15vw, 180px)";
-                y = 30;
-                rotate = 6;
-                scale = 0.92;
-                opacity = 0.95;
-                zIndex = 40;
-              } 
-              // Right 2 card
-              else if (offset === 2) {
-                x = "min(28vw, 340px)";
-                y = 60;
-                rotate = 12;
-                scale = 0.84;
-                opacity = 0.7;
-                zIndex = 30;
-              }
-              // Left 1 card
-              else if (offset === testimonials.length - 1) {
-                x = "max(-180px, -15vw)";
-                y = 30;
-                rotate = -6;
-                scale = 0.92;
-                opacity = 0.95;
-                zIndex = 40;
-              }
-              // Left 2 card
-              else if (offset === testimonials.length - 2) {
-                x = "max(-340px, -28vw)";
-                y = 60;
-                rotate = -12;
-                scale = 0.84;
-                opacity = 0.7;
-                zIndex = 30;
+              if (isMobile) {
+                if (offset === 0) {
+                  x = "0px";
+                  y = 0;
+                  rotate = 0;
+                  scale = 1;
+                  opacity = 1;
+                  zIndex = 50;
+                } else {
+                  x = "0px";
+                  y = 0;
+                  rotate = 0;
+                  scale = 0.8;
+                  opacity = 0;
+                  zIndex = -1;
+                }
+              } else {
+                // Center card
+                if (offset === 0) {
+                  x = "0px";
+                  y = 0;
+                  rotate = 0;
+                  scale = 1;
+                  opacity = 1;
+                  zIndex = 50;
+                } 
+                // Right 1 card
+                else if (offset === 1) {
+                  x = "min(15vw, 180px)";
+                  y = 30;
+                  rotate = 6;
+                  scale = 0.92;
+                  opacity = 0.95;
+                  zIndex = 40;
+                } 
+                // Right 2 card
+                else if (offset === 2) {
+                  x = "min(28vw, 340px)";
+                  y = 60;
+                  rotate = 12;
+                  scale = 0.84;
+                  opacity = 0.7;
+                  zIndex = 30;
+                }
+                // Left 1 card
+                else if (offset === testimonials.length - 1) {
+                  x = "max(-180px, -15vw)";
+                  y = 30;
+                  rotate = -6;
+                  scale = 0.92;
+                  opacity = 0.95;
+                  zIndex = 40;
+                }
+                // Left 2 card
+                else if (offset === testimonials.length - 2) {
+                  x = "max(-340px, -28vw)";
+                  y = 60;
+                  rotate = -12;
+                  scale = 0.84;
+                  opacity = 0.7;
+                  zIndex = 30;
+                }
               }
 
               // Determine background color based on original brand alternating style

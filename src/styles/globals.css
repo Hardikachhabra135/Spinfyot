@@ -62,7 +62,8 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 
@@ -83,7 +84,8 @@ body {
   background-color: var(--color-sfy-black);
   color: var(--color-sfy-navy);
   overflow-x: hidden;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ── Reduced Motion ── */
