@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import Home from './pages/Home.jsx';
 import { ReducedMotionContext } from './context/ReducedMotionContext';
+import ReferralTracker from './components/common/ReferralTracker.jsx';
 
 // Lazy-loaded pages
 const ServiceDetail = lazy(() => import('./pages/services/ServiceDetail.jsx'));
@@ -78,8 +79,10 @@ function App() {
       </a>
       <Suspense fallback={<PageLoader />}>
         <AnimatePresence mode="wait">
+          <ReferralTracker />
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+            <Route path="/ref/:slug" element={<PageTransition><Home /></PageTransition>} />
             <Route path="/services" element={<PageTransition><ServicesPage /></PageTransition>} />
             <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
             <Route path="/testimonials" element={<PageTransition><TestimonialsPage /></PageTransition>} />

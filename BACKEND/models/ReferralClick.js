@@ -1,46 +1,35 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 
-const Appointment = sequelize.define('Appointment', {
+const ReferralClick = sequelize.define('ReferralClick', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  name: {
+  referralId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  visitorId: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true
-    }
-  },
-  phoneNumber: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  classType: {
+  landingPage: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  sourcePage: {
+  deviceType: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  referralSlug: {
+  referrer: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  status: {
-    type: DataTypes.ENUM('New', 'Contacted', 'Resolved'),
-    defaultValue: 'New'
   }
 }, {
   timestamps: true,
-  tableName: 'appointments'
+  tableName: 'referral_clicks'
 });
 
-module.exports = Appointment;
+module.exports = ReferralClick;

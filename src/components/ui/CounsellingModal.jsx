@@ -76,10 +76,13 @@ const CounsellingModal = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     setFormState('loading');
     try {
+      const referralSlug = localStorage.getItem('referral_slug') || undefined;
+      const visitorId = localStorage.getItem('visitorId') || undefined;
+
       const response = await fetch(apiUrl('/api/public/appointments'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, sourcePage: window.location.pathname }),
+        body: JSON.stringify({ ...data, sourcePage: window.location.pathname, referralSlug, visitorId }),
       });
       if (!response.ok) {
         const errData = await response.json();

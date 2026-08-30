@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2 } from 'lucide-react';
 import { useAuth } from '../App';
 
 export default function Sidebar() {
@@ -12,6 +12,7 @@ export default function Sidebar() {
     { to: '/questions', label: 'Ask a Question', icon: HelpCircle },
     { to: '/testimonials', label: 'Testimonials', icon: Star },
     { to: '/blogs', label: 'Blogs', icon: FileText },
+    { to: '/influencer-links', label: 'Influencer Links', icon: Share2 },
   ];
 
   return (

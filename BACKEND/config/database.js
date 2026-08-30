@@ -25,6 +25,13 @@ if (process.env.DATABASE_URL) {
       idle: 10000
     }
   });
+} else if (process.env.NODE_ENV !== 'production') {
+  // Local fallback for easy development without MySQL
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './database.sqlite',
+    logging: console.log
+  });
 } else {
   sequelize = new Sequelize(
     process.env.DB_NAME || 'spinfyot',
@@ -34,7 +41,7 @@ if (process.env.DATABASE_URL) {
       host: process.env.DB_HOST || 'localhost',
       dialect: 'mysql',
       port: parseInt(process.env.DB_PORT, 10) || 3306,
-      logging: isProduction ? false : console.log,
+      logging: false,
       dialectOptions: sslOptions,
       pool: {
         max: 10,

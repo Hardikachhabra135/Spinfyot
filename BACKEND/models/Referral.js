@@ -1,46 +1,40 @@
 const sequelize = require('../config/database');
 const { DataTypes } = require('sequelize');
 
-const Contact = sequelize.define('Contact', {
+const Referral = sequelize.define('Referral', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  name: {
+  influencerName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
+  slug: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      isEmail: true
-    }
+    unique: true
   },
-  phone: {
+  promoCode: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  interest: {
+  discountType: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true // e.g., 'Percentage', 'Fixed Amount'
   },
-  message: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  referralSlug: {
-    type: DataTypes.STRING,
+  discountValue: {
+    type: DataTypes.FLOAT,
     allowNull: true
   },
   status: {
-    type: DataTypes.ENUM('New', 'Contacted', 'In Progress', 'Resolved'),
-    defaultValue: 'New'
+    type: DataTypes.ENUM('Active', 'Inactive'),
+    defaultValue: 'Active'
   }
 }, {
   timestamps: true,
-  tableName: 'contacts'
+  tableName: 'referrals'
 });
 
-module.exports = Contact;
+module.exports = Referral;

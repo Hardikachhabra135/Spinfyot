@@ -26,7 +26,9 @@ export default function ContactPage() {
         email: e.target.email.value,
         phone: e.target.phone.value,
         interest: e.target.interest.value,
-        message: e.target.message.value
+        message: e.target.message.value,
+        referralSlug: localStorage.getItem('referral_slug') || undefined,
+        visitorId: localStorage.getItem('visitorId') || undefined
       };
       const response = await fetch(apiUrl('/api/public/contacts'), {
         method: 'POST',

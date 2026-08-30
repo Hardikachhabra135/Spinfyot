@@ -7,6 +7,7 @@ import Appointments from './pages/Appointments';
 import Questions from './pages/Questions';
 import TestimonialsAdmin from './pages/TestimonialsAdmin';
 import BlogsAdmin from './pages/BlogsAdmin';
+import InfluencerLinks from './pages/InfluencerLinks';
 
 // Create a simple Auth Context
 export const AuthContext = createContext();
@@ -47,6 +48,7 @@ function App() {
                     <Route path="/questions" element={<Questions />} />
                     <Route path="/testimonials" element={<TestimonialsAdmin />} />
                     <Route path="/blogs" element={<BlogsAdmin />} />
+                    <Route path="/influencer-links" element={<InfluencerLinks />} />
                   </Routes>
                 </div>
               </div>
