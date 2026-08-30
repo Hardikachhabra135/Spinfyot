@@ -61,7 +61,11 @@ export default function InfluencerLinks() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          promoCode: formData.promoCode.trim() || null,
+          discountValue: formData.discountValue ? parseFloat(formData.discountValue) : null
+        })
       });
       const data = await res.json();
       if (data.success) {
