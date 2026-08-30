@@ -116,7 +116,7 @@ export default function InfluencerLinks() {
 
   const copyToClipboard = (slug) => {
     // Always use the public production domain for distributed links
-    const baseUrl = import.meta.env.VITE_PUBLIC_WEBSITE_URL || 'https://spinfyot.vercel.app';
+    const baseUrl = import.meta.env.VITE_PUBLIC_WEBSITE_URL || 'https://spinfyot-frontend.vercel.app';
     const url = `${baseUrl}/ref/${slug}`;
     navigator.clipboard.writeText(url);
     alert('Link copied!');
