@@ -75,7 +75,9 @@ app.use('/api/public/', apiLimiter);
 
 // Setup Routes
 app.use('/api/public', require('./routes/publicRoutes'));
+app.use('/api/admin/counsellors', require('./routes/counsellorAdminRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/counsellor', require('./routes/counsellorPortalRoutes'));
 
 // 404 Handler
 app.use((req, res) => {

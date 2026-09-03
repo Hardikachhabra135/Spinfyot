@@ -34,6 +34,10 @@ const Contact = sequelize.define('Contact', {
     type: DataTypes.STRING,
     allowNull: true
   },
+  counsellorId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
   status: {
     type: DataTypes.ENUM('New', 'Contacted', 'In Progress', 'Resolved'),
     defaultValue: 'New'

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
-const { Admin, Appointment, Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion, sequelize } = require('../models');
+const { Admin, Appointment, Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion, Assignment, Counsellor, sequelize } = require('../models');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -31,9 +31,13 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role === 'counsellor') {
+      return res.status(403).json({ success: false, error: 'Forbidden: Admins only' });
+    }
     req.admin = decoded;
     next();
   } catch (error) {
+    console.error('JWT Verification Error in adminRoutes:', error.message);
     return res.status(401).json({ success: false, error: 'Invalid token' });
   }
 };
@@ -401,5 +405,124 @@ router.delete('/referrals/:id', authMiddleware, async (req, res) => {
   }
 });
 
+
+router.put('/appointments/:id/assign', authMiddleware, async (req, res) => {
+  try {
+    const appointment = await Appointment.findByPk(req.params.id);
+    if (!appointment) return res.status(404).json({ success: false, error: 'Not found' });
+    appointment.counsellorId = req.body.counsellorId || null;
+    await appointment.save();
+    res.json({ success: true, data: appointment });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+router.put('/contacts/:id/assign', authMiddleware, async (req, res) => {
+  try {
+    const contact = await Contact.findByPk(req.params.id);
+    if (!contact) return res.status(404).json({ success: false, error: 'Not found' });
+    contact.counsellorId = req.body.counsellorId || null;
+    await contact.save();
+    res.json({ success: true, data: contact });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// --- NEW ASSIGNMENT SYSTEM ROUTES ---
+
+// Get all appointments with their active assignment
+router.get('/assignments/appointments', authMiddleware, async (req, res) => {
+  try {
+    const appointments = await Appointment.findAll({
+      include: [
+        {
+          model: Assignment,
+          where: { isActive: true },
+          required: false, // LEFT JOIN to get unassigned too
+          include: [{ model: Counsellor, attributes: ['id', 'name', 'counsellorId'] }]
+        }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json({ success: true, data: appointments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// Assign a counsellor to an appointment
+router.post('/assignments', authMiddleware, async (req, res) => {
+  const { appointmentId, counsellorId } = req.body;
+  if (!appointmentId || !counsellorId) return res.status(400).json({ success: false, error: 'Missing fields' });
+
+  try {
+    // Mark any existing active assignments for this appointment as inactive
+    await Assignment.update(
+      { isActive: false },
+      { where: { appointmentId, isActive: true } }
+    );
+
+    // Create new active assignment
+    const assignment = await Assignment.create({
+      appointmentId,
+      counsellorId,
+      isActive: true,
+      counsellorStatus: 'New'
+    });
+
+    res.json({ success: true, data: assignment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// Unassign an appointment
+router.post('/assignments/unassign', authMiddleware, async (req, res) => {
+  const { appointmentId } = req.body;
+  if (!appointmentId) return res.status(400).json({ success: false, error: 'Missing appointmentId' });
+
+  try {
+    await Assignment.update(
+      { isActive: false },
+      { where: { appointmentId, isActive: true } }
+    );
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// Get Counsellor Workload
+router.get('/assignments/workload', authMiddleware, async (req, res) => {
+  try {
+    const counsellors = await Counsellor.findAll({
+      attributes: ['id', 'name', 'counsellorId'],
+      include: [
+        {
+          model: Assignment,
+          where: { isActive: true },
+          required: false
+        }
+      ]
+    });
+
+    const workload = counsellors.map(c => ({
+      id: c.id,
+      name: c.name,
+      counsellorId: c.counsellorId,
+      assignedCount: c.Assignments ? c.Assignments.length : 0
+    }));
+
+    res.json({ success: true, data: workload });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
 
 module.exports = router;

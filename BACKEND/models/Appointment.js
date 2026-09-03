@@ -34,6 +34,10 @@ const Appointment = sequelize.define('Appointment', {
     type: DataTypes.STRING,
     allowNull: true
   },
+  counsellorId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
   status: {
     type: DataTypes.ENUM('New', 'Contacted', 'Resolved'),
     defaultValue: 'New'

@@ -1,26 +1,25 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2, Briefcase } from 'lucide-react';
+import { NavLink, useParams } from 'react-router-dom';
+import { LayoutDashboard, Users, CalendarDays, User, LogOut, GraduationCap, PhoneCall, Award } from 'lucide-react';
 import { useAuth } from '../App';
 
-export default function Sidebar() {
-  const { logout } = useAuth();
+export default function Sidebar({ slug }) {
+  const { logout, counsellor } = useAuth();
   
   const navItems = [
-    { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/appointments', label: 'Appointments', icon: Users }, // Keeping this as Users to minimize changes
-    { to: '/assign-counsellor', label: 'Assign to Counsellor', icon: Briefcase },
-    { to: '/questions', label: 'Ask a Question', icon: HelpCircle },
-    { to: '/testimonials', label: 'Testimonials', icon: Star },
-    { to: '/blogs', label: 'Blogs', icon: FileText },
-    { to: '/influencer-links', label: 'Influencer Links', icon: Share2 },
-    { to: '/counsellors', label: 'Counsellors', icon: Users },
+    { to: `/c/${slug}`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { to: `/c/${slug}/students`, label: 'My Students', icon: GraduationCap },
+    { to: `/c/${slug}/assigned`, label: 'Assigned Students', icon: Users },
+    { to: `/c/${slug}/enrolled`, label: 'Enrolled Students', icon: Award },
+    { to: `/c/${slug}/callbacks`, label: 'Call Back Requests', icon: PhoneCall },
+    { to: `/c/${slug}/profile`, label: 'My Profile', icon: User },
   ];
 
   return (
     <div className="w-64 bg-slate-900 text-white flex flex-col h-full shadow-xl">
       <div className="p-6 border-b border-slate-800">
-        <h1 className="text-2xl font-bold tracking-tight text-blue-400">SPINFYOT<span className="text-white">Admin</span></h1>
+        <h1 className="text-xl font-bold tracking-tight text-blue-400">SPINFYOT<br/><span className="text-white">Counsellor</span></h1>
+        <p className="text-xs text-slate-400 mt-2">Welcome, {counsellor?.name}</p>
       </div>
       
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -28,6 +27,7 @@ export default function Sidebar() {
           <NavLink
             key={item.to}
             to={item.to}
+            end={item.exact}
             className={({ isActive }) => 
               `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive 

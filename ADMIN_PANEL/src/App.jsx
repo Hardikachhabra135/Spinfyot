@@ -8,6 +8,8 @@ import Questions from './pages/Questions';
 import TestimonialsAdmin from './pages/TestimonialsAdmin';
 import BlogsAdmin from './pages/BlogsAdmin';
 import InfluencerLinks from './pages/InfluencerLinks';
+import Counsellors from './pages/Counsellors';
+import AssignCounsellor from './pages/AssignCounsellor';
 
 // Create a simple Auth Context
 export const AuthContext = createContext();
@@ -45,10 +47,12 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/appointments" element={<Appointments />} />
+                    <Route path="/assign-counsellor" element={<AssignCounsellor />} />
                     <Route path="/questions" element={<Questions />} />
                     <Route path="/testimonials" element={<TestimonialsAdmin />} />
                     <Route path="/blogs" element={<BlogsAdmin />} />
                     <Route path="/influencer-links" element={<InfluencerLinks />} />
+                    <Route path="/counsellors" element={<Counsellors />} />
                   </Routes>
                 </div>
               </div>

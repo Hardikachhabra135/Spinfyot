@@ -122,14 +122,10 @@ export default function Appointments() {
                     <td className="p-4 text-sm text-slate-500"><span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono">{app.sourcePage}</span></td>
                     <td className="p-4 text-sm text-slate-600">{new Date(app.createdAt).toLocaleDateString()}</td>
                     <td className="p-4">
-                      <select 
+                      <select
+                        className="text-sm bg-white border border-slate-200 rounded-lg px-3 py-1 focus:outline-none"
                         value={app.status}
                         onChange={(e) => updateStatus(app.id, e.target.value)}
-                        className={`text-sm rounded-full px-3 py-1 font-medium border-0 outline-none cursor-pointer
-                          ${app.status === 'New' ? 'bg-blue-100 text-blue-700' : ''}
-                          ${app.status === 'Contacted' ? 'bg-amber-100 text-amber-700' : ''}
-                          ${app.status === 'Resolved' ? 'bg-green-100 text-green-700' : ''}
-                        `}
                       >
                         <option value="New">New</option>
                         <option value="Contacted">Contacted</option>
