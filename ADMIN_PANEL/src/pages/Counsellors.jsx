@@ -101,7 +101,8 @@ export default function Counsellors() {
   };
 
   const copyToClipboard = (slug) => {
-    const baseUrl = 'http://localhost:5175'; // Counsellor portal port
+    const isLocal = window.location.hostname === 'localhost';
+    const baseUrl = import.meta.env.VITE_COUNSELLOR_PORTAL_URL || (isLocal ? 'http://localhost:5175' : 'https://counsellor-portal-lilac.vercel.app');
     const url = `${baseUrl}/c/${slug}`;
     navigator.clipboard.writeText(url);
     alert('Counsellor portal link copied!');
