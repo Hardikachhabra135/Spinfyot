@@ -51,6 +51,26 @@
   }
 }
 
+  /*
+  ✈️ airplaneFly — flies in from right and parks on the left 🛬
+    - Starts off-screen RIGHT (120vw)
+    - Ends parked on the LEFT (12vw, exactly matching the reference photo position)
+  */
+  @keyframes airplaneFly {
+    0% {
+      transform: translate3d(120vw, 0px, 0);
+    }
+    100% {
+      transform: translate3d(12vw, 0px, 0);
+    }
+  }
+
+/* Legacy alias */
+@keyframes airplaneCruise {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
 /* ── Base Styles ── */
 * {
   margin: 0;

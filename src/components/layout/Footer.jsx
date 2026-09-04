@@ -16,8 +16,7 @@ const SOCIALS = [
   },
 ];
 
-/* ── Nav links ── */
-const NAV_LINKS = [
+const QUICK_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Services', to: '/services' },
   { label: 'Testimonials', to: '/testimonials' },
@@ -25,384 +24,161 @@ const NAV_LINKS = [
   { label: 'Contact', to: '/contact' },
 ];
 
+const SERVICES_LINKS = [
+  { label: 'Career Counselling', to: '/services/career-counselling' },
+  { label: 'University Selection', to: '/services/university-selection' },
+  { label: 'Visa Assistance', to: '/services/visa-assistance' },
+  { label: 'Pre-Departure Support', to: '/services/pre-departure-support' },
+  { label: 'Post-Arrival Support', to: '/services/post-arrival-support' },
+  { label: 'Work Visa Assistance', to: '/services/work-visa-assistance' },
+  { label: 'Spouse Services', to: '/services/spouse-services' },
+  { label: 'Appeals & Legal Support', to: '/services/appeals-legal-support' },
+  { label: 'Accommodation Assistance', to: '/services/accommodation-assistance' },
+];
+
 export default function Footer() {
-  const fadeUp = {
-    hidden: { opacity: 0, y: 14 },
-    visible: (i = 0) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 },
-    }),
-  };
+  const handleScrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer
-      style={{
-        width: '100%',
-        background: '#000000', /* Pure black base */
-        fontFamily: "'Poppins', sans-serif",
-        position: 'relative',
-        overflow: 'hidden',
-        borderTopLeftRadius: 'clamp(24px, 5vw, 48px)',
-        borderTopRightRadius: 'clamp(24px, 5vw, 48px)',
-        marginTop: '-24px', /* Pull it up slightly if needed to overlap cleanly, or remove if not needed */
-      }}
-    >
-      {/* ── Main content wrapper ── */}
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 32px)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'clamp(12px, 2vw, 16px)',
-        }}
-      >
-        {/* ══════════ TOP ROW: Logo Box + Content Box ══════════ */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-40px' }}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'auto 1fr',
-            gap: 'clamp(12px, 2vw, 16px)',
-            alignItems: 'stretch',
-          }}
-          className="footer-top-row"
-        >
-          {/* ── LEFT: Logo White Box ── */}
-          <motion.div
-            variants={fadeUp}
-            custom={0}
-            style={{
-              background: '#F5F3EE',
-              borderRadius: '16px',
-              padding: 'clamp(20px, 3vw, 32px) clamp(24px, 4vw, 40px)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              gap: '14px',
-              minWidth: '200px',
-            }}
-            className="footer-logo-box"
-          >
-            <Link
-              to="/"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{ display: 'inline-block', textDecoration: 'none' }}
-            >
-              <img
-                src="/assets/logo/spinfyot-logo-transparent.png"
-                alt="Spinfyot"
-                className="footer-logo-img"
-                style={{
-                  height: '58px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  display: 'block',
-                }}
-              />
+    <footer style={{ width: '100%', background: '#000000', color: '#ffffff', fontFamily: "'Poppins', sans-serif", overflow: 'hidden' }}>
+      {/* Centered Main Container */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '60px 40px 24px 40px' }}>
+        
+        {/* 4-Column Grid */}
+        <div className="footer-grid">
+          
+          {/* Column 1: Brand */}
+          <div className="footer-col brand-col">
+            <Link to="/" onClick={handleScrollToTop} style={{ display: 'inline-block', marginBottom: '16px', background: '#F5F3EE', padding: '14px 20px', borderRadius: '14px', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+              <img src="/assets/logo/spinfyot-logo-transparent.png" alt="Spinfyot" style={{ height: '52px', width: 'auto', display: 'block' }} />
             </Link>
-            <p
-              className="footer-logo-desc"
-              style={{
-                color: '#6B7280',
-                fontSize: '13px',
-                fontWeight: 400,
-                lineHeight: 1.6,
-                margin: 0,
-                maxWidth: '240px',
-                letterSpacing: '0.01em',
-              }}
-            >
-              Guiding your global education journey with precision and care.
+            <p style={{ color: '#9CA3AF', fontSize: '13px', lineHeight: '1.6', marginBottom: '20px', maxWidth: '280px', fontWeight: '300' }}>
+              Empowering students to achieve their global education dreams with expert guidance, seamless processing, and unwavering support from start to finish.
             </p>
-          </motion.div>
-
-          {/* ── RIGHT: Nav + Social White Box ── */}
-          <motion.div
-            variants={fadeUp}
-            custom={1}
-            style={{
-              background: '#F5F3EE',
-              borderRadius: '16px',
-              padding: 'clamp(20px, 3vw, 32px) clamp(24px, 4vw, 40px)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              gap: '20px',
-            }}
-            className="footer-content-box"
-          >
-            {/* Nav links row */}
-            <nav
-              className="footer-nav-links"
-              aria-label="Footer navigation"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '8px 28px',
-                alignItems: 'center',
-              }}
-            >
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  style={{
-                    color: '#374151',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    letterSpacing: '0.02em',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s ease',
-                    padding: '2px 0',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Social icons */}
-            <div className="footer-social-icons" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              {SOCIALS.map((s) => (
-                <motion.a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  whileHover={{ scale: 1.1 }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '10px',
-                    background: '#E8E5DE',
-                    color: '#374151',
-                    textDecoration: 'none',
-                    transition: 'background 0.2s ease, color 0.2s ease',
-                    flexShrink: 0,
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = '#173B63';
-                    e.currentTarget.style.color = '#ffffff';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = '#E8E5DE';
-                    e.currentTarget.style.color = '#374151';
-                  }}
-                >
-                  <svg style={{ width: '16px', height: '16px', fill: 'currentColor' }} viewBox="0 0 24 24" aria-hidden="true">
-                    <path d={s.path} />
-                  </svg>
-                </motion.a>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              {SOCIALS.map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)', color: '#9CA3AF', transition: 'all 0.3s' }} onMouseEnter={e => { e.currentTarget.style.background = '#E57A44'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-2px)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#9CA3AF'; e.currentTarget.style.transform = 'translateY(0)' }}>
+                  <svg style={{ width: '16px', height: '16px', fill: 'currentColor' }} viewBox="0 0 24 24"><path d={s.path}/></svg>
+                </a>
               ))}
             </div>
-          </motion.div>
-        </motion.div>
-
-        {/* ══════════ BOTTOM ROW: Full-width Contact Box ══════════ */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          custom={2}
-          style={{
-            background: '#F5F3EE',
-            borderRadius: '16px',
-            padding: 'clamp(16px, 3vw, 24px) clamp(24px, 4vw, 40px)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '10px 32px',
-          }}
-          className="footer-bottom-box"
-        >
-          {/* Contact info */}
-          <div className="footer-contact-info" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px 24px' }}>
-            <a
-              href="mailto:Ketan@spinfyot.in"
-              style={{
-                color: '#374151',
-                fontSize: '13px',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                fontWeight: 500,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
-            >
-              Ketan@spinfyot.in
-            </a>
-            <span className="footer-separator" style={{ color: '#D1D5DB', fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
-            <a
-              href="tel:+919876543210"
-              style={{
-                color: '#374151',
-                fontSize: '13px',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                fontWeight: 500,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#E57A44'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#374151'; }}
-            >
-              +91 98765 43210
-            </a>
-            <span className="footer-separator" style={{ color: '#D1D5DB', fontSize: '18px', userSelect: 'none' }} aria-hidden="true">&middot;</span>
-            <span style={{ color: '#6B7280', fontSize: '12px', fontWeight: 400 }}>
-              123 Education Hub, Global City, State, 123456
-            </span>
           </div>
 
-          {/* Copyright + legal links */}
-          <div className="footer-legal" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px', alignItems: 'center' }}>
-            <span style={{ color: '#9CA3AF', fontSize: '11px', letterSpacing: '0.08em' }}>
-              &copy; 2026 SPINFYOT
-            </span>
-            <Link
-              to="/privacy"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{ color: '#9CA3AF', fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#374151'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF'; }}
-            >
+          {/* Column 2: Quick Links */}
+          <div className="footer-col">
+            <h3 style={{ color: '#E57A44', fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>Quick Links</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {QUICK_LINKS.map(link => (
+                <li key={link.label}>
+                  <Link to={link.to} onClick={handleScrollToTop} style={{ color: '#D1D5DB', fontSize: '13px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', fontWeight: '300' }} onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateX(4px)' }} onMouseLeave={e => { e.currentTarget.style.color = '#D1D5DB'; e.currentTarget.style.transform = 'translateX(0)' }}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Services */}
+          <div className="footer-col">
+            <h3 style={{ color: '#E57A44', fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>Services</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {SERVICES_LINKS.map(link => (
+                <li key={link.label}>
+                  <Link to={link.to} onClick={handleScrollToTop} style={{ color: '#D1D5DB', fontSize: '13px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', fontWeight: '300' }} onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateX(4px)' }} onMouseLeave={e => { e.currentTarget.style.color = '#D1D5DB'; e.currentTarget.style.transform = 'translateX(0)' }}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact */}
+          <div className="footer-col">
+            <h3 style={{ color: '#E57A44', fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>Contact</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <svg style={{ width: '18px', height: '18px', color: '#9CA3AF', flexShrink: 0, marginTop: '2px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <a href="tel:+919876543210" style={{ color: '#D1D5DB', fontSize: '13px', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '300' }} onMouseEnter={e => e.currentTarget.style.color = '#ffffff'} onMouseLeave={e => e.currentTarget.style.color = '#D1D5DB'}>
+                  +91 98765 43210
+                </a>
+              </li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <svg style={{ width: '18px', height: '18px', color: '#9CA3AF', flexShrink: 0, marginTop: '2px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <a href="mailto:Ketan@spinfyot.in" style={{ color: '#D1D5DB', fontSize: '13px', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '300' }} onMouseEnter={e => e.currentTarget.style.color = '#ffffff'} onMouseLeave={e => e.currentTarget.style.color = '#D1D5DB'}>
+                  Ketan@spinfyot.in
+                </a>
+              </li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <svg style={{ width: '18px', height: '18px', color: '#9CA3AF', flexShrink: 0, marginTop: '2px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span style={{ color: '#D1D5DB', fontSize: '13px', lineHeight: '1.6', fontWeight: '300' }}>
+                  123 Education Hub, Global City,<br/>State, 123456
+                </span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Divider & Bottom Bar */}
+        <div style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="footer-bottom">
+          <p style={{ color: '#9CA3AF', fontSize: '12px', margin: 0, fontWeight: '300' }}>
+            &copy; 2026 SpinFyot. All rights reserved.
+          </p>
+          <div style={{ display: 'flex', gap: '32px' }}>
+            <Link to="/privacy" onClick={handleScrollToTop} style={{ color: '#9CA3AF', fontSize: '12px', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '300' }} onMouseEnter={e => e.currentTarget.style.color = '#ffffff'} onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
               Privacy Policy
             </Link>
-            <Link
-              to="/terms"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              style={{ color: '#9CA3AF', fontSize: '11px', textDecoration: 'none', transition: 'color 0.2s ease', letterSpacing: '0.04em' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#374151'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF'; }}
-            >
+            <Link to="/terms" onClick={handleScrollToTop} style={{ color: '#9CA3AF', fontSize: '12px', textDecoration: 'none', transition: 'color 0.2s', fontWeight: '300' }} onMouseEnter={e => e.currentTarget.style.color = '#ffffff'} onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}>
               Terms of Service
             </Link>
           </div>
-        </motion.div>
+        </div>
+
       </div>
 
-      {/* ── Responsive styles ── */}
       <style>{`
-        /* Desktop: side-by-side top row */
-        .footer-top-row {
-          grid-template-columns: auto 1fr !important;
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1.3fr 1.1fr;
+          gap: 64px;
         }
-
-        /* Tablet (below 992px) */
-        @media (max-width: 992px) {
-          .footer-top-row {
-            grid-template-columns: 1fr 1.5fr !important;
-          }
-          .footer-logo-box {
-            min-width: 0 !important;
-          }
-          .footer-bottom-box {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 20px !important;
-          }
+        .footer-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
-        
-        /* Mobile (below 768px) */
-        @media (max-width: 768px) {
-          .footer-top-row {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 12px !important;
+        @media (max-width: 1024px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
           }
-          .footer-logo-box, .footer-content-box {
-            padding: 16px 12px !important;
-            gap: 12px !important;
+          .brand-col {
+            grid-column: span 2;
           }
         }
-
-        /* Small Mobile (below 576px) */
-        @media (max-width: 576px) {
-          .footer-top-row {
-            gap: 8px !important;
+        @media (max-width: 640px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 48px;
           }
-          .footer-logo-box, .footer-content-box {
-            padding: 12px 8px !important;
-            border-radius: 12px !important;
+          .brand-col {
+            grid-column: span 1;
           }
-          .footer-logo-img {
-            max-width: 100% !important;
-            height: auto !important;
-            max-height: 48px !important;
+          .footer-bottom {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
           }
-          .footer-logo-desc {
-            font-size: 11px !important;
-            line-height: 1.4 !important;
-          }
-          .footer-nav-links {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 8px !important;
-          }
-          .footer-nav-links a {
-            font-size: 12px !important;
-          }
-          .footer-social-icons {
-            flex-wrap: wrap !important;
-            gap: 6px !important;
-          }
-          .footer-social-icons a {
-            width: 28px !important;
-            height: 28px !important;
-            border-radius: 6px !important;
-          }
-          .footer-social-icons svg {
-            width: 14px !important;
-            height: 14px !important;
-          }
-          .footer-contact-info {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 8px !important;
-          }
-          .footer-contact-info a, .footer-contact-info span:not(.footer-separator) {
-            font-size: 12px !important;
-          }
-          .footer-separator {
-            display: none !important;
-          }
-          .footer-legal {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 8px !important;
-          }
-        }
-        
-        /* Extra small devices (below 380px) */
-        @media (max-width: 380px) {
-           .footer-logo-img {
-             max-height: 40px !important;
-           }
-           .footer-logo-desc {
-             font-size: 10px !important;
-           }
-           .footer-nav-links a {
-             font-size: 11px !important;
-           }
-           .footer-contact-info a, .footer-contact-info span:not(.footer-separator) {
-             font-size: 11px !important;
-           }
         }
       `}</style>
     </footer>
   );
 }
+

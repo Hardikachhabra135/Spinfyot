@@ -292,15 +292,9 @@ router.post('/assigned-students/:id/add-to-mystudents', portalAuthMiddleware, as
 
     const appt = assignment.Appointment;
 
-    // Check if a student with this email already exists for this counsellor to avoid duplicates
-    let existing = null;
-    if (appt.email) {
-      existing = await Student.findOne({ where: { email: appt.email, counsellorId: req.counsellor.id } });
-    }
-    
-    if (existing) {
-      return res.status(400).json({ success: false, error: 'Student already exists in My Students' });
-    }
+    // Note: We deliberately do not check for existing emails here,
+    // as the manual "Add New Student" form also allows multiple entries 
+    // with the same email if needed.
 
     const newStudent = await Student.create({
       counsellorId: req.counsellor.id,

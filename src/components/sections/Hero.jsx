@@ -45,24 +45,12 @@ const travelerVariant = {
   },
 };
 
-// Airplane flies in from top-right, following a subtle arc
-const airplaneEntryVariant = {
-  hidden: {
-    opacity: 0,
-    x: 280,
-    y: -160,
-    rotate: -148,
-  },
+// Airplane: simple fade-in on mount — flight path is driven by CSS keyframe
+const airplaneFadeIn = {
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    x: 0,
-    y: 0,
-    rotate: -155,
-    transition: {
-      duration: 1.6,
-      ease: [0.16, 1, 0.3, 1], // expo-like ease for cinematic feel
-      delay: 0.1,
-    },
+    transition: { duration: 0.6, ease: 'easeOut', delay: 0.4 },
   },
 };
 
@@ -135,8 +123,10 @@ export default function Hero({ onBookCounselling }) {
   const textOpacity = useTransform(smoothScrollY, [0, 500], [1, 0]);
   const travelerY = useTransform(smoothScrollY, [0, 800], [0, 40]);
   const pathY = useTransform(smoothScrollY, [0, 800], [0, -40]);
-  const airplaneX = useTransform(smoothScrollY, [0, 800], [0, -600]);
-  const airplaneY = useTransform(smoothScrollY, [0, 800], [0, -100]);
+  // NOTE: airplaneX and airplaneY are intentionally removed.
+  // Tying the airplane position to scroll caused it to reverse direction
+  // whenever the user scrolled upward. The airplane now uses its own
+  // independent CSS animation loop instead.
 
   // Detect mobile to disable parallax (which pushes text behind navbar)
   const [isMobile, setIsMobile] = useState(false);
@@ -174,6 +164,47 @@ export default function Hero({ onBookCounselling }) {
       />
 
       <Particles />
+
+      {/* ── AIRPLANE — full-width fly-across overlay ──────────────────────────
+          Positioned absolutely on the hero section (not inside the inner div)
+          so it can fly across the FULL viewport width unobstructed.
+          One CSS keyframe (airplaneFly) drives ALL motion — scroll-independent,
+          never reverses, GPU-accelerated via translate3d.
+      ── */}
+      {!prefersReducedMotion && (
+        <motion.div
+          className="absolute inset-0 z-30 pointer-events-none overflow-hidden"
+          variants={airplaneFadeIn}
+          initial="hidden"
+          animate="visible"
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '15%',          /* Positioned precisely between the navbar and the heading text without overlapping either */
+              left: 0,
+              width: '100%',
+              height: 'auto',
+              /* Smoothly flies in from right and parks on left. */
+              animation: 'airplaneFly 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              willChange: 'transform',
+            }}
+          >
+            <img
+              src="/assets/images/airplane-real.png"
+              alt="Airplane flying across"
+              style={{
+                width: 'clamp(80px, 14vw, 220px)',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 15px 30px rgba(153,182,245,0.5))',
+                /* Asset points left. rotate(15deg) tilts the nose up matching the reference photo exactly. */
+                transform: 'rotate(15deg)',
+                display: 'block',
+              }}
+            />
+          </div>
+        </motion.div>
+      )}
 
       {/* Thematic Decorative Layer */}
       <motion.div
@@ -237,36 +268,6 @@ export default function Hero({ onBookCounselling }) {
 
           {/* Flight Path */}
           <FlightPathLine pathY={pathY} textOpacity={textOpacity} />
-
-          {/* ── Airplane (cinematic entrance) ─────────────────────────────── */}
-          <motion.div
-            className="absolute z-30 right-[4%] top-[2%] md:left-[5%] md:right-auto md:top-[15%]"
-            style={{ scaleX: -1 }}
-            variants={prefersReducedMotion ? {} : airplaneEntryVariant}
-            initial={prefersReducedMotion ? { opacity: 1, rotate: -155 } : 'hidden'}
-            animate={prefersReducedMotion ? { rotate: -155 } : 'visible'}
-          >
-            {/* Parallax + idle float wrapper */}
-            <motion.div
-              style={{ x: airplaneX, y: airplaneY, opacity: textOpacity }}
-              animate={prefersReducedMotion ? {} : {
-                y: [0, -14, 0],
-                rotate: [0, -3, 0],
-              }}
-              transition={{
-                duration: 4.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 1.8, // Start floating only after entry animation
-              }}
-            >
-              <img
-                src="/assets/images/airplane-real.png"
-                alt="Airplane"
-                className="w-20 sm:w-28 md:w-56 object-contain drop-shadow-[0_15px_30px_rgba(153,182,245,0.5)]"
-              />
-            </motion.div>
-          </motion.div>
 
           {/* ── Left Content: Headline & CTA ──────────────────────────────── */}
           <motion.div
