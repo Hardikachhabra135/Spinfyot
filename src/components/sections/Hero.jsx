@@ -117,24 +117,6 @@ const FlightPathLine = ({ pathY, textOpacity }) => (
         animate={{ pathLength: 1, opacity: 1 }}
         transition={{ duration: 2.2, ease: 'easeOut', delay: 0.6 }}
       />
-      {/* Flight waypoints */}
-      {[
-        { cx: 100, cy: 180, r: 3 },
-        { cx: 450, cy: 205, r: 3.5 },
-        { cx: 850, cy: 275, r: 4 },
-        { cx: 1150, cy: 185, r: 3 },
-      ].map(({ cx, cy, r }, i) => (
-        <motion.circle
-          key={cx}
-          cx={cx} cy={cy} r={r}
-          fill="#E57A44"
-          stroke="#050B14"
-          strokeWidth="2"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 1.2 + i * 0.2, duration: 0.5, ease: 'backOut' }}
-        />
-      ))}
     </svg>
   </motion.div>
 );
