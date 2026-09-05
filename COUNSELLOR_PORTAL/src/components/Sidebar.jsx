@@ -1,18 +1,44 @@
-import React from 'react';
-import { NavLink, useParams } from 'react-router-dom';
-import { LayoutDashboard, Users, CalendarDays, User, LogOut, GraduationCap, PhoneCall, Award } from 'lucide-react';
-import { useAuth } from '../App';
+﻿import React, { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { LayoutDashboard, Users, CalendarDays, User, LogOut, GraduationCap, PhoneCall, Award, MessageSquare } from "lucide-react";
+import { useAuth } from "../App";
+import api from "../utils/api";
 
 export default function Sidebar({ slug }) {
-  const { logout, counsellor } = useAuth();
+  const { logout, counsellor, token } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    let interval;
+    if (token) {
+      const fetchUnread = async () => {
+        try {
+          const res = await api.get("/api/counsellor/messages/unread-count", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.data.success) {
+            setUnreadCount(res.data.count);
+          }
+        } catch (error) {
+          console.error("Failed to fetch unread count");
+        }
+      };
+
+      fetchUnread();
+      interval = setInterval(fetchUnread, 10000);
+    }
+    return () => clearInterval(interval);
+  }, [token, location.pathname]);
   
   const navItems = [
-    { to: `/c/${slug}`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
-    { to: `/c/${slug}/students`, label: 'My Students', icon: GraduationCap },
-    { to: `/c/${slug}/assigned`, label: 'Assigned Students', icon: Users },
-    { to: `/c/${slug}/enrolled`, label: 'Enrolled Students', icon: Award },
-    { to: `/c/${slug}/callbacks`, label: 'Call Back Requests', icon: PhoneCall },
-    { to: `/c/${slug}/profile`, label: 'My Profile', icon: User },
+    { to: `/c/${slug}`, label: "Dashboard", icon: LayoutDashboard, exact: true },
+    { to: `/c/${slug}/students`, label: "My Students", icon: GraduationCap },
+    { to: `/c/${slug}/assigned`, label: "Assigned Students", icon: Users },
+    { to: `/c/${slug}/enrolled`, label: "Enrolled Students", icon: Award },
+    { to: `/c/${slug}/callbacks`, label: "Call Back Requests", icon: PhoneCall },
+    { to: `/c/${slug}/profile`, label: "My Profile", icon: User },
+    { to: `/c/${slug}/chat`, label: "Talk to Admin", icon: MessageSquare, badge: unreadCount },
   ];
 
   return (
@@ -29,15 +55,22 @@ export default function Sidebar({ slug }) {
             to={item.to}
             end={item.exact}
             className={({ isActive }) => 
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' 
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-900/20" 
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
               }`
             }
           >
-            <item.icon size={20} />
-            <span className="font-medium">{item.label}</span>
+            <div className="flex items-center gap-3">
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </div>
+            {item.badge > 0 && (
+              <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {item.badge}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -54,3 +87,4 @@ export default function Sidebar({ slug }) {
     </div>
   );
 }
+

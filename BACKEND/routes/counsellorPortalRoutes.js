@@ -316,4 +316,119 @@ router.post('/assigned-students/:id/add-to-mystudents', portalAuthMiddleware, as
   }
 });
 
+
+// --- COUNSELLOR MESSAGING ROUTES ---
+const { Message, Admin } = require('../models');
+
+// 1. Get all admins (usually just one, but we return a list for flexibility)
+router.get('/messages/admins', portalAuthMiddleware, async (req, res) => {
+  try {
+    console.log("Fetching admins for counsellor:", req.counsellor);
+    const admins = await Admin.findAll({
+      attributes: ['id', 'email']
+    });
+    console.log("Found admins:", admins.map(a => a.id));
+
+    const chatList = await Promise.all(admins.map(async (admin) => {
+      console.log("Querying messages for adminId:", admin.id, "counsellorId:", req.counsellor.id);
+      const messages = await Message.findAll({
+        where: { adminId: admin.id, counsellorId: req.counsellor.id },
+        order: [['createdAt', 'DESC']]
+      });
+      console.log("Messages found:", messages.length);
+
+      const unreadCount = messages.filter(m => m.sender === 'Admin' && !m.isRead).length;
+      const lastMessage = messages[0] || null;
+
+      return {
+        id: admin.id,
+        name: 'Administrator', // Mask email with a professional name
+        email: admin.email,
+        unreadCount,
+        lastMessage
+      };
+    }));
+
+    chatList.sort((a, b) => {
+      const timeA = a.lastMessage ? new Date(a.lastMessage.createdAt).getTime() : 0;
+      const timeB = b.lastMessage ? new Date(b.lastMessage.createdAt).getTime() : 0;
+      return timeB - timeA;
+    });
+
+    console.log("Returning chatList:", chatList.length);
+    res.json({ success: true, admins: chatList });
+  } catch (error) {
+    console.error('Error fetching admin chat list:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// 2. Get messages with a specific admin
+router.get('/messages/:adminId', portalAuthMiddleware, async (req, res) => {
+  try {
+    const adminId = req.params.adminId;
+
+    // Mark unread messages from Admin to this Counsellor as read
+    await Message.update(
+      { isRead: true },
+      { where: { adminId, counsellorId: req.counsellor.id, sender: 'Admin', isRead: false } }
+    );
+
+    const messages = await Message.findAll({
+      where: { adminId, counsellorId: req.counsellor.id },
+      order: [['createdAt', 'ASC']]
+    });
+
+    res.json({ success: true, messages });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// 3. Send a message to an admin
+router.post('/messages/:adminId', portalAuthMiddleware, async (req, res) => {
+  try {
+    const adminId = req.params.adminId;
+    const { content } = req.body;
+
+    if (!content || !content.trim()) {
+      return res.status(400).json({ success: false, error: 'Message content is required' });
+    }
+
+    const admin = await Admin.findByPk(adminId);
+    if (!admin) {
+      return res.status(404).json({ success: false, error: 'Admin not found' });
+    }
+
+    const message = await Message.create({
+      adminId,
+      counsellorId: req.counsellor.id,
+      sender: 'Counsellor',
+      content: content.trim(),
+      isRead: false
+    });
+
+    res.json({ success: true, message });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+
+
+
+router.get('/messages/unread-count', portalAuthMiddleware, async (req, res) => {
+  try {
+    const count = await Message.count({ where: { counsellorId: req.counsellor.id, sender: 'Admin', isRead: false } });
+    res.json({ success: true, count });
+  } catch (error) {
+    res.json({ success: false, count: 0 });
+  }
+});
+
+
 module.exports = router;
+
+

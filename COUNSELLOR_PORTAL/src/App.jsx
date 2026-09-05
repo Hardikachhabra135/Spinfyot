@@ -8,6 +8,7 @@ import Students from './pages/Students';
 import AssignedStudents from './pages/AssignedStudents';
 import EnrolledStudents from './pages/EnrolledStudents';
 import CallBacks from './pages/CallBacks';
+import TalkToAdmin from './pages/TalkToAdmin';
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -76,6 +77,7 @@ function CounsellorApp() {
           <Route path="/enrolled" element={<EnrolledStudents />} />
           <Route path="/callbacks" element={<CallBacks />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/chat" element={<TalkToAdmin />} />
         </Routes>
       </main>
     </div>

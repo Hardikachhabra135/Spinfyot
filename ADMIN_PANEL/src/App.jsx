@@ -10,6 +10,7 @@ import BlogsAdmin from './pages/BlogsAdmin';
 import InfluencerLinks from './pages/InfluencerLinks';
 import Counsellors from './pages/Counsellors';
 import AssignCounsellor from './pages/AssignCounsellor';
+import TalkToCounselor from './pages/TalkToCounselor';
 
 // Create a simple Auth Context
 export const AuthContext = createContext();
@@ -53,6 +54,7 @@ function App() {
                     <Route path="/blogs" element={<BlogsAdmin />} />
                     <Route path="/influencer-links" element={<InfluencerLinks />} />
                     <Route path="/counsellors" element={<Counsellors />} />
+                    <Route path="/chat" element={<TalkToCounselor />} />
                   </Routes>
                 </div>
               </div>

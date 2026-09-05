@@ -1,20 +1,46 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2, Briefcase } from 'lucide-react';
-import { useAuth } from '../App';
+﻿import React, { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2, Briefcase } from "lucide-react";
+import { useAuth } from "../App";
+import api from "../utils/api";
 
 export default function Sidebar() {
-  const { logout } = useAuth();
-  
+  const { logout, token } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    let interval;
+    if (token) {
+      const fetchUnread = async () => {
+        try {
+          const res = await api.get("/api/admin/messages/unread-count", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (res.data.success) {
+            setUnreadCount(res.data.count);
+          }
+        } catch (error) {
+          console.error("Failed to fetch unread count");
+        }
+      };
+
+      fetchUnread();
+      interval = setInterval(fetchUnread, 10000);
+    }
+    return () => clearInterval(interval);
+  }, [token, location.pathname]); // Re-fetch on navigation
+
   const navItems = [
-    { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/appointments', label: 'Appointments', icon: Users }, // Keeping this as Users to minimize changes
-    { to: '/assign-counsellor', label: 'Assign to Counsellor', icon: Briefcase },
-    { to: '/questions', label: 'Ask a Question', icon: HelpCircle },
-    { to: '/testimonials', label: 'Testimonials', icon: Star },
-    { to: '/blogs', label: 'Blogs', icon: FileText },
-    { to: '/influencer-links', label: 'Influencer Links', icon: Share2 },
-    { to: '/counsellors', label: 'Counsellors', icon: Users },
+    { to: "/", label: "Dashboard", icon: LayoutDashboard },
+    { to: "/appointments", label: "Appointments", icon: Users },
+    { to: "/assign-counsellor", label: "Assign to Counsellor", icon: Briefcase },
+    { to: "/questions", label: "Ask a Question", icon: HelpCircle },
+    { to: "/testimonials", label: "Testimonials", icon: Star },
+    { to: "/blogs", label: "Blogs", icon: FileText },
+    { to: "/influencer-links", label: "Influencer Links", icon: Share2 },
+    { to: "/counsellors", label: "Counsellors", icon: Users },
+    { to: "/chat", label: "Talk to Counselor", icon: MessageSquare, badge: unreadCount },
   ];
 
   return (
@@ -29,15 +55,22 @@ export default function Sidebar() {
             key={item.to}
             to={item.to}
             className={({ isActive }) => 
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+              `flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' 
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-900/20" 
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
               }`
             }
           >
-            <item.icon size={20} />
-            <span className="font-medium">{item.label}</span>
+            <div className="flex items-center gap-3">
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </div>
+            {item.badge > 0 && (
+              <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {item.badge}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -54,3 +87,4 @@ export default function Sidebar() {
     </div>
   );
 }
+

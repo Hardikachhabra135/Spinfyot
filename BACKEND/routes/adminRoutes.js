@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -525,4 +525,115 @@ router.get('/assignments/workload', authMiddleware, async (req, res) => {
   }
 });
 
+
+// --- ADMIN MESSAGING ROUTES ---
+const { Message } = require('../models');
+
+// 1. Get all counsellors with latest message info for the chat list
+router.get('/messages/counsellors', authMiddleware, async (req, res) => {
+  try {
+    const counsellors = await Counsellor.findAll({
+      attributes: ['id', 'counsellorId', 'name', 'profileImage', 'specialization', 'status']
+    });
+
+    // For each counsellor, get the last message and unread count
+    const chatList = await Promise.all(counsellors.map(async (c) => {
+      const messages = await Message.findAll({
+        where: { adminId: req.admin.id, counsellorId: c.id },
+        order: [['createdAt', 'DESC']]
+      });
+
+      const unreadCount = messages.filter(m => m.sender === 'Counsellor' && !m.isRead).length;
+      const lastMessage = messages[0] || null;
+
+      return {
+        ...c.toJSON(),
+        unreadCount,
+        lastMessage
+      };
+    }));
+
+    // Sort by most recently active conversation
+    chatList.sort((a, b) => {
+      const timeA = a.lastMessage ? new Date(a.lastMessage.createdAt).getTime() : 0;
+      const timeB = b.lastMessage ? new Date(b.lastMessage.createdAt).getTime() : 0;
+      return timeB - timeA;
+    });
+
+    res.json({ success: true, counsellors: chatList });
+  } catch (error) {
+    console.error('Error fetching chat list:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// 2. Get messages for a specific counsellor
+router.get('/messages/:counsellorId', authMiddleware, async (req, res) => {
+  try {
+    const counsellorId = req.params.counsellorId;
+
+    // Mark all unread messages from this counsellor to this admin as read
+    await Message.update(
+      { isRead: true },
+      { where: { adminId: req.admin.id, counsellorId, sender: 'Counsellor', isRead: false } }
+    );
+
+    const messages = await Message.findAll({
+      where: { adminId: req.admin.id, counsellorId },
+      order: [['createdAt', 'ASC']]
+    });
+
+    res.json({ success: true, messages });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+// 3. Send a message to a counsellor
+router.post('/messages/:counsellorId', authMiddleware, async (req, res) => {
+  try {
+    const counsellorId = req.params.counsellorId;
+    const { content } = req.body;
+
+    if (!content || !content.trim()) {
+      return res.status(400).json({ success: false, error: 'Message content is required' });
+    }
+
+    // Verify counsellor exists
+    const counsellor = await Counsellor.findByPk(counsellorId);
+    if (!counsellor) {
+      return res.status(404).json({ success: false, error: 'Counsellor not found' });
+    }
+
+    const message = await Message.create({
+      adminId: req.admin.id,
+      counsellorId,
+      sender: 'Admin',
+      content: content.trim(),
+      isRead: false
+    });
+
+    res.json({ success: true, message });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+
+
+
+router.get('/messages/unread-count', authMiddleware, async (req, res) => {
+  try {
+    const count = await Message.count({ where: { adminId: req.admin.id, sender: 'Counsellor', isRead: false } });
+    res.json({ success: true, count });
+  } catch (error) {
+    res.json({ success: false, count: 0 });
+  }
+});
+
+
 module.exports = router;
+
+

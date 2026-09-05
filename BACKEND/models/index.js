@@ -13,6 +13,7 @@ const ReferralConversion = require('./ReferralConversion');
 const Counsellor = require('./Counsellor');
 const Student = require('./Student');
 const Assignment = require('./Assignment');
+const Message = require('./Message');
 
 // Associations
 Referral.hasMany(ReferralClick, { foreignKey: 'referralId' });
@@ -35,6 +36,12 @@ Assignment.belongsTo(Appointment, { foreignKey: 'appointmentId' });
 
 Counsellor.hasMany(Assignment, { foreignKey: 'counsellorId' });
 Assignment.belongsTo(Counsellor, { foreignKey: 'counsellorId' });
+
+Admin.hasMany(Message, { foreignKey: 'adminId' });
+Message.belongsTo(Admin, { foreignKey: 'adminId' });
+
+Counsellor.hasMany(Message, { foreignKey: 'counsellorId' });
+Message.belongsTo(Counsellor, { foreignKey: 'counsellorId' });
 
 const syncDatabase = async () => {
   try {
@@ -90,5 +97,6 @@ module.exports = {
   ReferralConversion,
   Counsellor,
   Student,
-  Assignment
+  Assignment,
+  Message
 };
