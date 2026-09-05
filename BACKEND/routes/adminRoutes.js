@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -567,6 +567,16 @@ router.get('/messages/counsellors', authMiddleware, async (req, res) => {
   }
 });
 
+// IMPORTANT: unread-count must be before /:counsellorId to avoid Express treating "unread-count" as a param
+router.get('/messages/unread-count', authMiddleware, async (req, res) => {
+  try {
+    const count = await Message.count({ where: { adminId: req.admin.id, sender: 'Counsellor', isRead: false } });
+    res.json({ success: true, count });
+  } catch (error) {
+    res.json({ success: false, count: 0 });
+  }
+});
+
 // 2. Get messages for a specific counsellor
 router.get('/messages/:counsellorId', authMiddleware, async (req, res) => {
   try {
@@ -621,19 +631,4 @@ router.post('/messages/:counsellorId', authMiddleware, async (req, res) => {
   }
 });
 
-
-
-
-router.get('/messages/unread-count', authMiddleware, async (req, res) => {
-  try {
-    const count = await Message.count({ where: { adminId: req.admin.id, sender: 'Counsellor', isRead: false } });
-    res.json({ success: true, count });
-  } catch (error) {
-    res.json({ success: false, count: 0 });
-  }
-});
-
-
 module.exports = router;
-
-

@@ -363,6 +363,16 @@ router.get('/messages/admins', portalAuthMiddleware, async (req, res) => {
   }
 });
 
+// IMPORTANT: unread-count must be BEFORE /:adminId to avoid Express treating "unread-count" as a param
+router.get('/messages/unread-count', portalAuthMiddleware, async (req, res) => {
+  try {
+    const count = await Message.count({ where: { counsellorId: req.counsellor.id, sender: 'Admin', isRead: false } });
+    res.json({ success: true, count });
+  } catch (error) {
+    res.json({ success: false, count: 0 });
+  }
+});
+
 // 2. Get messages with a specific admin
 router.get('/messages/:adminId', portalAuthMiddleware, async (req, res) => {
   try {
@@ -417,18 +427,4 @@ router.post('/messages/:adminId', portalAuthMiddleware, async (req, res) => {
 });
 
 
-
-
-router.get('/messages/unread-count', portalAuthMiddleware, async (req, res) => {
-  try {
-    const count = await Message.count({ where: { counsellorId: req.counsellor.id, sender: 'Admin', isRead: false } });
-    res.json({ success: true, count });
-  } catch (error) {
-    res.json({ success: false, count: 0 });
-  }
-});
-
-
 module.exports = router;
-
-

@@ -74,6 +74,23 @@ const syncDatabase = async () => {
     try { await sequelize.query('ALTER TABLE `students` ADD COLUMN `budget` VARCHAR(255);'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `students` ADD COLUMN `intakeTerm` VARCHAR(255);'); } catch (e) {}
 
+    // Create messages table explicitly (for production MySQL/TiDB compatibility)
+    try {
+      await sequelize.query(`
+        CREATE TABLE IF NOT EXISTS \`messages\` (
+          \`id\` INTEGER NOT NULL AUTO_INCREMENT,
+          \`adminId\` INTEGER NOT NULL,
+          \`counsellorId\` INTEGER NOT NULL,
+          \`sender\` ENUM('Admin','Counsellor') NOT NULL,
+          \`content\` TEXT NOT NULL,
+          \`isRead\` TINYINT(1) DEFAULT 0,
+          \`createdAt\` DATETIME NOT NULL,
+          \`updatedAt\` DATETIME NOT NULL,
+          PRIMARY KEY (\`id\`)
+        );
+      `);
+    } catch (e) {}
+
     // Run normal sync to create missing tables without altering existing ones
     await sequelize.sync();
     console.log('All models were synchronized successfully.');
