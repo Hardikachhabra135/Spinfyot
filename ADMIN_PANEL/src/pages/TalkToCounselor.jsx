@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../utils/api";
 import { useAuth } from "../App";
-import { Send, Search, User, Clock, Check, Loader2, MessageSquare } from "lucide-react";
+import { Send, Search, Check, Loader2, MessageSquare } from "lucide-react";
 
 export default function TalkToCounselor() {
   const { token } = useAuth();
@@ -16,7 +16,6 @@ export default function TalkToCounselor() {
   const messagesEndRef = useRef(null);
   const pollingInterval = useRef(null);
 
-  // Fetch list of counsellors
   const fetchCounsellors = async (quiet = false) => {
     if (!quiet) setLoadingList(true);
     try {
@@ -33,7 +32,6 @@ export default function TalkToCounselor() {
     }
   };
 
-  // Fetch messages for selected counsellor
   const fetchMessages = async (counsellorId, quiet = false) => {
     if (!counsellorId) return;
     if (!quiet) setLoadingMessages(true);
@@ -53,7 +51,6 @@ export default function TalkToCounselor() {
 
   useEffect(() => {
     fetchCounsellors();
-    // Poll for new conversations/unread counts
     const interval = setInterval(() => fetchCounsellors(true), 15000);
     return () => clearInterval(interval);
   }, [token]);
@@ -61,29 +58,24 @@ export default function TalkToCounselor() {
   useEffect(() => {
     if (selectedCounsellor) {
       fetchMessages(selectedCounsellor.id);
-      
-      // Setup active chat polling
       if (pollingInterval.current) clearInterval(pollingInterval.current);
       pollingInterval.current = setInterval(() => {
         fetchMessages(selectedCounsellor.id, true);
-        fetchCounsellors(true); // Update left sidebar unread badges too
+        fetchCounsellors(true);
       }, 5000);
     }
-    
     return () => {
       if (pollingInterval.current) clearInterval(pollingInterval.current);
     };
   }, [selectedCounsellor, token]);
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSendMessage = async (e) => {
     e?.preventDefault();
     if (!newMessage.trim() || !selectedCounsellor) return;
-
     setSending(true);
     try {
       const res = await api.post(
@@ -94,7 +86,7 @@ export default function TalkToCounselor() {
       if (res.data.success) {
         setMessages((prev) => [...prev, res.data.message]);
         setNewMessage("");
-        fetchCounsellors(true); // Update last message in sidebar
+        fetchCounsellors(true);
       }
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -104,15 +96,14 @@ export default function TalkToCounselor() {
     }
   };
 
-  const filteredCounsellors = counsellors.filter(c => 
-    (c.name || "").toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredCounsellors = counsellors.filter((c) =>
+    (c.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
     (c.counsellorId || "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const formatTime = (dateString) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return new Date(dateString).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -132,7 +123,7 @@ export default function TalkToCounselor() {
             />
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto">
           {loadingList ? (
             <div className="flex justify-center p-8">
@@ -142,7 +133,7 @@ export default function TalkToCounselor() {
             <div className="text-center p-8 text-slate-500 text-sm">No counselors found.</div>
           ) : (
             <ul className="divide-y divide-slate-100">
-              {filteredCounsellors.map(c => (
+              {filteredCounsellors.map((c) => (
                 <li key={c.id}>
                   <button
                     onClick={() => setSelectedCounsellor(c)}
@@ -159,9 +150,7 @@ export default function TalkToCounselor() {
                       <div className="flex justify-between items-baseline mb-1">
                         <h3 className="font-semibold text-slate-800 truncate pr-2">{c.name}</h3>
                         {c.lastMessage && (
-                          <span className="text-xs text-slate-400 flex-shrink-0">
-                            {formatTime(c.lastMessage.createdAt)}
-                          </span>
+                          <span className="text-xs text-slate-400 flex-shrink-0">{formatTime(c.lastMessage.createdAt)}</span>
                         )}
                       </div>
                       <div className="flex justify-between items-center">
@@ -188,25 +177,25 @@ export default function TalkToCounselor() {
         {selectedCounsellor ? (
           <>
             {/* Chat Header */}
-            <div className="px-6 py-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-sm z-10">
-              <div className="flex items-center gap-4">
-                <button 
-                  className="md:hidden text-slate-500 hover:text-slate-800"
-                  onClick={() => setSelectedCounsellor(null)}
-                >
-                  &larr; Back
-                </button>
-                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold overflow-hidden">
-                  {selectedCounsellor.profileImage ? (
-                    <img src={`/uploads/counsellors/${selectedCounsellor.profileImage}`} alt={selectedCounsellor.name} className="w-full h-full object-cover" />
-                  ) : (
-                    (selectedCounsellor.name || "C").charAt(0).toUpperCase()
-                  )}
-                </div>
-                <div>
-                  <h2 className="font-bold text-slate-800 leading-tight">{selectedCounsellor.name}</h2>
-                  <span className="text-xs text-slate-500">{selectedCounsellor.specialization || "Counselor"} • ID: {selectedCounsellor.counsellorId}</span>
-                </div>
+            <div className="px-6 py-4 border-b border-slate-200 bg-white flex items-center gap-4 shadow-sm z-10">
+              <button
+                className="md:hidden text-slate-500 hover:text-slate-800"
+                onClick={() => setSelectedCounsellor(null)}
+              >
+                &larr; Back
+              </button>
+              <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold overflow-hidden">
+                {selectedCounsellor.profileImage ? (
+                  <img src={`/uploads/counsellors/${selectedCounsellor.profileImage}`} alt={selectedCounsellor.name} className="w-full h-full object-cover" />
+                ) : (
+                  (selectedCounsellor.name || "C").charAt(0).toUpperCase()
+                )}
+              </div>
+              <div>
+                <h2 className="font-bold text-slate-800 leading-tight">{selectedCounsellor.name}</h2>
+                <span className="text-xs text-slate-500">
+                  {selectedCounsellor.specialization || "Counselor"} • ID: {selectedCounsellor.counsellorId}
+                </span>
               </div>
             </div>
 
@@ -222,10 +211,8 @@ export default function TalkToCounselor() {
                   <p>No messages yet. Send a message to start the conversation.</p>
                 </div>
               ) : (
-                messages.map((msg, index) => {
+                messages.map((msg) => {
                   const isAdmin = msg.sender === "Admin";
-                  const showAvatar = index === messages.length - 1 || messages[index + 1]?.sender !== msg.sender;
-                  
                   return (
                     <div key={msg.id} className={`flex flex-col ${isAdmin ? "items-end" : "items-start"}`}>
                       <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl ${isAdmin ? "bg-blue-600 text-white rounded-br-none" : "bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm"}`}>
@@ -233,9 +220,7 @@ export default function TalkToCounselor() {
                       </div>
                       <div className="flex items-center gap-1 mt-1 px-1">
                         <span className="text-[10px] text-slate-400 font-medium">{formatTime(msg.createdAt)}</span>
-                        {isAdmin && msg.isRead && (
-                          <Check size={12} className="text-blue-500" />
-                        )}
+                        {isAdmin && msg.isRead && <Check size={12} className="text-blue-500" />}
                       </div>
                     </div>
                   );
@@ -276,4 +261,3 @@ export default function TalkToCounselor() {
     </div>
   );
 }
-

@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api from "../utils/api";
 import { useAuth } from "../App";
-import { Send, Search, User, Clock, Check, Loader2, MessageSquare } from "lucide-react";
+import { Send, User, Check, Loader2, MessageSquare } from "lucide-react";
 
 export default function TalkToAdmin() {
-  const { token, counsellor } = useAuth();
+  const { token } = useAuth();
   const [admins, setAdmins] = useState([]);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -57,14 +57,12 @@ export default function TalkToAdmin() {
   useEffect(() => {
     if (selectedAdmin) {
       fetchMessages(selectedAdmin.id);
-      
       if (pollingInterval.current) clearInterval(pollingInterval.current);
       pollingInterval.current = setInterval(() => {
         fetchMessages(selectedAdmin.id, true);
         fetchAdmins(true);
       }, 5000);
     }
-    
     return () => {
       if (pollingInterval.current) clearInterval(pollingInterval.current);
     };
@@ -77,7 +75,6 @@ export default function TalkToAdmin() {
   const handleSendMessage = async (e) => {
     e?.preventDefault();
     if (!newMessage.trim() || !selectedAdmin) return;
-
     setSending(true);
     try {
       const res = await api.post(
@@ -100,8 +97,7 @@ export default function TalkToAdmin() {
 
   const formatTime = (dateString) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return new Date(dateString).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -112,7 +108,7 @@ export default function TalkToAdmin() {
           <h2 className="text-lg font-bold text-slate-800">Support</h2>
           <p className="text-xs text-slate-500">Contact administrators</p>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto">
           {loadingList ? (
             <div className="flex justify-center p-8">
@@ -122,7 +118,7 @@ export default function TalkToAdmin() {
             <div className="text-center p-8 text-slate-500 text-sm">No admins available.</div>
           ) : (
             <ul className="divide-y divide-slate-100">
-              {admins.map(admin => (
+              {admins.map((admin) => (
                 <li key={admin.id}>
                   <button
                     onClick={() => setSelectedAdmin(admin)}
@@ -135,9 +131,7 @@ export default function TalkToAdmin() {
                       <div className="flex justify-between items-baseline mb-1">
                         <h3 className="font-semibold text-slate-800 truncate pr-2">{admin.name}</h3>
                         {admin.lastMessage && (
-                          <span className="text-xs text-slate-400 flex-shrink-0">
-                            {formatTime(admin.lastMessage.createdAt)}
-                          </span>
+                          <span className="text-xs text-slate-400 flex-shrink-0">{formatTime(admin.lastMessage.createdAt)}</span>
                         )}
                       </div>
                       <div className="flex justify-between items-center">
@@ -164,21 +158,19 @@ export default function TalkToAdmin() {
         {selectedAdmin ? (
           <>
             {/* Chat Header */}
-            <div className="px-6 py-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-sm z-10">
-              <div className="flex items-center gap-4">
-                <button 
-                  className="md:hidden text-slate-500 hover:text-slate-800"
-                  onClick={() => setSelectedAdmin(null)}
-                >
-                  &larr; Back
-                </button>
-                <div className="w-10 h-10 bg-slate-800 text-white rounded-full flex items-center justify-center font-bold overflow-hidden">
-                  <User size={20} />
-                </div>
-                <div>
-                  <h2 className="font-bold text-slate-800 leading-tight">{selectedAdmin.name}</h2>
-                  <span className="text-xs text-slate-500">Support Team</span>
-                </div>
+            <div className="px-6 py-4 border-b border-slate-200 bg-white flex items-center gap-4 shadow-sm z-10">
+              <button
+                className="md:hidden text-slate-500 hover:text-slate-800"
+                onClick={() => setSelectedAdmin(null)}
+              >
+                &larr; Back
+              </button>
+              <div className="w-10 h-10 bg-slate-800 text-white rounded-full flex items-center justify-center font-bold overflow-hidden">
+                <User size={20} />
+              </div>
+              <div>
+                <h2 className="font-bold text-slate-800 leading-tight">{selectedAdmin.name}</h2>
+                <span className="text-xs text-slate-500">Support Team</span>
               </div>
             </div>
 
@@ -194,9 +186,8 @@ export default function TalkToAdmin() {
                   <p>No messages yet. Send a message to start the conversation.</p>
                 </div>
               ) : (
-                messages.map((msg, index) => {
+                messages.map((msg) => {
                   const isCounsellor = msg.sender === "Counsellor";
-                  
                   return (
                     <div key={msg.id} className={`flex flex-col ${isCounsellor ? "items-end" : "items-start"}`}>
                       <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl ${isCounsellor ? "bg-blue-600 text-white rounded-br-none" : "bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm"}`}>
@@ -204,9 +195,7 @@ export default function TalkToAdmin() {
                       </div>
                       <div className="flex items-center gap-1 mt-1 px-1">
                         <span className="text-[10px] text-slate-400 font-medium">{formatTime(msg.createdAt)}</span>
-                        {isCounsellor && msg.isRead && (
-                          <Check size={12} className="text-blue-500" />
-                        )}
+                        {isCounsellor && msg.isRead && <Check size={12} className="text-blue-500" />}
                       </div>
                     </div>
                   );
@@ -247,4 +236,3 @@ export default function TalkToAdmin() {
     </div>
   );
 }
-
