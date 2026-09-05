@@ -9,6 +9,7 @@ import { apiUrl } from '../utils/api';
 export default function ContactPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   useEffect(() => {
     document.title = "Contact Us | Spinfyot";
@@ -20,11 +21,20 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setPhoneError('');
+    
+    const phoneVal = e.target.phone.value;
+    const phoneRegex = /^(?:\+91\s?)?[0-9]{10}$/;
+    if (!phoneRegex.test(phoneVal)) {
+      setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
     try {
       const data = {
         name: e.target.name.value,
         email: e.target.email.value,
-        phone: e.target.phone.value,
+        phone: phoneVal,
         interest: e.target.interest.value,
         message: e.target.message.value,
         referralSlug: localStorage.getItem('referral_slug') || undefined,
@@ -134,15 +144,23 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
                         <label htmlFor="phone" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>PHONE NUMBER</label>
-                        <input type="tel" id="phone" style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="+1 (234) 567-8900" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                        <input type="tel" id="phone" required pattern="^(?:\+91\s?)?[0-9]{10}$" title="Please enter a valid 10-digit Indian mobile number." style={{ backgroundColor: '#F8F9FA', border: phoneError ? '1px solid #EF4444' : '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="+91 9876543210" onChange={() => setPhoneError('')} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = phoneError ? '#EF4444' : '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                        {phoneError && <span style={{ color: '#EF4444', fontSize: '12px', marginTop: '-4px' }}>{phoneError}</span>}
                       </div>
                       <div className="flex flex-col gap-2">
                         <label htmlFor="interest" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>INTEREST</label>
-                        <select id="interest" style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s', cursor: 'pointer' }} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }}>
-                          <option value="counseling">Study Abroad Counseling</option>
-                          <option value="visa">Visa Support</option>
-                          <option value="post-arrival">Post-Arrival Support</option>
-                          <option value="other">Other Inquiry</option>
+                        <select id="interest" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s', cursor: 'pointer' }} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }}>
+                          <option value="" disabled selected>Select a Service</option>
+                          <option value="Career Counselling">Career Counselling</option>
+                          <option value="University Selection">University Selection</option>
+                          <option value="Visa Assistance">Visa Assistance</option>
+                          <option value="Pre-Departure Support">Pre-Departure Support</option>
+                          <option value="Post-Arrival Support">Post-Arrival Support</option>
+                          <option value="Work Visa Assistance">Work Visa Assistance</option>
+                          <option value="Spouse Services">Spouse Services</option>
+                          <option value="Appeals & Legal Support">Appeals & Legal Support</option>
+                          <option value="Accommodation Assistance">Accommodation Assistance</option>
+                          <option value="IELTS">IELTS</option>
                         </select>
                       </div>
                     </div>
