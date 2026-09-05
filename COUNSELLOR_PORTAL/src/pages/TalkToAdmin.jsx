@@ -228,7 +228,7 @@ export default function TalkToAdmin() {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-slate-400">
             <MessageSquare size={64} className="opacity-10 mb-4" />
-            <h3 className="text-lg font-medium text-slate-500">Talk to Admin</h3>
+            <h3 className="text-lg font-medium text-slate-500">Chat with Admin</h3>
             <p className="text-sm">Select an admin from the list to start messaging.</p>
           </div>
         )}

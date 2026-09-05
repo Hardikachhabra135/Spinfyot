@@ -38,7 +38,7 @@ export default function Sidebar({ slug }) {
     { to: `/c/${slug}/enrolled`, label: "Enrolled Students", icon: Award },
     { to: `/c/${slug}/callbacks`, label: "Call Back Requests", icon: PhoneCall },
     { to: `/c/${slug}/profile`, label: "My Profile", icon: User },
-    { to: `/c/${slug}/chat`, label: "Talk to Admin", icon: MessageSquare, badge: unreadCount },
+    { to: `/c/${slug}/chat`, label: "Chat with Admin", icon: MessageSquare, badge: unreadCount },
   ];
 
   return (
