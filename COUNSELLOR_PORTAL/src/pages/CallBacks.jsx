@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PhoneCall, CheckCircle, CalendarClock } from 'lucide-react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 
 export default function CallBacks() {
   const { token } = useAuth();
@@ -15,7 +16,7 @@ export default function CallBacks() {
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/counsellor/students', {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -40,7 +41,7 @@ export default function CallBacks() {
   const markResolved = async (id) => {
     if (!window.confirm("Mark this call back as resolved?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export default function CallBacks() {
   const handleReschedule = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${selectedStudent.id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${selectedStudent.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

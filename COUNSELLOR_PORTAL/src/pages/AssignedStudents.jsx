@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Phone, Mail, Calendar, MapPin, Clock, Edit, UserPlus } from 'lucide-react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 
 export default function AssignedStudents() {
   const { token } = useAuth();
@@ -12,7 +13,7 @@ export default function AssignedStudents() {
 
   const fetchAssignments = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/counsellor/assigned-students', {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/assigned-students`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -32,7 +33,7 @@ export default function AssignedStudents() {
 
   const handleAddToMyStudents = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/assigned-students/${id}/add-to-mystudents`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/assigned-students/${id}/add-to-mystudents`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -61,7 +62,7 @@ export default function AssignedStudents() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/assigned-students/${activeModal.id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/assigned-students/${activeModal.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

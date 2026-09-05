@@ -8,6 +8,7 @@ import {
   Briefcase,
   Heart,
   Scale,
+  BookOpen
 } from 'lucide-react';
 
 const services = [
@@ -245,6 +246,32 @@ const services = [
       { q: 'Do you help with airport pickups?', a: 'Yes, as part of our broader pre-departure services, we can coordinate your transit from the airport directly to your new accommodation.' }
     ],
     icon: Home,
+  },
+  {
+    slug: 'ielts',
+    title: 'IELTS',
+    shortDescription: 'Personalized IELTS guidance to help you achieve your target score.',
+    subtitle: 'Achieve your target score with personalized guidance.',
+    about: 'Our IELTS preparation program provides personalized coaching to help you master all four sections of the test: Reading, Writing, Listening, and Speaking.',
+    whatWeProvide: [
+      { title: 'Mock Tests', desc: 'Full-length practice tests to simulate the real exam environment.' },
+      { title: 'Personalized Feedback', desc: 'Detailed analysis of your performance to identify areas for improvement.' },
+      { title: 'Speaking Practice', desc: 'One-on-one speaking sessions to boost your fluency and confidence.' },
+      { title: 'Writing Reviews', desc: 'Expert feedback on your writing tasks to enhance coherence and vocabulary.' }
+    ],
+    howItWorks: [
+      { step: '01', title: 'Diagnostic Test', desc: 'Assess your current English proficiency level.' },
+      { step: '02', title: 'Study Plan', desc: 'Create a customized study schedule based on your target score.' },
+      { step: '03', title: 'Intensive Coaching', desc: 'Focus on specific skills and strategies for each test section.' },
+      { step: '04', title: 'Final Review', desc: 'Complete full mock exams before test day.' }
+    ],
+    whoItsFor: 'Students planning to study in English-speaking countries who need to demonstrate their English proficiency.',
+    faqs: [
+      { q: 'How long does the IELTS preparation course take?', a: 'The duration depends on your current proficiency and target score, typically ranging from 4 to 8 weeks.' },
+      { q: 'Do you provide study materials?', a: 'Yes, we provide comprehensive study guides, practice tests, and access to online resources.' },
+      { q: 'Can I take the classes online?', a: 'Yes, we offer both in-person and online coaching options.' }
+    ],
+    icon: BookOpen,
   }
 ];
 

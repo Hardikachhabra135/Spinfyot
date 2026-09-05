@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, Briefcase } from 'lucide-react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Profile() {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/counsellor/profile', {
+        const res = await fetch(`${API_BASE_URL}/api/counsellor/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GraduationCap, Plus, Upload, PhoneCall, FileText, Edit, Trash2, Eye, CheckCircle } from 'lucide-react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Students() {
   const { token } = useAuth();
@@ -23,7 +24,7 @@ export default function Students() {
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/counsellor/students', {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -44,7 +45,7 @@ export default function Students() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = isEditing ? `http://localhost:5000/api/counsellor/students/${selectedStudent.id}` : 'http://localhost:5000/api/counsellor/students';
+      const url = isEditing ? `${API_BASE_URL}/api/counsellor/students/${selectedStudent.id}` : `${API_BASE_URL}/api/counsellor/students`;
       const method = isEditing ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
@@ -72,7 +73,7 @@ export default function Students() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -86,7 +87,7 @@ export default function Students() {
   const markEnrolled = async (id) => {
     if (!window.confirm("Mark this student as Enrolled? They will be moved to the Enrolled section.")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ export default function Students() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${selectedStudent.id}/upload`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${selectedStudent.id}/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formPayload
@@ -394,7 +395,7 @@ export default function Students() {
                     try { docs = JSON.parse(selectedStudent.documents || '[]'); } catch(e) {}
                     if (docs.length === 0) return <span className="text-slate-400 italic">No documents uploaded.</span>;
                     return docs.map((doc, idx) => (
-                      <a key={idx} href={`http://localhost:5000${doc.path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg text-blue-600 font-medium transition-colors">
+                      <a key={idx} href={`${API_BASE_URL}${doc.path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg text-blue-600 font-medium transition-colors">
                         <FileText size={18} /> {doc.name}
                       </a>
                     ));

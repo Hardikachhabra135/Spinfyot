@@ -82,7 +82,7 @@ export default function Home() {
 
       <main id="main-content" className="flex-grow relative z-10">
         <Hero onBookCounselling={openModal} />
-        <Services />
+        <Services isHome={true} />
         <AboutUs />
         <Testimonials />
       </main>

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { LayoutGrid } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import ServiceCard from '../ui/ServiceCard';
 import services from '../../data/services';
@@ -18,7 +19,20 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } }
 };
 
-export default function Services() {
+export default function Services({ isHome = false }) {
+  const displayServices = isHome 
+    ? [
+        ...services.slice(0, 8),
+        {
+          slug: '',
+          link: '/services',
+          title: 'All Services',
+          shortDescription: 'Explore our complete range of global education and student support services.',
+          icon: LayoutGrid
+        }
+      ]
+    : services;
+
   return (
     <section 
       id="services" 
@@ -72,8 +86,8 @@ export default function Services() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {services.map((service, index) => (
-            <motion.div key={service.slug} variants={itemVariants} style={{ display: 'flex', width: '100%' }}>
+          {displayServices.map((service, index) => (
+            <motion.div key={service.slug || 'all-services'} variants={itemVariants} style={{ display: 'flex', width: '100%' }}>
               <ServiceCard service={service} index={index} />
             </motion.div>
           ))}

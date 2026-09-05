@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Upload, FileText, Eye } from 'lucide-react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 
 export default function EnrolledStudents() {
   const { token } = useAuth();
@@ -14,7 +15,7 @@ export default function EnrolledStudents() {
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/counsellor/students', {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -40,7 +41,7 @@ export default function EnrolledStudents() {
       formPayload.append('documents', files[i]);
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/counsellor/students/${selectedStudent.id}/upload`, {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/students/${selectedStudent.id}/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formPayload
@@ -189,7 +190,7 @@ export default function EnrolledStudents() {
                     try { docs = JSON.parse(selectedStudent.documents || '[]'); } catch(e) {}
                     if (docs.length === 0) return <span className="text-slate-400 italic">No documents uploaded.</span>;
                     return docs.map((doc, idx) => (
-                      <a key={idx} href={`http://localhost:5000${doc.path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg text-blue-600 font-medium transition-colors">
+                      <a key={idx} href={`${API_BASE_URL}${doc.path}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-lg text-blue-600 font-medium transition-colors">
                         <FileText size={18} /> {doc.name}
                       </a>
                     ));

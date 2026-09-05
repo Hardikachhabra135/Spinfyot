@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 import { Users, TrendingUp, PhoneCall, CheckCircle, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/counsellor/dashboard', {
+        const res = await fetch(`${API_BASE_URL}/api/counsellor/dashboard`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

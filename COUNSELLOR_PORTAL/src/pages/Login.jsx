@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../App';
+import { API_BASE_URL } from '../utils/api';
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function Login() {
@@ -15,7 +16,7 @@ export default function Login() {
     setError('');
     
     try {
-      const res = await fetch('http://localhost:5000/api/counsellor/login', {
+      const res = await fetch(`${API_BASE_URL}/api/counsellor/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ counsellorId, password })

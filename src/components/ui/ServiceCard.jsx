@@ -45,7 +45,7 @@ const ServiceCard = ({ service }) => {
 
       {/* Top Right Corner Ribbon (go-corner) */}
       <a 
-        href={`/services/${service.slug}`}
+        href={service.link || `/services/${service.slug}`}
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setIsBtnHovered(true)}
@@ -124,7 +124,7 @@ const ServiceCard = ({ service }) => {
         {/* Trigger Button */}
         <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: isBtnHovered ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)', transition: 'border-color 0.45s easeOut' }}>
           <a 
-            href={`/services/${service.slug}`}
+            href={service.link || `/services/${service.slug}`}
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={() => setIsBtnHovered(true)}
