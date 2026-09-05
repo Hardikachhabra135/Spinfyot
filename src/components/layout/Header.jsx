@@ -70,7 +70,8 @@ const styles = {
     objectFit: 'contain',
     mixBlendMode: 'multiply',
     display: 'block',
-    transition: 'height 0.4s',
+    transition: 'all 0.4s',
+    transform: 'scale(1.2)',
   },
   logoLanding: {
     height: '56px',
@@ -78,7 +79,8 @@ const styles = {
     objectFit: 'contain',
     mixBlendMode: 'multiply',
     display: 'block',
-    transition: 'height 0.4s',
+    transition: 'all 0.4s',
+    transform: 'scale(1.2)',
   },
   logoWrap: {
     display: 'flex',
