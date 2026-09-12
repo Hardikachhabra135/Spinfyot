@@ -1,0 +1,1 @@
+const Jimp = require("jimp"); Jimp.read("c:/Users/iamri/OneDrive/Desktop/spinfyot/public/assets/images/airplane-real.png").then(img => { console.log("160,40:", img.getPixelColor(160,40).toString(16)); console.log("500,250:", img.getPixelColor(500,250).toString(16)); })

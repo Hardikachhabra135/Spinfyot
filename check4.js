@@ -1,0 +1,1 @@
+fetch('https://spinfyot-admin.vercel.app/').then(r=>r.text()).then(html=>{ const js=html.match(/src="(\/assets\/index-[^"]+)"/)[1]; fetch('https://spinfyot-admin.vercel.app'+js).then(r=>r.text()).then(code=>{ const idx = code.indexOf('promoCode:'); console.log(code.substring(idx-50, idx+150)) }) })

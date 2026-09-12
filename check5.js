@@ -1,0 +1,1 @@
+fetch('https://spinfyot-admin.vercel.app/').then(r=>r.text()).then(html=>{ const js=html.match(/src="(\/assets\/index-[^"]+)"/)[1]; fetch('https://spinfyot-admin.vercel.app'+js).then(r=>r.text()).then(code=>{ const regex = /promoCode/g; let match; while ((match = regex.exec(code)) !== null) { console.log(code.substring(match.index-30, match.index+100)); } }) })

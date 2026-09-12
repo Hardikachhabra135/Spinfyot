@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <!-- Placeholder logo — replace with the real exported SVG from Canva -->
+  <text x="10" y="36" font-family="Poppins, sans-serif" font-weight="700" font-size="28" fill="#1F3A5C">
+    SPINFY
+  </text>
+  <!-- Orange orbit circle around "O" -->
+  <ellipse cx="155" cy="24" rx="14" ry="14" stroke="#E67E22" stroke-width="2.5" fill="none" transform="rotate(-20, 155, 24)" />
+  <circle cx="165" cy="14" r="3" fill="#E67E22" />
+  <text x="148" y="36" font-family="Poppins, sans-serif" font-weight="700" font-size="28" fill="#1F3A5C">
+    T
+  </text>
+</svg>
