@@ -24,20 +24,31 @@ export default function ContactPage() {
     e.preventDefault();
     setPhoneError('');
     
-    const phoneVal = e.target.phone.value;
-    const phoneRegex = /^(?:\+91\s?)?[0-9]{10}$/;
-    if (!phoneRegex.test(phoneVal)) {
-      setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+    const phoneVal = e.target.phone.value.trim();
+    const phoneRegex = /^[0-9]{10}$/; // Requires exactly 10 digits
+    if (!phoneRegex.test(phoneVal.replace(/\D/g, ''))) {
+      setPhoneError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+
+    const stateVal = e.target.state.value.trim();
+    const countryVal = e.target.country.value.trim();
+    const qualVal = e.target.qualification.value.trim();
+    const courseVal = e.target.course.value.trim();
+    const serviceVal = e.target.service.value.trim();
+
+    if (!stateVal || !countryVal || !qualVal) {
+      alert("Please fill all mandatory fields.");
       return;
     }
 
     try {
       const data = {
-        name: e.target.name.value,
-        email: e.target.email.value,
+        name: e.target.name.value.trim(),
+        email: e.target.email.value.trim(),
         phone: phoneVal,
-        interest: e.target.interest.value,
-        message: e.target.message.value,
+        interest: serviceVal || undefined,
+        message: `State: ${stateVal} | Country: ${countryVal} | Qualification: ${qualVal} | Course: ${courseVal || 'N/A'}`,
         referralSlug: localStorage.getItem('referral_slug') || undefined,
         visitorId: localStorage.getItem('visitorId') || undefined
       };
@@ -61,9 +72,9 @@ export default function ContactPage() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: "EMAIL ADDRESS", text: "Ketan@spinfyot.in", link: "mailto:Ketan@spinfyot.in" },
-    { icon: Phone, label: "PHONE NUMBER", text: "+91 98765 43210", link: "tel:+919876543210" },
-    { icon: MapPin, label: "OFFICE LOCATION", text: "123 Education Hub, Global City, State, 123456", link: "https://maps.google.com/?q=123+Education+Hub" }
+    { icon: Mail, label: "EMAIL ADDRESS", text: "Info@spinfyot.in", link: "mailto:Info@spinfyot.in" },
+    { icon: Phone, label: "PHONE NUMBER", text: "9599558820", link: "tel:9599558820" },
+    { icon: MapPin, label: "OFFICE LOCATION", text: "Malhan Falcon Plaza, F 10-A, Plot No-4, Pocket 7, Sector 12 Dwarka, New Delhi, Delhi 110075", link: "https://maps.google.com/?q=Malhan+Falcon+Plaza,+F+10-A,+Plot+No-4,+Pocket+7,+Sector+12+Dwarka,+New+Delhi,+Delhi+110075" }
   ];
 
   return (
@@ -134,25 +145,47 @@ export default function ContactPage() {
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="name" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>FULL NAME</label>
+                        <label htmlFor="name" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>NAME <span style={{ color: 'red' }}>*</span></label>
                         <input type="text" id="name" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="John Doe" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)'; trackEvent('form_started', window.location.pathname, { form: 'Contact' }); }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
                       </div>
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="email" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>EMAIL ADDRESS</label>
+                        <label htmlFor="email" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>MAIL ID <span style={{ color: 'red' }}>*</span></label>
                         <input type="email" id="email" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="john@example.com" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="phone" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>PHONE NUMBER</label>
-                        <input type="tel" id="phone" required pattern="^(?:\+91\s?)?[0-9]{10}$" title="Please enter a valid 10-digit Indian mobile number." style={{ backgroundColor: '#F8F9FA', border: phoneError ? '1px solid #EF4444' : '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="+91 9876543210" onChange={() => setPhoneError('')} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = phoneError ? '#EF4444' : '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                        <label htmlFor="phone" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>PHONE NUMBER <span style={{ color: 'red' }}>*</span></label>
+                        <input type="tel" id="phone" required style={{ backgroundColor: '#F8F9FA', border: phoneError ? '1px solid #EF4444' : '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="9876543210" onChange={() => setPhoneError('')} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = phoneError ? '#EF4444' : '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
                         {phoneError && <span style={{ color: '#EF4444', fontSize: '12px', marginTop: '-4px' }}>{phoneError}</span>}
                       </div>
                       <div className="flex flex-col gap-2">
-                        <label htmlFor="interest" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>INTEREST</label>
-                        <select id="interest" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s', cursor: 'pointer' }} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }}>
-                          <option value="" disabled selected>Select a Service</option>
+                        <label htmlFor="state" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>YOUR STATE <span style={{ color: 'red' }}>*</span></label>
+                        <input type="text" id="state" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="e.g. Delhi" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="country" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>COUNTRY YOU WANT TO GO <span style={{ color: 'red' }}>*</span></label>
+                        <input type="text" id="country" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="e.g. Canada" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="qualification" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>LAST QUALIFICATION <span style={{ color: 'red' }}>*</span></label>
+                        <input type="text" id="qualification" required style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="e.g. B.Tech" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="course" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>COURSE YOU WANT TO GO</label>
+                        <input type="text" id="course" style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s' }} placeholder="e.g. Data Science (Optional)" onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }} />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label htmlFor="service" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>SERVICE YOU WANT</label>
+                        <select id="service" style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s', cursor: 'pointer' }} onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }}>
+                          <option value="">Select a Service (Optional)</option>
                           <option value="Career Counselling">Career Counselling</option>
                           <option value="University Selection">University Selection</option>
                           <option value="Visa Assistance">Visa Assistance</option>
@@ -165,11 +198,6 @@ export default function ContactPage() {
                           <option value="IELTS">IELTS</option>
                         </select>
                       </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="message" style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.5px' }}>MESSAGE</label>
-                      <textarea id="message" required rows="4" style={{ backgroundColor: '#F8F9FA', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '16px 20px', fontSize: '16px', color: '#1F3A5C', outline: 'none', transition: 'all 0.3s', resize: 'none' }} placeholder="Tell us how we can help..." onFocus={(e) => { e.target.style.borderColor = '#99B6F5'; e.target.style.backgroundColor = '#FFFFFF'; e.target.style.boxShadow = '0 0 0 4px rgba(153,182,245,0.1)' }} onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F8F9FA'; e.target.style.boxShadow = 'none' }}></textarea>
                     </div>
 
                     <div className="mt-4 flex justify-start">

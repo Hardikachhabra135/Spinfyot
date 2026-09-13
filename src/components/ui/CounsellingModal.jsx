@@ -8,12 +8,14 @@ import { X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { apiUrl } from '../../utils/api';
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  classType: z.enum(['Class 10', 'Class 12', 'Undergraduate', 'Postgraduate', 'Working Professional'], {
-    errorMap: () => ({ message: 'Please select a valid class' }),
-  }),
-  phoneNumber: z.string().regex(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
-  email: z.string().email('Please enter a valid email address'),
+  name: z.string().trim().min(1, 'Name is required'),
+  phoneNumber: z.string().trim().regex(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits'),
+  email: z.string().trim().email('Please enter a valid email address'),
+  state: z.string().trim().min(1, 'State is required'),
+  country: z.string().trim().min(1, 'Country is required'),
+  qualification: z.string().trim().min(1, 'Qualification is required'),
+  course: z.string().trim().optional(),
+  service: z.string().trim().optional()
 });
 
 const CounsellingModal = ({ isOpen, onClose }) => {
@@ -22,7 +24,7 @@ const CounsellingModal = ({ isOpen, onClose }) => {
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: '', classType: '', phoneNumber: '', email: '' }
+    defaultValues: { name: '', phoneNumber: '', email: '', state: '', country: '', qualification: '', course: '', service: '' }
   });
 
   // Focus trap and ESC to close
@@ -79,10 +81,20 @@ const CounsellingModal = ({ isOpen, onClose }) => {
       const referralSlug = localStorage.getItem('referral_slug') || undefined;
       const visitorId = localStorage.getItem('visitorId') || undefined;
 
+      const payload = {
+        name: data.name,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        classType: `Qual: ${data.qualification} | State: ${data.state} | Country: ${data.country} | Course: ${data.course || 'N/A'} | Service: ${data.service || 'N/A'}`,
+        sourcePage: window.location.pathname,
+        referralSlug,
+        visitorId
+      };
+
       const response = await fetch(apiUrl('/api/public/appointments'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, sourcePage: window.location.pathname, referralSlug, visitorId }),
+        body: JSON.stringify(payload),
       });
       if (!response.ok) {
         const errData = await response.json();
@@ -252,49 +264,21 @@ const CounsellingModal = ({ isOpen, onClose }) => {
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div>
-                  <label htmlFor="name" style={labelStyle}>Full Name</label>
-                  <input
-                    id="name"
-                    {...register('name')}
-                    style={inputStyle}
-                    placeholder="John Doe"
-                    onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
-                    onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
-                  />
-                  {errors.name && <p style={errorStyle}>{errors.name.message}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="classType" style={labelStyle}>Current Education Level</label>
-                  <select
-                    id="classType"
-                    {...register('classType')}
-                    style={{
-                      ...inputStyle,
-                      appearance: 'none',
-                      cursor: 'pointer',
-                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 1rem center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '1.5em 1.5em'
-                    }}
-                    onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
-                    onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
-                  >
-                    <option value="">Select your current stage</option>
-                    <option value="Class 10">Class 10</option>
-                    <option value="Class 12">Class 12</option>
-                    <option value="Undergraduate">Undergraduate / College</option>
-                    <option value="Postgraduate">Postgraduate</option>
-                    <option value="Working Professional">Working Professional</option>
-                  </select>
-                  {errors.classType && <p style={errorStyle}>{errors.classType.message}</p>}
-                </div>
-
                 <div style={{ display: 'flex', gap: '20px', flexDirection: isMobile ? 'column' : 'row' }}>
                   <div style={{ flex: 1 }}>
-                    <label htmlFor="phoneNumber" style={labelStyle}>Phone Number</label>
+                    <label htmlFor="name" style={labelStyle}>Name <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      id="name"
+                      {...register('name')}
+                      style={inputStyle}
+                      placeholder="John Doe"
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    />
+                    {errors.name && <p style={errorStyle}>{errors.name.message}</p>}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="phoneNumber" style={labelStyle}>Phone Number <span style={{ color: 'red' }}>*</span></label>
                     <input
                       id="phoneNumber"
                       type="tel"
@@ -306,9 +290,11 @@ const CounsellingModal = ({ isOpen, onClose }) => {
                     />
                     {errors.phoneNumber && <p style={errorStyle}>{errors.phoneNumber.message}</p>}
                   </div>
+                </div>
 
+                <div style={{ display: 'flex', gap: '20px', flexDirection: isMobile ? 'column' : 'row' }}>
                   <div style={{ flex: 1 }}>
-                    <label htmlFor="email" style={labelStyle}>Email Address</label>
+                    <label htmlFor="email" style={labelStyle}>Mail ID <span style={{ color: 'red' }}>*</span></label>
                     <input
                       id="email"
                       type="email"
@@ -319,6 +305,93 @@ const CounsellingModal = ({ isOpen, onClose }) => {
                       onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
                     />
                     {errors.email && <p style={errorStyle}>{errors.email.message}</p>}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="state" style={labelStyle}>Your State <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      id="state"
+                      type="text"
+                      {...register('state')}
+                      style={inputStyle}
+                      placeholder="e.g. Delhi"
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    />
+                    {errors.state && <p style={errorStyle}>{errors.state.message}</p>}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px', flexDirection: isMobile ? 'column' : 'row' }}>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="country" style={labelStyle}>Country You Want to Go <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      id="country"
+                      type="text"
+                      {...register('country')}
+                      style={inputStyle}
+                      placeholder="e.g. Canada"
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    />
+                    {errors.country && <p style={errorStyle}>{errors.country.message}</p>}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="qualification" style={labelStyle}>Last Qualification <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      id="qualification"
+                      type="text"
+                      {...register('qualification')}
+                      style={inputStyle}
+                      placeholder="e.g. B.Tech"
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    />
+                    {errors.qualification && <p style={errorStyle}>{errors.qualification.message}</p>}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px', flexDirection: isMobile ? 'column' : 'row' }}>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="course" style={labelStyle}>Course You Want to Go</label>
+                    <input
+                      id="course"
+                      type="text"
+                      {...register('course')}
+                      style={inputStyle}
+                      placeholder="e.g. Data Science (Optional)"
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label htmlFor="service" style={labelStyle}>Service You Want</label>
+                    <select
+                      id="service"
+                      {...register('service')}
+                      style={{
+                        ...inputStyle,
+                        appearance: 'none',
+                        cursor: 'pointer',
+                        backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                        backgroundPosition: 'right 1rem center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '1.5em 1.5em'
+                      }}
+                      onFocus={(e) => { e.target.style.borderColor = '#3B82F6'; e.target.style.backgroundColor = '#ffffff'; e.target.style.boxShadow = '0 0 0 4px rgba(59,130,246,0.1)'; }}
+                      onBlur={(e) => { e.target.style.borderColor = '#E5E7EB'; e.target.style.backgroundColor = '#F9FAFB'; e.target.style.boxShadow = 'none'; }}
+                    >
+                      <option value="">Select a Service (Optional)</option>
+                      <option value="Career Counselling">Career Counselling</option>
+                      <option value="University Selection">University Selection</option>
+                      <option value="Visa Assistance">Visa Assistance</option>
+                      <option value="Pre-Departure Support">Pre-Departure Support</option>
+                      <option value="Post-Arrival Support">Post-Arrival Support</option>
+                      <option value="Work Visa Assistance">Work Visa Assistance</option>
+                      <option value="Spouse Services">Spouse Services</option>
+                      <option value="Appeals & Legal Support">Appeals & Legal Support</option>
+                      <option value="Accommodation Assistance">Accommodation Assistance</option>
+                      <option value="IELTS">IELTS</option>
+                    </select>
                   </div>
                 </div>
 
