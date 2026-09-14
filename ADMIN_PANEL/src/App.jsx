@@ -13,6 +13,7 @@ import Counsellors from './pages/Counsellors';
 import AssignCounsellor from './pages/AssignCounsellor';
 import TalkToCounselor from './pages/TalkToCounselor';
 import EveryoneChat from './pages/EveryoneChat';
+import Inquiries from './pages/Inquiries';
 
 // Create a simple Auth Context
 export const AuthContext = createContext();
@@ -59,6 +60,7 @@ function App() {
                     <Route path="/counsellors" element={<Counsellors />} />
                     <Route path="/chat" element={<TalkToCounselor />} />
                     <Route path="/everyone-chat" element={<EveryoneChat />} />
+                    <Route path="/inquiries" element={<Inquiries />} />
                   </Routes>
                 </div>
               </div>

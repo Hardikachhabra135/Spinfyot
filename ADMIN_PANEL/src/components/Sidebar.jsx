@@ -51,6 +51,7 @@ export default function Sidebar() {
     { to: "/contact-forms", label: "Contact Forms", icon: BookOpen, badge: unreadContacts },
     { to: "/assign-counsellor", label: "Assign to Counsellor", icon: Briefcase },
     { to: "/questions", label: "Ask a Question", icon: HelpCircle },
+    { to: "/inquiries", label: "Contact Forms", icon: MessageSquare },
     { to: "/testimonials", label: "Testimonials", icon: Star },
     { to: "/blogs", label: "Blogs", icon: FileText },
     { to: "/influencer-links", label: "Influencer Links", icon: Share2 },

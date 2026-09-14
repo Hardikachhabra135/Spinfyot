@@ -47,10 +47,15 @@ export default function Inquiries() {
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Contact Inquiries</h1>
-        <button className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
-          <Download size={18} /> Export CSV
-        </button>
+        <h1 className="text-2xl font-bold text-slate-800">Contact Forms</h1>
+        <div className="flex items-center gap-4">
+          <div className="text-sm font-medium text-slate-600 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
+            Total Submissions: {inquiries.length}
+          </div>
+          <button className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
+            <Download size={18} /> Export CSV
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -72,28 +77,52 @@ export default function Inquiries() {
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-sm border-b border-slate-200">
                 <th className="p-4 font-semibold">Name & Contact</th>
-                <th className="p-4 font-semibold">Interest</th>
-                <th className="p-4 font-semibold min-w-[300px]">Message</th>
-                <th className="p-4 font-semibold">Date</th>
+                <th className="p-4 font-semibold">Location (State/Country)</th>
+                <th className="p-4 font-semibold">Academics (Qual/Course)</th>
+                <th className="p-4 font-semibold">Service</th>
+                <th className="p-4 font-semibold">Date/Time</th>
                 <th className="p-4 font-semibold">Status</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="5" className="p-8 text-center text-slate-500">Loading...</td></tr>
+                <tr><td colSpan="6" className="p-8 text-center text-slate-500">Loading...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan="5" className="p-8 text-center text-slate-500">No inquiries found.</td></tr>
+                <tr><td colSpan="6" className="p-8 text-center text-slate-500">No Contact Enquiries Yet</td></tr>
               ) : (
-                filtered.map(item => (
+                filtered.map(item => {
+                  let state = 'N/A';
+                  let country = 'N/A';
+                  let qual = 'N/A';
+                  let course = 'N/A';
+
+                  if (item.message && item.message.includes('State:')) {
+                    const parts = item.message.split(' | ');
+                    parts.forEach(part => {
+                      if (part.startsWith('State:')) state = part.replace('State:', '').trim();
+                      if (part.startsWith('Country:')) country = part.replace('Country:', '').trim();
+                      if (part.startsWith('Qualification:')) qual = part.replace('Qualification:', '').trim();
+                      if (part.startsWith('Course:')) course = part.replace('Course:', '').trim();
+                    });
+                  }
+
+                  return (
                   <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50/50">
                     <td className="p-4 text-sm">
                       <div className="font-medium text-slate-800">{item.name}</div>
-                      <div className="text-slate-600">{item.email}</div>
-                      <div className="text-slate-500 text-xs">{item.phone}</div>
+                      <div className="text-slate-600">{item.phone}</div>
+                      <div className="text-slate-500 text-xs">{item.email}</div>
                     </td>
-                    <td className="p-4 text-sm text-slate-600 capitalize">{item.interest}</td>
-                    <td className="p-4 text-sm text-slate-600 italic whitespace-pre-wrap">"{item.message}"</td>
-                    <td className="p-4 text-sm text-slate-500">{new Date(item.createdAt).toLocaleDateString()}</td>
+                    <td className="p-4 text-sm">
+                      <div className="text-slate-800">{state}</div>
+                      <div className="text-slate-500 text-xs">{country}</div>
+                    </td>
+                    <td className="p-4 text-sm">
+                      <div className="text-slate-800">{qual}</div>
+                      <div className="text-slate-500 text-xs">{course}</div>
+                    </td>
+                    <td className="p-4 text-sm text-slate-600 capitalize">{item.interest || 'N/A'}</td>
+                    <td className="p-4 text-sm text-slate-500">{new Date(item.createdAt).toLocaleString()}</td>
                     <td className="p-4">
                       <select 
                         value={item.status}
@@ -110,7 +139,7 @@ export default function Inquiries() {
                       </select>
                     </td>
                   </tr>
-                ))
+                )})
               )}
             </tbody>
           </table>
