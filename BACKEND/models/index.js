@@ -140,7 +140,24 @@ const syncDatabase = async () => {
     try { await sequelize.query('ALTER TABLE `messages` MODIFY `counsellorId` INTEGER NULL;'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `messages` ADD COLUMN `conversationType` VARCHAR(255) DEFAULT \'DIRECT\';'); } catch (e) {}
 
+    
+    // Add CRM Contact Fields
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `submission_id` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `state` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `country` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `qualification` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `course` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `service` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `source` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `follow_up_date` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `follow_up_time` VARCHAR(255);'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `follow_up_note` TEXT;'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `viewed_at` DATETIME;'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `converted_at` DATETIME;'); } catch (e) {}
+    try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `archived_at` DATETIME;'); } catch (e) {}
+
     // Run normal sync to create missing tables without altering existing ones
+
     await sequelize.sync();
     console.log('All models were synchronized successfully.');
   } catch (error) {
