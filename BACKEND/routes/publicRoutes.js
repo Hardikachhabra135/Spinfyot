@@ -2,7 +2,20 @@ const express = require('express');
 const router = express.Router();
 const { Appointment, Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion } = require('../models');
 
+
+// DEBUG ROUTE
+router.get('/debug/analytics', async (req, res) => {
+  try {
+    const logs = await EventLog.findAll();
+    const contacts = await Contact.count();
+    res.json({ success: true, logsCount: logs.length, contactsCount: contacts });
+  } catch (error) {
+    res.json({ success: false, error: error.message, stack: error.stack });
+  }
+});
+
 // POST /api/public/appointments
+
 router.post('/appointments', async (req, res) => {
   try {
     const { name, classType, phoneNumber, email, sourcePage, referralSlug } = req.body;

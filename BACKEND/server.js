@@ -7,6 +7,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
+console.log('[Spinfyot] Server build: analytics-fix-v2 2026-09-14T19:19');
 
 // Trust proxy for Render / Cloudflare rate-limiting & IP detection
 app.set('trust proxy', 1);

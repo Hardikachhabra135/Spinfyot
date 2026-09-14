@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'fra
 import FoldText from '../ui/FoldText';
 import SpecularButton from '../ui/SpecularButton';
 import { ReducedMotionContext } from '../../context/ReducedMotionContext';
+import { trackEvent } from '../../utils/analytics';
 
 const customEase = [0.22, 1, 0.36, 1];
 
@@ -128,6 +129,12 @@ export default function Hero({ onBookCounselling }) {
   const containerRef = useRef(null);
   const prefersReducedMotion = useContext(ReducedMotionContext);
   const { scrollY } = useScroll();
+
+  // Track CTA click and open modal
+  const handleBookCounselling = () => {
+    trackEvent('cta_click', window.location.pathname, { button: 'Book Free Counselling Hero' });
+    if (onBookCounselling) onBookCounselling();
+  };
 
   // Smooth spring for parallax
   const smoothScrollY = useSpring(scrollY, { damping: 25, stiffness: 100 });
@@ -364,7 +371,7 @@ export default function Hero({ onBookCounselling }) {
                   followMouse
                   proximity={250}
                   autoAnimate={false}
-                  onClick={onBookCounselling}
+                  onClick={handleBookCounselling}
                   className="w-[280px] sm:w-[320px] max-w-[90vw] shadow-2xl"
                 >
                   BOOK FREE COUNSELING
@@ -420,7 +427,7 @@ export default function Hero({ onBookCounselling }) {
                   followMouse
                   proximity={250}
                   autoAnimate={false}
-                  onClick={onBookCounselling}
+                  onClick={handleBookCounselling}
                   className="w-[280px] max-w-[90vw] shadow-2xl"
                 >
                   BOOK FREE COUNSELING
