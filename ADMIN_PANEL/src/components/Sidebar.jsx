@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2, Briefcase, Plus } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, HelpCircle, Star, FileText, LogOut, Share2, Briefcase, Plus, BookOpen } from "lucide-react";
 import { useAuth } from "../App";
 import api from "../utils/api";
 import AddStudentModal from "./AddStudentModal";
@@ -9,6 +9,7 @@ export default function Sidebar() {
   const { logout, token } = useAuth();
   const [unreadDirect, setUnreadDirect] = useState(0);
   const [unreadEveryone, setUnreadEveryone] = useState(0);
+  const [unreadContacts, setUnreadContacts] = useState(0);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const location = useLocation();
 
@@ -27,6 +28,15 @@ export default function Sidebar() {
         } catch (error) {
           // silently fail
         }
+
+        try {
+          const contactRes = await api.get('/api/admin/contact-forms?status=NEW', { headers: { Authorization: `Bearer ${token}` } });
+          if (contactRes.data.success) {
+            setUnreadContacts(contactRes.data.data.length);
+          }
+        } catch (error) {
+          // silently fail
+        }
       };
 
       fetchUnread();
@@ -38,6 +48,7 @@ export default function Sidebar() {
   const navItems = [
     { to: "/", label: "Dashboard", icon: LayoutDashboard },
     { to: "/appointments", label: "Leads", icon: Users },
+    { to: "/contact-forms", label: "Contact Forms", icon: BookOpen, badge: unreadContacts },
     { to: "/assign-counsellor", label: "Assign to Counsellor", icon: Briefcase },
     { to: "/questions", label: "Ask a Question", icon: HelpCircle },
     { to: "/testimonials", label: "Testimonials", icon: Star },

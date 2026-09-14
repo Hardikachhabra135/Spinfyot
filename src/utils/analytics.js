@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000'; // Make sure this matches backend config
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Generate or retrieve anonymous session ID
 const getSessionId = () => {
@@ -27,19 +27,15 @@ export const trackEvent = async (eventType, path = window.location.pathname, met
       }
     };
 
-    // Use sendBeacon if available for better non-blocking delivery, otherwise fallback to fetch
-    if (navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      navigator.sendBeacon(`${API_BASE_URL}/api/public/analytics/track`, blob);
-    } else {
-      await fetch(`${API_BASE_URL}/api/public/analytics/track`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-    }
+    // Use fetch with keepalive which is the modern standard for non-blocking analytics delivery
+    await fetch(`${API_BASE_URL}/api/public/analytics/track`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
   } catch (error) {
     // Fail silently on public frontend
     console.error('Analytics tracking failed silently.');

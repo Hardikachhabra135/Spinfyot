@@ -76,6 +76,7 @@ app.use('/api/public/', apiLimiter);
 // Setup Routes
 app.use('/api/public', require('./routes/publicRoutes'));
 app.use('/api/admin/counsellors', require('./routes/counsellorAdminRoutes'));
+app.use('/api/admin/contact-forms', require('./routes/adminContactRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/counsellor', require('./routes/counsellorPortalRoutes'));
 

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
+import ContactForms from './pages/ContactForms';
 import Login from './pages/Login';
 import Appointments from './pages/Appointments';
 import Questions from './pages/Questions';
@@ -49,6 +50,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/appointments" element={<Appointments />} />
+                    <Route path="/contact-forms" element={<ContactForms />} />
                     <Route path="/assign-counsellor" element={<AssignCounsellor />} />
                     <Route path="/questions" element={<Questions />} />
                     <Route path="/testimonials" element={<TestimonialsAdmin />} />

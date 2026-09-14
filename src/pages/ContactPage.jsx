@@ -11,6 +11,7 @@ export default function ContactPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     document.title = "Contact Us | Spinfyot";
@@ -21,6 +22,7 @@ export default function ContactPage() {
   const closeModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (e) => {
+    if (isLoading) return;
     e.preventDefault();
     setPhoneError('');
     
@@ -202,7 +204,7 @@ export default function ContactPage() {
 
                     <div className="mt-4 flex justify-start">
                       <button type="submit" style={{ backgroundColor: '#1F3A5C', color: '#FFFFFF', fontSize: '16px', fontWeight: 600, padding: '16px 40px', borderRadius: '100px', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 8px 20px rgba(31, 58, 92, 0.15)' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#99B6F5'; e.currentTarget.style.color = '#1F3A5C'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1F3A5C'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-                        Send Message
+                        {isLoading ? 'Sending...' : 'Send Message'}
                       </button>
                     </div>
                   </form>

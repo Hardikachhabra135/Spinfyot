@@ -440,43 +440,56 @@ router.get('/analytics', authMiddleware, async (req, res) => {
       trafficMap[ds] = new Set();
     }
 
-    logs.forEach(log => {
-      const dateStr = log.createdAt.toISOString().split('T')[0];
-      let sessionId = log.metadata?.sessionId || 'anon';
-      
-      if (log.eventType === 'page_view') {
-        pageViews++;
-        pagesMap[log.path] = (pagesMap[log.path] || 0) + 1;
-        if (trafficMap[dateStr]) trafficMap[dateStr].add(sessionId);
-        visitorsMap.add(sessionId);
-      } else {
-        interactions++;
-        if (log.eventType === 'cta_click') {
-          const btn = log.metadata?.button || 'Unknown CTA';
-          interactionsMap[btn] = (interactionsMap[btn] || 0) + 1;
-        } else if (log.eventType === 'form_started') {
-          formsStarted++;
-          interactionsMap['Form Started'] = (interactionsMap['Form Started'] || 0) + 1;
-        } else if (log.eventType === 'form_submitted') {
-          formsSubmitted++;
-          interactionsMap['Form Submitted'] = (interactionsMap['Form Submitted'] || 0) + 1;
+      logs.forEach(log => {
+        const dateStr = log.createdAt.toISOString().split('T')[0];
+        
+        // Defensive parsing for SQLite returning JSON as strings sometimes
+        let parsedMetadata = log.metadata || {};
+        if (typeof parsedMetadata === 'string') {
+          try {
+            parsedMetadata = JSON.parse(parsedMetadata);
+          } catch(e) {
+            parsedMetadata = {};
+          }
         }
-      }
-    });
 
-    const totalVisitors = visitorsMap.size;
-    const traffic = Object.keys(trafficMap).sort().map(date => ({
-      date,
-      visitors: trafficMap[date].size
-    }));
-
-    // Ranked arrays
-    const topPages = Object.entries(pagesMap).map(([page, count]) => ({ page, count })).sort((a, b) => b.count - a.count).slice(0, 5);
-    const topInteractions = Object.entries(interactionsMap).map(([action, count]) => ({ action, count })).sort((a, b) => b.count - a.count).slice(0, 5);
-
-    // Leads & Appointments Generated in this period
-    const leadsGenerated = await Assignment.count({ where: whereClause });
-    const appointmentsCreated = await Appointment.count({ where: whereClause });
+        let sessionId = parsedMetadata.sessionId || 'anon';
+        
+        if (log.eventType === 'page_view') {
+          pageViews++;
+          pagesMap[log.path] = (pagesMap[log.path] || 0) + 1;
+          if (trafficMap[dateStr]) trafficMap[dateStr].add(sessionId);
+          visitorsMap.add(sessionId);
+        } else {
+          interactions++;
+          if (log.eventType === 'cta_click') {
+            const btn = parsedMetadata.button || 'Unknown CTA';
+            interactionsMap[btn] = (interactionsMap[btn] || 0) + 1;
+          } else if (log.eventType === 'form_started') {
+            formsStarted++;
+            interactionsMap['Form Started'] = (interactionsMap['Form Started'] || 0) + 1;
+          } else if (log.eventType === 'form_submitted') {
+            formsSubmitted++;
+            interactionsMap['Form Submitted'] = (interactionsMap['Form Submitted'] || 0) + 1;
+          }
+        }
+      });
+  
+      const totalVisitors = visitorsMap.size;
+      const traffic = Object.keys(trafficMap).sort().map(date => ({
+        date,
+        visitors: trafficMap[date].size
+      }));
+  
+      // Ranked arrays
+      const topPages = Object.entries(pagesMap).map(([page, count]) => ({ page, count })).sort((a, b) => b.count - a.count).slice(0, 5);
+      const topInteractions = Object.entries(interactionsMap).map(([action, count]) => ({ action, count })).sort((a, b) => b.count - a.count).slice(0, 5);
+  
+      // Leads & Appointments Generated in this period - True Source of Truth
+      const contactsCreated = await Contact.count({ where: whereClause });
+      const appointmentsCreated = await Appointment.count({ where: whereClause });
+      const questionsCreated = await Question.count({ where: whereClause });
+      const leadsGenerated = contactsCreated + appointmentsCreated + questionsCreated;
 
     res.json({
       success: true,

@@ -33,10 +33,27 @@ router.post('/appointments', async (req, res) => {
 // POST /api/public/contacts
 router.post('/contacts', async (req, res) => {
   try {
-    const { name, email, phone, interest, message, referralSlug } = req.body;
+    const { name, email, phone, state, country, qualification, course, service, source, interest, message, referralSlug } = req.body;
     
+    // Generate unique submission ID
+    const year = new Date().getFullYear();
+    const count = await Contact.count();
+    const submission_id = `CF-${year}-${String(count + 1).padStart(5, '0')}`;
+
     const contact = await Contact.create({
-      name, email, phone, interest, message, referralSlug
+      submission_id,
+      name, 
+      email, 
+      phone, 
+      state, 
+      country, 
+      qualification, 
+      course, 
+      service, 
+      source: source || (referralSlug ? `Influencer Link - ${referralSlug}` : 'Direct Website'),
+      interest: interest || course || service || '', 
+      message: message || '', 
+      referralSlug
     });
 
     if (referralSlug) {

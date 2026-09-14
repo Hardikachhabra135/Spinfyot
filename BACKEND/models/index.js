@@ -2,6 +2,7 @@ const sequelize = require('../config/database');
 const Admin = require('./Admin');
 const Appointment = require('./Appointment');
 const Contact = require('./Contact');
+const ContactNote = require('./ContactNote');
 const Question = require('./Question');
 const Testimonial = require('./Testimonial');
 const Blog = require('./Blog');
@@ -27,6 +28,10 @@ Appointment.belongsTo(Counsellor, { foreignKey: 'counsellorId' });
 
 Counsellor.hasMany(Contact, { foreignKey: 'counsellorId' });
 Contact.belongsTo(Counsellor, { foreignKey: 'counsellorId' });
+
+Contact.hasMany(ContactNote, { foreignKey: 'contactId' });
+ContactNote.belongsTo(Contact, { foreignKey: 'contactId' });
+
 
 Counsellor.hasMany(Student, { foreignKey: 'counsellorId' });
 Student.belongsTo(Counsellor, { foreignKey: 'counsellorId' });
@@ -149,6 +154,7 @@ module.exports = {
   Admin,
   Appointment,
   Contact,
+  ContactNote,
   Question,
   Testimonial,
   Blog,
