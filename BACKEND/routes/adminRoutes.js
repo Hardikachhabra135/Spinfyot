@@ -851,7 +851,6 @@ router.get('/assignments/workload', authMiddleware, async (req, res) => {
 
 // --- ADMIN MESSAGING ROUTES ---
 const { Message } = require('../models');
-const { Op } = require('sequelize');
 
 // 1. Get all counsellors with latest message info for the chat list
 router.get('/messages/counsellors', authMiddleware, async (req, res) => {

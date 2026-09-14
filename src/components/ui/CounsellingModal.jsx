@@ -102,6 +102,7 @@ const CounsellingModal = ({ isOpen, onClose }) => {
       }
       
       setFormState('success');
+      trackEvent('form_submitted', window.location.pathname, { form: 'Modal' });
       setTimeout(() => {
         onClose();
       }, 2000);

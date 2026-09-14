@@ -44,8 +44,41 @@ function App() {
 
   useEffect(() => {
     trackEvent('page_view', location.pathname);
-  }, [location.pathname]);
 
+    // Global click listener for analytics
+    const handleClick = (e) => {
+      try {
+        const target = e.target.closest('a, button');
+        if (!target) return;
+
+        const text = (target.innerText || target.getAttribute('aria-label') || '').trim();
+        const href = target.getAttribute('href');
+
+        if (href?.startsWith('tel:')) {
+          trackEvent('cta_click', location.pathname, { button: 'Phone Link', target: href });
+        } else if (href?.startsWith('mailto:')) {
+          trackEvent('cta_click', location.pathname, { button: 'Email Link', target: href });
+        } else if (href?.includes('wa.me') || href?.includes('whatsapp')) {
+          trackEvent('cta_click', location.pathname, { button: 'WhatsApp Link', target: href });
+        } else if (target.tagName === 'A') {
+          if (href?.startsWith('/services/')) {
+            trackEvent('cta_click', location.pathname, { button: `Service: ${text}` });
+          } else {
+            // Track header/footer navigation
+            trackEvent('nav_click', location.pathname, { destination: href, text });
+          }
+        } else if (target.tagName === 'BUTTON' && target.type !== 'submit') {
+          // Track generic buttons but avoid forms since forms are handled separately
+          if (text) trackEvent('cta_click', location.pathname, { button: text });
+        }
+      } catch (err) {
+        // Fail silently
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [location.pathname]);
   // Set up Lenis smooth scroll
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
