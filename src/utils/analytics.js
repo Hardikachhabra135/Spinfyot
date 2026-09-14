@@ -33,8 +33,7 @@ export const trackEvent = async (eventType, path = window.location.pathname, met
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload),
-      keepalive: true
+      body: JSON.stringify(payload)
     });
   } catch (error) {
     // Fail silently on public frontend

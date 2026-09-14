@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const { Admin, Appointment, Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion, Assignment, Counsellor, Student, sequelize } = require('../models');
+const { Op } = require('sequelize');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -63,7 +64,6 @@ router.post('/login', async (req, res) => {
 // GET /api/admin/dashboard/stats
 router.get('/dashboard/stats', authMiddleware, async (req, res) => {
   try {
-    const { Op } = require('sequelize');
     
     const totalAppointments = await Appointment.count();
     const newAppointments = await Appointment.count({ where: { status: 'New' } });
