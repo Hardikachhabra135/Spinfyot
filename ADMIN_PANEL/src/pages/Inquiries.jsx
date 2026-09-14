@@ -44,6 +44,55 @@ export default function Inquiries() {
     a.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const exportCSV = () => {
+    if (inquiries.length === 0) return alert("No data to export");
+    
+    const headers = ['Name', 'Phone', 'Email', 'State', 'Country', 'Qualification', 'Course', 'Service', 'Date', 'Status'];
+    
+    const csvRows = [headers.join(',')];
+    
+    inquiries.forEach(item => {
+      let state = 'N/A';
+      let country = 'N/A';
+      let qual = 'N/A';
+      let course = 'N/A';
+
+      if (item.message && item.message.includes('State:')) {
+        const parts = item.message.split(' | ');
+        parts.forEach(part => {
+          if (part.startsWith('State:')) state = part.replace('State:', '').trim();
+          if (part.startsWith('Country:')) country = part.replace('Country:', '').trim();
+          if (part.startsWith('Qualification:')) qual = part.replace('Qualification:', '').trim();
+          if (part.startsWith('Course:')) course = part.replace('Course:', '').trim();
+        });
+      }
+
+      const row = [
+        `"${item.name || ''}"`,
+        `"${item.phone || ''}"`,
+        `"${item.email || ''}"`,
+        `"${state}"`,
+        `"${country}"`,
+        `"${qual}"`,
+        `"${course}"`,
+        `"${item.interest || ''}"`,
+        `"${new Date(item.createdAt).toLocaleString()}"`,
+        `"${item.status || ''}"`
+      ];
+      csvRows.push(row.join(','));
+    });
+    
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `contact_forms_${new Date().getTime()}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
@@ -52,7 +101,7 @@ export default function Inquiries() {
           <div className="text-sm font-medium text-slate-600 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
             Total Submissions: {inquiries.length}
           </div>
-          <button className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
+          <button onClick={exportCSV} className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
             <Download size={18} /> Export CSV
           </button>
         </div>
