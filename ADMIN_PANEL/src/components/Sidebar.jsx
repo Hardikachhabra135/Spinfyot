@@ -48,7 +48,6 @@ export default function Sidebar() {
   const navItems = [
     { to: "/", label: "Dashboard", icon: LayoutDashboard },
     { to: "/appointments", label: "Leads", icon: Users },
-    { to: "/contact-forms", label: "Contact Forms", icon: BookOpen, badge: unreadContacts },
     { to: "/assign-counsellor", label: "Assign to Counsellor", icon: Briefcase },
     { to: "/questions", label: "Ask a Question", icon: HelpCircle },
     { to: "/inquiries", label: "Contact Forms", icon: MessageSquare },
