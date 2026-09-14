@@ -47,7 +47,7 @@ function App() {
             <PrivateRoute>
               <div className="flex h-screen overflow-hidden bg-gray-100">
                 <Sidebar />
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto min-w-0 flex flex-col overflow-x-hidden">
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/appointments" element={<Appointments />} />

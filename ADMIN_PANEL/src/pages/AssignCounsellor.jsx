@@ -89,7 +89,7 @@ export default function AssignCounsellor() {
       </div>
 
       {/* Workload Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
         {workload.map(c => {
           const load = getLoadText(c.assignedCount);
           return (
@@ -138,14 +138,14 @@ export default function AssignCounsellor() {
       </div>
 
       {/* Appointments Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <table className="w-full whitespace-nowrap">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto w-full">
+        <table className="w-full text-left min-w-[900px]">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Student Info</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Appointment</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Assignment Status</th>
-              <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600">Actions</th>
+              <th className="px-6 py-4 text-sm font-semibold text-slate-600 w-1/4">Student Info</th>
+              <th className="px-6 py-4 text-sm font-semibold text-slate-600 w-2/5">Appointment</th>
+              <th className="px-6 py-4 text-sm font-semibold text-slate-600 w-[15%]">Assignment Status</th>
+              <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600 w-1/5">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -183,7 +183,7 @@ export default function AssignCounsellor() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       {activeModalId === `${a._recordType}-${a.id}` ? (
-                        <div className="inline-flex items-center gap-2 bg-white border border-slate-200 p-2 rounded-xl shadow-lg relative z-10">
+                        <div className="flex flex-wrap justify-end items-center gap-2 max-w-[280px] ml-auto bg-white border border-slate-200 p-2 rounded-xl shadow-lg relative z-10">
                           <select 
                             value={selectedCounsellor}
                             onChange={(e) => setSelectedCounsellor(e.target.value)}
