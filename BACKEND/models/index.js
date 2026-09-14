@@ -156,7 +156,22 @@ const syncDatabase = async () => {
     try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `converted_at` DATETIME;'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `contacts` ADD COLUMN `archived_at` DATETIME;'); } catch (e) {}
 
-    // Run normal sync to create missing tables without altering existing ones
+    // Create event_logs table explicitly for TiDB/MySQL production compatibility
+    // (sequelize.sync() may silently skip JSON columns on some TiDB versions)
+    try {
+      await sequelize.query(`
+        CREATE TABLE IF NOT EXISTS \`event_logs\` (
+          \`id\` INTEGER NOT NULL AUTO_INCREMENT,
+          \`eventType\` VARCHAR(255) NOT NULL,
+          \`path\` VARCHAR(255),
+          \`metadata\` JSON,
+          \`createdAt\` DATETIME NOT NULL,
+          PRIMARY KEY (\`id\`)
+        );
+      `);
+    } catch (e) {}
+
+    // Run normal sync to create any remaining missing tables without altering existing ones
 
     await sequelize.sync();
     console.log('All models were synchronized successfully.');

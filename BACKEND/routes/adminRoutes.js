@@ -441,9 +441,12 @@ router.get('/analytics', authMiddleware, async (req, res) => {
     }
 
       logs.forEach(log => {
-        const dateStr = log.createdAt.toISOString().split('T')[0];
+        // TiDB/MySQL may return createdAt as a Date object OR as a string — handle both
+        const createdAtDate = log.createdAt instanceof Date ? log.createdAt : new Date(log.createdAt);
+        const dateStr = createdAtDate.toISOString().split('T')[0];
         
         // Defensive parsing for SQLite returning JSON as strings sometimes
+        // TiDB also sometimes returns JSON columns as raw strings
         let parsedMetadata = log.metadata || {};
         if (typeof parsedMetadata === 'string') {
           try {
@@ -512,7 +515,7 @@ router.get('/analytics', authMiddleware, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Analytics route error:', error.message || error);
     res.status(500).json({ success: false, error: 'Server error' });
   }
 });
