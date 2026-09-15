@@ -67,8 +67,8 @@ const Contact = sequelize.define('Contact', {
     allowNull: true
   },
   status: {
-    type: DataTypes.ENUM('New', 'Contacted', 'In Progress', 'Resolved', 'NEW', 'VIEWED', 'CONTACTED', 'FOLLOW-UP', 'CONVERTED', 'CLOSED'),
-    defaultValue: 'NEW'
+    type: DataTypes.STRING,
+    defaultValue: 'New'
   },
   follow_up_date: {
     type: DataTypes.DATEONLY,

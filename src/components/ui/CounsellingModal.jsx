@@ -6,6 +6,7 @@ import * as z from 'zod';
 import emailjs from '@emailjs/browser';
 import { X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { apiUrl } from '../../utils/api';
+import { trackEvent } from '../../utils/analytics';
 
 const formSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),

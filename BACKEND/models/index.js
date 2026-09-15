@@ -139,6 +139,10 @@ const syncDatabase = async () => {
     try { await sequelize.query('ALTER TABLE `messages` MODIFY `adminId` INTEGER NULL;'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `messages` MODIFY `counsellorId` INTEGER NULL;'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `messages` ADD COLUMN `conversationType` VARCHAR(255) DEFAULT \'DIRECT\';'); } catch (e) {}
+    
+    // Fix ENUM truncation errors by changing status columns to VARCHAR
+    try { await sequelize.query("ALTER TABLE `contacts` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); } catch(e) {}
+    try { await sequelize.query("ALTER TABLE `appointments` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); } catch(e) {}
 
     
     // Add CRM Contact Fields
