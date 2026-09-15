@@ -21,6 +21,7 @@ const formSchema = z.object({
 
 const CounsellingModal = ({ isOpen, onClose }) => {
   const [formState, setFormState] = useState('idle'); // idle | loading | success
+  const [submitError, setSubmitError] = useState(null);
   const modalRef = useRef(null);
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -72,12 +73,14 @@ const CounsellingModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setFormState('idle');
+      setSubmitError(null);
       reset();
     }
   }, [isOpen, reset]);
 
   const onSubmit = async (data) => {
     setFormState('loading');
+    setSubmitError(null);
     try {
       const referralSlug = localStorage.getItem('referral_slug') || undefined;
       const visitorId = localStorage.getItem('visitorId') || undefined;
@@ -103,13 +106,13 @@ const CounsellingModal = ({ isOpen, onClose }) => {
       }
       
       setFormState('success');
-      trackEvent('form_submitted', window.location.pathname, { form: 'Modal' });
+      trackEvent('form_submitted', window.location.pathname, { form: 'Appointment' });
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (error) {
       console.error('Submission failed:', error);
-      alert('Failed to submit appointment: ' + error.message);
+      setSubmitError(error.message || 'Unable to submit your request. Please try again.');
       setFormState('idle');
     }
   };
@@ -266,6 +269,11 @@ const CounsellingModal = ({ isOpen, onClose }) => {
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {submitError && (
+                  <div style={{ color: '#EF4444', backgroundColor: '#FEF2F2', padding: '12px 16px', borderRadius: '8px', border: '1px solid #FECACA', fontSize: '14px' }}>
+                    {submitError}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: '20px', flexDirection: isMobile ? 'column' : 'row' }}>
                   <div style={{ flex: 1 }}>
                     <label htmlFor="name" style={labelStyle}>Name <span style={{ color: 'red' }}>*</span></label>

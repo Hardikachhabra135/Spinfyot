@@ -12,6 +12,7 @@ export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     document.title = "Contact Us | Spinfyot";
@@ -22,8 +23,10 @@ export default function ContactPage() {
   const closeModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (e) => {
-    if (isLoading) return;
     e.preventDefault();
+    if (isLoading) return;
+    
+    setSubmitError(null);
     setPhoneError('');
     
     const phoneVal = e.target.phone.value.trim();
@@ -40,10 +43,11 @@ export default function ContactPage() {
     const serviceVal = e.target.service.value.trim();
 
     if (!stateVal || !countryVal || !qualVal) {
-      alert("Please fill all mandatory fields.");
+      setSubmitError("Please fill all mandatory fields.");
       return;
     }
 
+    setIsLoading(true);
     try {
       const data = {
         name: e.target.name.value.trim(),
@@ -69,7 +73,9 @@ export default function ContactPage() {
       e.target.reset();
     } catch (error) {
       console.error('Contact submission failed:', error);
-      alert('Failed to submit: ' + error.message);
+      setSubmitError(error.message || 'Unable to submit your request. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -202,10 +208,17 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 flex justify-start">
-                      <button type="submit" style={{ backgroundColor: '#1F3A5C', color: '#FFFFFF', fontSize: '16px', fontWeight: 600, padding: '16px 40px', borderRadius: '100px', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 8px 20px rgba(31, 58, 92, 0.15)' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#99B6F5'; e.currentTarget.style.color = '#1F3A5C'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#1F3A5C'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-                        {isLoading ? 'Sending...' : 'Send Message'}
-                      </button>
+                    <div className="mt-4 flex flex-col gap-4">
+                      {submitError && (
+                        <div style={{ color: '#EF4444', backgroundColor: '#FEF2F2', padding: '12px 16px', borderRadius: '8px', border: '1px solid #FECACA', fontSize: '14px' }}>
+                          {submitError}
+                        </div>
+                      )}
+                      <div>
+                        <button type="submit" disabled={isLoading} style={{ backgroundColor: isLoading ? '#9CA3AF' : '#1F3A5C', color: '#FFFFFF', fontSize: '16px', fontWeight: 600, padding: '16px 40px', borderRadius: '100px', border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer', transition: 'all 0.3s ease', boxShadow: '0 8px 20px rgba(31, 58, 92, 0.15)' }} onMouseOver={(e) => { if(!isLoading) { e.currentTarget.style.backgroundColor = '#99B6F5'; e.currentTarget.style.color = '#1F3A5C'; e.currentTarget.style.transform = 'translateY(-2px)'; } }} onMouseOut={(e) => { if(!isLoading) { e.currentTarget.style.backgroundColor = '#1F3A5C'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.transform = 'translateY(0)'; } }}>
+                          {isLoading ? 'Sending...' : 'Send Message'}
+                        </button>
+                      </div>
                     </div>
                   </form>
                 )}

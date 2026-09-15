@@ -42,7 +42,7 @@ router.post('/appointments', async (req, res) => {
   try {
     const { name, classType, phoneNumber, email, sourcePage, referralSlug } = req.body;
     const appointment = await Appointment.create({
-      name, email, phoneNumber, classType, sourcePage, referralSlug
+      name, email, phoneNumber, classType, sourcePage, referralSlug, status: 'New'
     });
     
     // Log conversion if referral exists
@@ -88,7 +88,8 @@ router.post('/contacts', async (req, res) => {
       source: source || (referralSlug ? `Influencer Link - ${referralSlug}` : 'Direct Website'),
       interest: interest || course || service || '', 
       message: message || '', 
-      referralSlug
+      referralSlug,
+      status: 'New'
     });
 
     if (referralSlug) {

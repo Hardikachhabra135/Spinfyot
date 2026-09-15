@@ -140,9 +140,35 @@ const syncDatabase = async () => {
     try { await sequelize.query('ALTER TABLE `messages` MODIFY `counsellorId` INTEGER NULL;'); } catch (e) {}
     try { await sequelize.query('ALTER TABLE `messages` ADD COLUMN `conversationType` VARCHAR(255) DEFAULT \'DIRECT\';'); } catch (e) {}
     
-    // Fix ENUM truncation errors by changing status columns to VARCHAR
-    try { await sequelize.query("ALTER TABLE `contacts` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); } catch(e) {}
-    try { await sequelize.query("ALTER TABLE `appointments` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); } catch(e) {}
+        // Fix ENUM truncation errors by changing status columns to VARCHAR
+      try { 
+        console.log("Migrating contacts status to VARCHAR...");
+        await sequelize.query("ALTER TABLE `contacts` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); 
+        console.log("Contacts status migrated successfully.");
+      } catch(e) {
+        console.error("Failed to migrate contacts status:", e.message);
+        // Fallback syntax
+        try {
+          await sequelize.query("ALTER TABLE `contacts` CHANGE `status` `status` VARCHAR(255) DEFAULT 'New';");
+          console.log("Contacts status migrated successfully (fallback).");
+        } catch(e2) {
+          console.error("Fallback failed:", e2.message);
+        }
+      }
+      
+      try { 
+        console.log("Migrating appointments status to VARCHAR...");
+        await sequelize.query("ALTER TABLE `appointments` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';"); 
+        console.log("Appointments status migrated successfully.");
+      } catch(e) {
+        console.error("Failed to migrate appointments status:", e.message);
+        try {
+          await sequelize.query("ALTER TABLE `appointments` CHANGE `status` `status` VARCHAR(255) DEFAULT 'New';");
+          console.log("Appointments status migrated successfully (fallback).");
+        } catch(e2) {
+          console.error("Fallback failed:", e2.message);
+        }
+      }
 
     
     // Add CRM Contact Fields
