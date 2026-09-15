@@ -663,11 +663,17 @@ router.put('/appointments/:id/status', authMiddleware, async (req, res) => {
 // DELETE /api/admin/appointments/:id
 router.delete('/appointments/:id', authMiddleware, async (req, res) => {
   try {
-    const deletedCount = await Appointment.destroy({ where: { id: req.params.id } });
-    if (deletedCount === 0) return res.status(404).json({ success: false, error: 'Appointment not found' });
+    const appointment = await Appointment.findByPk(req.params.id);
+    if (!appointment) return res.status(404).json({ success: false, error: 'Appointment not found' });
+    
+    // Manually cascade delete associated assignments
+    await Assignment.destroy({ where: { appointmentId: req.params.id } });
+    
+    await appointment.destroy();
     res.json({ success: true, message: 'Appointment deleted successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'Failed to delete appointment' });
+    console.error('DELETE APPOINTMENT ERROR:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete appointment. ' + error.message });
   }
 });
 

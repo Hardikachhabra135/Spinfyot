@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useAuth } from '../App';
-import { Download, Search, Trash2 } from 'lucide-react';
+import { Download, Search, Trash2, Check } from 'lucide-react';
 
 export default function Inquiries() {
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const { token } = useAuth();
-  const [deleteModal, setDeleteModal] = useState({ show: false, step: 1, id: null });
+  const [deleteModal, setDeleteModal] = useState({ show: false, step: 1, id: null, loading: false, error: null, success: false });
 
   const initiateDelete = (id) => {
-    setDeleteModal({ show: true, step: 1, id });
+    setDeleteModal({ show: true, step: 1, id, loading: false, error: null, success: false });
   };
 
   const cancelDelete = () => {
-    setDeleteModal({ show: false, step: 1, id: null });
+    setDeleteModal({ show: false, step: 1, id: null, loading: false, error: null, success: false });
   };
 
   const confirmDeleteStep1 = () => {
-    setDeleteModal(prev => ({ ...prev, step: 2 }));
+    setDeleteModal(prev => ({ ...prev, step: 2, error: null }));
   };
 
   const confirmDeleteStep2 = async () => {
+    setDeleteModal(prev => ({ ...prev, loading: true, error: null }));
     try {
       const res = await api.delete(`/api/admin/contacts/${deleteModal.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {
         setInquiries(inquiries.filter(app => app.id !== deleteModal.id));
-        alert("Entry deleted successfully.");
+        setDeleteModal(prev => ({ ...prev, loading: false, success: true }));
+        setTimeout(() => cancelDelete(), 1500);
       } else {
-        alert("Unable to delete entry. Please try again.");
+        setDeleteModal(prev => ({ ...prev, loading: false, error: res.data.error || "Unable to delete entry. Please try again." }));
       }
     } catch (error) {
       console.error(error);
-      alert("Unable to delete entry. Please try again.");
+      setDeleteModal(prev => ({ ...prev, loading: false, error: error.response?.data?.error || "Unable to delete entry. Please try again." }));
     }
-    cancelDelete();
   };
 
   useEffect(() => {
@@ -235,7 +236,14 @@ export default function Inquiries() {
       {deleteModal.show && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in duration-200">
-            {deleteModal.step === 1 ? (
+            {deleteModal.success ? (
+              <div className="text-center py-6">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Check className="text-green-600" size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">Entry deleted successfully</h3>
+              </div>
+            ) : deleteModal.step === 1 ? (
               <>
                 <h3 className="text-xl font-bold text-slate-800 mb-2">Delete Entry</h3>
                 <p className="text-slate-600 mb-6">Are you sure you want to delete this entry?</p>
@@ -247,10 +255,17 @@ export default function Inquiries() {
             ) : (
               <>
                 <h3 className="text-xl font-bold text-red-600 mb-2">Permanent Deletion</h3>
-                <p className="text-slate-600 mb-6">Are you absolutely sure? This action will permanently delete this entry.</p>
+                <p className="text-slate-600 mb-4">Are you absolutely sure? This action will permanently delete this entry.</p>
+                {deleteModal.error && (
+                  <div className="p-3 mb-4 text-sm text-red-700 bg-red-50 rounded-lg border border-red-100 break-words">
+                    {deleteModal.error}
+                  </div>
+                )}
                 <div className="flex justify-end gap-3">
-                  <button onClick={cancelDelete} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition">Cancel</button>
-                  <button onClick={confirmDeleteStep2} className="px-4 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-lg transition">Yes, Delete Permanently</button>
+                  <button onClick={cancelDelete} disabled={deleteModal.loading} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition disabled:opacity-50">Cancel</button>
+                  <button onClick={confirmDeleteStep2} disabled={deleteModal.loading} className="px-4 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-lg transition disabled:opacity-50 min-w-[160px] flex justify-center">
+                    {deleteModal.loading ? 'Deleting...' : 'Yes, Delete Permanently'}
+                  </button>
                 </div>
               </>
             )}

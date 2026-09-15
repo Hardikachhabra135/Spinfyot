@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Contact, ContactNote, Student, sequelize } = require('../models');
+const { Contact, ContactNote, Student, Assignment, sequelize } = require('../models');
 const { Op } = require('sequelize');
 
 // GET /api/admin/contact-forms
@@ -194,11 +194,18 @@ router.post('/:id/archive', async (req, res) => {
 // DELETE /api/admin/contacts/:id
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    const deletedCount = await Contact.destroy({ where: { id: req.params.id } });
-    if (deletedCount === 0) return res.status(404).json({ success: false, error: 'Contact not found' });
+    const contact = await Contact.findByPk(req.params.id);
+    if (!contact) return res.status(404).json({ success: false, error: 'Contact not found' });
+    
+    // Manually cascade delete associated contact notes and assignments
+    await ContactNote.destroy({ where: { contactId: req.params.id } });
+    await Assignment.destroy({ where: { appointmentId: req.params.id, recordType: 'contact' } }).catch(() => {});
+    
+    await contact.destroy();
     res.json({ success: true, message: 'Contact deleted successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, error: 'Failed to delete contact' });
+    console.error('DELETE CONTACT ERROR:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete contact. ' + error.message });
   }
 });
 
