@@ -72,10 +72,10 @@ export default function Appointments() {
   );
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-4 md:p-8 w-full max-w-full box-border">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-slate-800">Booked Appointments</h1>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <button onClick={() => handleExport('excel')} className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
             <FileSpreadsheet size={18} /> Export Excel
           </button>
@@ -85,31 +85,31 @@ export default function Appointments() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden w-full">
         <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
               type="text" 
               placeholder="Search by name or email..." 
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 w-64 text-sm"
+              className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64 text-sm"
             />
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-sm border-b border-slate-200">
-                <th className="p-4 font-semibold">Name</th>
-                <th className="p-4 font-semibold">Contact Info</th>
-                <th className="p-4 font-semibold">Level / Interest</th>
-                <th className="p-4 font-semibold max-w-xs">Message</th>
-                <th className="p-4 font-semibold">Source Page</th>
-                <th className="p-4 font-semibold">Date Submitted</th>
-                <th className="p-4 font-semibold">Status</th>
+                <th className="p-4 font-semibold whitespace-nowrap">Name</th>
+                <th className="p-4 font-semibold whitespace-nowrap">Contact Info</th>
+                <th className="p-4 font-semibold min-w-[150px]">Level / Interest</th>
+                <th className="p-4 font-semibold min-w-[200px]">Message</th>
+                <th className="p-4 font-semibold whitespace-nowrap">Source Page</th>
+                <th className="p-4 font-semibold whitespace-nowrap">Date Submitted</th>
+                <th className="p-4 font-semibold whitespace-nowrap">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -120,18 +120,20 @@ export default function Appointments() {
               ) : (
                 filtered.map(app => (
                   <tr key={app.id} className="border-b border-slate-100 hover:bg-slate-50/50">
-                    <td className="p-4 font-medium text-slate-800">{app.name}</td>
-                    <td className="p-4 text-sm">
-                      <div className="text-slate-800">{app.email}</div>
+                    <td className="p-4 font-medium text-slate-800 break-words">{app.name}</td>
+                    <td className="p-4 text-sm break-words">
+                      <div className="text-slate-800 break-all">{app.email}</div>
                       <div className="text-slate-500">{app.phoneNumber}</div>
                     </td>
-                    <td className="p-4 text-sm text-slate-600">{app.classType || app.interest || '-'}</td>
-                    <td className="p-4 text-sm text-slate-600 max-w-xs truncate" title={app.message}>{app.message || '-'}</td>
-                    <td className="p-4 text-sm text-slate-500"><span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono">{app.sourcePage}</span></td>
-                    <td className="p-4 text-sm text-slate-600">{new Date(app.createdAt).toLocaleDateString()}</td>
-                    <td className="p-4">
+                    <td className="p-4 text-sm text-slate-600 break-words whitespace-pre-wrap">{app.classType || app.interest || '-'}</td>
+                    <td className="p-4 text-sm text-slate-600">
+                      <div className="max-h-24 overflow-y-auto whitespace-pre-wrap break-words">{app.message || '-'}</div>
+                    </td>
+                    <td className="p-4 text-sm text-slate-500"><span className="bg-slate-100 px-2 py-1 rounded text-xs font-mono whitespace-nowrap">{app.sourcePage}</span></td>
+                    <td className="p-4 text-sm text-slate-600 whitespace-nowrap">{new Date(app.createdAt).toLocaleDateString()}</td>
+                    <td className="p-4 whitespace-nowrap">
                       <select
-                        className="text-sm bg-white border border-slate-200 rounded-lg px-3 py-1 focus:outline-none"
+                        className="text-sm bg-white border border-slate-200 rounded-lg px-3 py-1 focus:outline-none min-w-[110px]"
                         value={app.status}
                         onChange={(e) => updateStatus(app.id, e.target.value, app._recordType || 'appointment')}
                       >
