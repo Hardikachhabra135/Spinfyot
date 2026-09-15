@@ -39,9 +39,17 @@ router.get('/', async (req, res) => {
     if (sort === 'Oldest First') orderClause = [['createdAt', 'ASC']];
     else if (sort === 'Recently Updated') orderClause = [['updatedAt', 'DESC']];
 
-    const contacts = await Contact.findAll({
+    let contacts = await Contact.findAll({
       where: whereClause,
       order: orderClause
+    });
+
+    contacts = contacts.map(c => {
+      const json = c.toJSON();
+      if (json.status === 'NEW') json.status = 'New';
+      if (json.status === 'CONTACTED') json.status = 'Contacted';
+      if (json.status === 'RESOLVED') json.status = 'Resolved';
+      return json;
     });
 
     res.json({ success: true, data: contacts });
@@ -58,7 +66,13 @@ router.get('/:id', async (req, res) => {
       include: [{ model: ContactNote, as: 'ContactNotes' }]
     });
     if (!contact) return res.status(404).json({ success: false, error: 'Not found' });
-    res.json({ success: true, data: contact });
+    
+    const json = contact.toJSON();
+    if (json.status === 'NEW') json.status = 'New';
+    if (json.status === 'CONTACTED') json.status = 'Contacted';
+    if (json.status === 'RESOLVED') json.status = 'Resolved';
+
+    res.json({ success: true, data: json });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: 'Server error' });

@@ -41,9 +41,9 @@ router.get('/debug/analytics', async (req, res) => {
 router.post('/appointments', async (req, res) => {
   try {
     const { name, classType, phoneNumber, email, sourcePage, referralSlug } = req.body;
-    const appointment = await Appointment.create({
-      name, email, phoneNumber, classType, sourcePage, referralSlug, status: 'New'
-    });
+      const appointment = await Appointment.create({
+        name, email, phoneNumber, classType, sourcePage, referralSlug, status: 'NEW' // Uppercase for TiDB ENUM compatibility
+      });
     
     // Log conversion if referral exists
     if (referralSlug) {
@@ -89,7 +89,7 @@ router.post('/contacts', async (req, res) => {
       interest: interest || course || service || '', 
       message: message || '', 
       referralSlug,
-      status: 'New'
+      status: 'NEW' // Uppercase for TiDB ENUM compatibility
     });
 
     if (referralSlug) {

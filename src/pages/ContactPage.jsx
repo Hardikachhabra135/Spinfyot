@@ -215,7 +215,22 @@ export default function ContactPage() {
                         </div>
                       )}
                       <div>
-                        <button type="submit" disabled={isLoading} style={{ backgroundColor: isLoading ? '#9CA3AF' : '#1F3A5C', color: '#FFFFFF', fontSize: '16px', fontWeight: 600, padding: '16px 40px', borderRadius: '100px', border: 'none', cursor: isLoading ? 'not-allowed' : 'pointer', transition: 'all 0.3s ease', boxShadow: '0 8px 20px rgba(31, 58, 92, 0.15)' }} onMouseOver={(e) => { if(!isLoading) { e.currentTarget.style.backgroundColor = '#99B6F5'; e.currentTarget.style.color = '#1F3A5C'; e.currentTarget.style.transform = 'translateY(-2px)'; } }} onMouseOut={(e) => { if(!isLoading) { e.currentTarget.style.backgroundColor = '#1F3A5C'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.transform = 'translateY(0)'; } }}>
+                        <button 
+                          type="submit" 
+                          disabled={isLoading} 
+                          className="hover:bg-blue-800 transition-colors duration-300"
+                          style={{ 
+                            backgroundColor: isLoading ? '#9CA3AF' : '#1F3A5C', 
+                            color: '#FFFFFF', 
+                            fontSize: '16px', 
+                            fontWeight: 600, 
+                            padding: '16px 40px', 
+                            borderRadius: '100px', 
+                            border: 'none', 
+                            cursor: isLoading ? 'not-allowed' : 'pointer', 
+                            boxShadow: '0 8px 20px rgba(31, 58, 92, 0.15)' 
+                          }}
+                        >
                           {isLoading ? 'Sending...' : 'Send Message'}
                         </button>
                       </div>
