@@ -1,6 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const { Appointment, Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion } = require('../models');
+const { Contact, Question, Testimonial, Blog, EventLog, Referral, ReferralClick, ReferralConversion, Appointment, sequelize } = require('../models');
+
+// Temporary Debug SQL Route
+router.get('/debug/sql', async (req, res) => {
+  try {
+    const results = [];
+    try {
+      await sequelize.query("ALTER TABLE `contacts` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';");
+      results.push('contacts status altered successfully');
+    } catch (e) {
+      results.push(`contacts error: ${e.message}`);
+    }
+    try {
+      await sequelize.query("ALTER TABLE `appointments` MODIFY COLUMN `status` VARCHAR(255) DEFAULT 'New';");
+      results.push('appointments status altered successfully');
+    } catch (e) {
+      results.push(`appointments error: ${e.message}`);
+    }
+    res.json({ success: true, results });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 
 // DEBUG ROUTE
