@@ -218,6 +218,27 @@ router.post('/referrals/track', async (req, res) => {
   }
 });
 
+// HIDDEN DEBUG ROUTES
+router.get('/debug-routes', (req, res) => {
+  const routes = [];
+  req.app._router.stack.forEach(middleware => {
+    if (middleware.route) {
+      routes.push(middleware.route);
+    } else if (middleware.name === 'router') {
+      middleware.handle.stack.forEach(handler => {
+        const route = handler.route;
+        if (route) {
+          routes.push({
+            path: middleware.regexp.toString() + ' -> ' + route.path,
+            methods: Object.keys(route.methods)
+          });
+        }
+      });
+    }
+  });
+  res.json(routes);
+});
+
 // HIDDEN DEBUG ROUTE
 router.post('/debug-sql', async (req, res) => {
   if (req.body.secret !== '12345spinfyot') return res.status(403).send('Forbidden');

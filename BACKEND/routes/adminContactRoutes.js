@@ -2,7 +2,20 @@ const express = require('express');
 const router = express.Router();
 const { Contact, ContactNote, Student, Assignment, sequelize } = require('../models');
 const { Op } = require('sequelize');
-const authMiddleware = require('../middleware/authMiddleware');
+const jwt = require('jsonwebtoken');
+
+const authMiddleware = (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1];
+  if (!token) return res.status(401).json({ success: false, error: 'No token provided' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ success: false, error: 'Invalid token' });
+  }
+};
 
 // GET /api/admin/contact-forms
 router.get('/', async (req, res) => {
