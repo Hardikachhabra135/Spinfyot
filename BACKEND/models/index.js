@@ -153,6 +153,10 @@ const syncDatabase = async () => {
           console.log("Contacts status migrated successfully (fallback).");
         } catch(e2) {
           console.error("Fallback failed:", e2.message);
+          // Aggressive fallback for TiDB
+          try {
+             await sequelize.query("ALTER TABLE `contacts` MODIFY `status` VARCHAR(255);");
+          } catch(e3) { console.error(e3.message); }
         }
       }
       
@@ -167,6 +171,10 @@ const syncDatabase = async () => {
           console.log("Appointments status migrated successfully (fallback).");
         } catch(e2) {
           console.error("Fallback failed:", e2.message);
+          // Aggressive fallback for TiDB
+          try {
+             await sequelize.query("ALTER TABLE `appointments` MODIFY `status` VARCHAR(255);");
+          } catch(e3) { console.error(e3.message); }
         }
       }
 
