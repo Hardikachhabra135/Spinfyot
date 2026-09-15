@@ -191,4 +191,15 @@ router.post('/:id/archive', async (req, res) => {
   }
 });
 
+// DELETE /api/admin/contacts/:id
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const deletedCount = await Contact.destroy({ where: { id: req.params.id } });
+    if (deletedCount === 0) return res.status(404).json({ success: false, error: 'Contact not found' });
+    res.json({ success: true, message: 'Contact deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to delete contact' });
+  }
+});
+
 module.exports = router;

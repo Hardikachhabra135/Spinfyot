@@ -646,6 +646,31 @@ router.delete('/referrals/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// PUT /api/admin/appointments/:id/status
+router.put('/appointments/:id/status', authMiddleware, async (req, res) => {
+  try {
+    const appointment = await Appointment.findByPk(req.params.id);
+    if (!appointment) return res.status(404).json({ success: false, error: 'Appointment not found' });
+    appointment.status = req.body.status;
+    await appointment.save();
+    res.json({ success: true, data: appointment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+});
+
+// DELETE /api/admin/appointments/:id
+router.delete('/appointments/:id', authMiddleware, async (req, res) => {
+  try {
+    const deletedCount = await Appointment.destroy({ where: { id: req.params.id } });
+    if (deletedCount === 0) return res.status(404).json({ success: false, error: 'Appointment not found' });
+    res.json({ success: true, message: 'Appointment deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Failed to delete appointment' });
+  }
+});
+
 
 router.put('/appointments/:id/assign', authMiddleware, async (req, res) => {
   try {
