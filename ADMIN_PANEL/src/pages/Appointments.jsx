@@ -145,14 +145,14 @@ export default function Appointments() {
                 <th className="p-4 font-semibold whitespace-nowrap">Source Page</th>
                 <th className="p-4 font-semibold whitespace-nowrap">Date Submitted</th>
                 <th className="p-4 font-semibold whitespace-nowrap">Status</th>
-                <th className="p-4 font-semibold whitespace-nowrap text-right">Actions</th>
+                <th className="p-4 font-semibold whitespace-nowrap text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="7" className="p-8 text-center text-slate-500">Loading...</td></tr>
+                <tr><td colSpan="8" className="p-8 text-center text-slate-500">Loading...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan="7" className="p-8 text-center text-slate-500">No appointments found.</td></tr>
+                <tr><td colSpan="8" className="p-8 text-center text-slate-500">No appointments found.</td></tr>
               ) : (
                 filtered.map(app => (
                   <tr key={app.id} className="border-b border-slate-100 hover:bg-slate-50/50">
@@ -178,7 +178,7 @@ export default function Appointments() {
                         <option value="Resolved">Resolved</option>
                       </select>
                     </td>
-                    <td className="p-4 whitespace-nowrap text-right">
+                    <td className="p-4 whitespace-nowrap text-center">
                       <button onClick={(e) => { e.stopPropagation(); initiateDelete(app.id, app._recordType || 'appointment'); }} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
                         <Trash2 size={18} />
                       </button>

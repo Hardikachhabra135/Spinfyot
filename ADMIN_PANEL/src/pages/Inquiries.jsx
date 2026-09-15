@@ -163,7 +163,7 @@ export default function Inquiries() {
                 <th className="p-4 font-semibold min-w-[150px]">Service</th>
                 <th className="p-4 font-semibold whitespace-nowrap">Date/Time</th>
                 <th className="p-4 font-semibold whitespace-nowrap">Status</th>
-                <th className="p-4 font-semibold whitespace-nowrap text-right">Actions</th>
+                <th className="p-4 font-semibold whitespace-nowrap text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -220,7 +220,7 @@ export default function Inquiries() {
                         <option value="Resolved">Resolved</option>
                       </select>
                     </td>
-                    <td className="p-4 whitespace-nowrap text-right">
+                    <td className="p-4 whitespace-nowrap text-center">
                       <button onClick={(e) => { e.stopPropagation(); initiateDelete(item.id); }} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
                         <Trash2 size={18} />
                       </button>
