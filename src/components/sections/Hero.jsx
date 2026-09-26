@@ -441,31 +441,16 @@ export default function Hero({ onBookCounselling }) {
 
       </div>
 
-      {/* Bottom Blend */}
-      <div className="absolute bottom-0 w-full pt-32 pb-12 px-6 z-20 flex justify-center bg-gradient-to-t from-[#000000] via-[#000000]/80 to-transparent pointer-events-none">
+      {/* Bottom Tagline */}
+      <div className="relative md:absolute bottom-0 w-full pt-12 md:pt-32 pb-8 md:pb-12 px-6 z-20 flex justify-center bg-transparent md:bg-gradient-to-t md:from-[#000000] md:via-[#000000]/80 md:to-transparent pointer-events-none mt-8 md:mt-0">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px 0px -10% 0px' }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center justify-center gap-3"
+          className="flex flex-col items-center justify-center gap-3 w-full"
         >
-          <p className="font-body text-[#8A9EBD] text-center text-[11px] md:text-[13px] font-medium tracking-[0.3em] uppercase max-w-[800px] leading-relaxed">
-            We help students get into <span className="text-white font-bold">top universities abroad</span><br className="hidden md:block" /> from shortlisting to visa
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Bottom Blend */}
-      <div className="absolute bottom-0 w-full pt-32 pb-12 px-6 z-20 flex justify-center bg-gradient-to-t from-[#000000] via-[#000000]/80 to-transparent pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center justify-center gap-3"
-        >
-          <p className="font-body text-[#8A9EBD] text-center text-[11px] md:text-[13px] font-medium tracking-[0.3em] uppercase max-w-[800px] leading-relaxed">
+          <p className="font-body text-[#8A9EBD] text-center text-[11px] md:text-[13px] font-medium tracking-[0.3em] uppercase max-w-[800px] leading-relaxed w-full">
             We help students get into <span className="text-white font-bold">top universities abroad</span><br className="hidden md:block" /> from shortlisting to visa
           </p>
         </motion.div>

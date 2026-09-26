@@ -8,6 +8,7 @@ import Services from '../components/sections/Services';
 import AboutUs from '../components/sections/AboutUs';
 import Testimonials from '../components/sections/Testimonials';
 import CounsellingModal from '../components/ui/CounsellingModal';
+import UniversityMarquee from '../components/sections/UniversityMarquee';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,6 +83,7 @@ export default function Home() {
 
       <main id="main-content" className="flex-grow relative z-10">
         <Hero onBookCounselling={openModal} />
+        <UniversityMarquee />
         <Services isHome={true} />
         <AboutUs />
         <Testimonials />
