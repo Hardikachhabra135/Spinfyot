@@ -103,8 +103,27 @@ function BlogFlashCard({ blog, onClose }) {
     document.body.style.overflow = 'hidden';
     const handler = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', handler); };
-  }, [onClose]);
+
+    // Dynamic SEO for modal (Title, Description, Canonical)
+    const prevTitle = document.title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const prevDesc = metaDesc ? metaDesc.getAttribute('content') : '';
+    const linkCanonical = document.querySelector('link[rel="canonical"]');
+    const prevCanonical = linkCanonical ? linkCanonical.getAttribute('href') : '';
+
+    if (blog.title) document.title = `${blog.title} | Spinfyot Blog`;
+    if (metaDesc && blog.excerpt) metaDesc.setAttribute('content', blog.excerpt);
+    if (linkCanonical) linkCanonical.setAttribute('href', `https://spinfyot.com/blog`);
+
+    return () => { 
+      document.body.style.overflow = ''; 
+      window.removeEventListener('keydown', handler); 
+      // Restore previous SEO
+      document.title = prevTitle;
+      if (metaDesc) metaDesc.setAttribute('content', prevDesc);
+      if (linkCanonical) linkCanonical.setAttribute('href', prevCanonical);
+    };
+  }, [onClose, blog]);
 
   return (
     <AnimatePresence>
