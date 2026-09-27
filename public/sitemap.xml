@@ -2,27 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://spinfyot.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://spinfyot.com/services</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://spinfyot.com/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://spinfyot.com/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://spinfyot.com/testimonials</loc>
   </url>
   <url>
     <loc>https://spinfyot.com/contact</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/blog</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/career-counselling</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/university-selection</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/visa-assistance</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/pre-departure-support</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/post-arrival-support</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/work-visa-assistance</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/spouse-services</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/appeals-legal-support</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/accommodation-assistance</loc>
+  </url>
+  <url>
+    <loc>https://spinfyot.com/services/ielts</loc>
   </url>
 </urlset>
