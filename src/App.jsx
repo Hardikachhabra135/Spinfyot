@@ -11,6 +11,7 @@ import { trackEvent } from './utils/analytics.js';
 const ServiceDetail = lazy(() => import('./pages/services/ServiceDetail.jsx'));
 const ContactPage = lazy(() => import('./pages/ContactPage.jsx'));
 const BlogPage = lazy(() => import('./pages/BlogPage.jsx'));
+const BlogDetail = lazy(() => import('./pages/BlogDetail.jsx'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
 const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage.jsx'));
 
@@ -126,6 +127,7 @@ function App() {
             <Route path="/testimonials" element={<PageTransition><TestimonialsPage /></PageTransition>} />
             <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
             <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+            <Route path="/blog/:slug" element={<PageTransition><BlogDetail /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </Suspense>
