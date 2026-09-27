@@ -535,11 +535,13 @@ router.get('/analytics', authMiddleware, async (req, res) => {
       const topPages = Object.entries(pagesMap).map(([page, count]) => ({ page, count })).sort((a, b) => b.count - a.count).slice(0, 5);
       const topInteractions = Object.entries(interactionsMap).map(([action, count]) => ({ action, count })).sort((a, b) => b.count - a.count).slice(0, 5);
   
-      // Leads & Appointments Generated in this period - True Source of Truth
-      const contactsCreated = await Contact.count({ where: whereClause });
+      // Leads & Appointments Generated - True Source of Truth based on live DB records
+      const totalContacts = await Contact.count();
+      const totalAppointments = await Appointment.count();
+      const leadsGenerated = totalContacts + totalAppointments;
+      
+      // Need this for funnel still
       const appointmentsCreated = await Appointment.count({ where: whereClause });
-      const questionsCreated = await Question.count({ where: whereClause });
-      const leadsGenerated = contactsCreated + appointmentsCreated + questionsCreated;
 
     res.json({
       success: true,
