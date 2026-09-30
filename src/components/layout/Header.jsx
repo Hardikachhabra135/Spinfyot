@@ -57,41 +57,43 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '12px clamp(16px, 4vw, 32px)',
+    padding: '8px clamp(12px, 3vw, 32px)',
   },
   innerLanding: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '16px clamp(16px, 5vw, 48px)',
+    padding: '12px clamp(12px, 3vw, 48px)',
   },
   logoScrolled: {
-    height: '40px',
+    height: 'clamp(32px, 4vw, 40px)',
     width: 'auto',
     objectFit: 'contain',
     mixBlendMode: 'multiply',
     display: 'block',
     transition: 'all 0.4s',
-    transform: 'scale(1.2)',
+    transform: 'scale(1.1)',
+    transformOrigin: 'left center',
   },
   logoLanding: {
-    height: '56px',
+    height: 'clamp(40px, 5vw, 56px)',
     width: 'auto',
     objectFit: 'contain',
     mixBlendMode: 'multiply',
     display: 'block',
     transition: 'all 0.4s',
-    transform: 'scale(1.2)',
+    transform: 'scale(1.1)',
+    transformOrigin: 'left center',
   },
   logoWrap: {
     display: 'flex',
     alignItems: 'center',
     flexShrink: 0,
-    width: 'clamp(120px, 35vw, 200px)',
+    width: 'auto',
   },
   nav: {
     alignItems: 'center',
-    gap: '40px',
+    gap: 'clamp(16px, 2.5vw, 40px)',
     flex: 1,
     justifyContent: 'center',
   },
@@ -170,7 +172,7 @@ export default function Header({ onInquireClick }) {
                     position: 'relative',
                     color: isActive ? '#1F3A5C' : '#111827',
                     fontWeight: isActive ? 700 : 600,
-                    fontSize: '18px',
+                    fontSize: 'clamp(14px, 1.5vw, 18px)',
                     fontFamily: 'Poppins, Inter, sans-serif',
                     textDecoration: 'none',
                     whiteSpace: 'nowrap',
@@ -226,6 +228,10 @@ export default function Header({ onInquireClick }) {
           <div className="hidden md:flex justify-end shrink-0">
             <button
               className="bubbles"
+              style={{
+                padding: 'clamp(8px, 1vw, 12px) clamp(16px, 2vw, 32px)',
+                fontSize: 'clamp(13px, 1.2vw, 16px)'
+              }}
               onClick={() => {
                 trackEvent('cta_click', location.pathname, { button: 'Inquire Header Desktop' });
                 if (onInquireClick) onInquireClick();

@@ -551,3 +551,9 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+@media (max-width: 767px) {
+  .airplane-element {
+    display: none !important;
+  }
+}

@@ -190,10 +190,10 @@ export default function Hero({ onBookCounselling }) {
       ── */}
       {!prefersReducedMotion && (
         <motion.div
-          className="absolute z-30 pointer-events-none"
+          className="airplane-element absolute z-30 pointer-events-none hidden md:block"
           style={{
-            top: '13%',
-            left: '6%',
+            top: 'clamp(100px, 15vh, 150px)',
+            left: 'clamp(10px, 4vw, 60px)',
             animation: 'airplaneFly 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards',
             willChange: 'transform',
           }}
@@ -283,7 +283,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Left Content: Headline & CTA ──────────────────────────────── */}
           <motion.div
-            className="relative z-30 w-full md:w-[65%] lg:w-[70%] flex flex-col items-start text-left"
+            className="relative z-30 w-full md:w-[60%] lg:w-[65%] xl:w-[70%] flex flex-col items-start text-left"
             style={{ y: isMobile ? 0 : textY, opacity: textOpacity }}
             variants={containerVariants}
             initial="hidden"
@@ -313,7 +313,7 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-[clamp(2.2rem,8.5vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
+            <h1 className="font-display text-[clamp(2.45rem,9.5vw,3.5rem)] md:text-[clamp(2.2rem,8.5vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
               <span className="block text-[#F8F9FA]">
                 <FoldText
                   text="Your Journey Abroad"
@@ -382,7 +382,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Right Content: Traveler ───────────────────────────────────── */}
           <motion.div
-            className="relative w-full mt-12 md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-[45%] h-auto md:h-full flex flex-col items-center justify-end md:justify-end z-20 pointer-events-none"
+            className="relative w-full mt-12 md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-[40%] lg:w-[45%] h-auto md:h-full flex flex-col items-center justify-end md:justify-end z-20 pointer-events-none"
             style={{ y: isMobile ? 0 : travelerY }}
             variants={travelerVariant}
             initial="hidden"
@@ -407,11 +407,11 @@ export default function Hero({ onBookCounselling }) {
               variants={ctaVariant}
               initial="hidden"
               animate="visible"
-              className="flex md:hidden relative w-full justify-center mt-8 pb-4 pointer-events-auto"
+              className="flex md:hidden relative w-full justify-center mt-14 pb-4 pointer-events-auto"
             >
               <div className="flex flex-col items-center">
                 <SpecularButton
-                  size="lg"
+                  size="md"
                   radius={18}
                   tint="#64A0FF"
                   tintOpacity={0.15}
@@ -428,7 +428,7 @@ export default function Hero({ onBookCounselling }) {
                   proximity={250}
                   autoAnimate={false}
                   onClick={handleBookCounselling}
-                  className="w-[280px] max-w-[90vw] shadow-2xl"
+                  className="w-[250px] max-w-[90vw] shadow-2xl"
                 >
                   BOOK FREE COUNSELING
                 </SpecularButton>
