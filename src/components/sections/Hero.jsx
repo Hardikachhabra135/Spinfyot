@@ -283,7 +283,7 @@ export default function Hero({ onBookCounselling }) {
 
           {/* ── Left Content: Headline & CTA ──────────────────────────────── */}
           <motion.div
-            className="relative z-30 w-full md:w-[60%] lg:w-[65%] xl:w-[70%] flex flex-col items-start text-left"
+            className="relative z-30 w-full md:w-[65%] lg:w-[70%] xl:w-[75%] flex flex-col items-start text-left"
             style={{ y: isMobile ? 0 : textY, opacity: textOpacity }}
             variants={containerVariants}
             initial="hidden"
@@ -313,8 +313,8 @@ export default function Hero({ onBookCounselling }) {
               </span>
             </motion.div>
 
-            <h1 className="font-display text-[clamp(2.45rem,9.5vw,3.5rem)] md:text-[clamp(2.2rem,8.5vw,5.5rem)] lg:text-[7rem] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0">
-              <span className="block text-[#F8F9FA]">
+            <h1 className="font-display text-[clamp(2.45rem,9.5vw,3.5rem)] md:text-[clamp(2.2rem,8.5vw,5.5rem)] lg:text-[clamp(5.5rem,8vw,7rem)] leading-[1.05] drop-shadow-lg flex flex-col gap-1 md:gap-2 mb-0 -ml-2 md:-ml-3">
+              <span className="block text-[#F8F9FA] pl-2 pr-6 md:pl-3 md:pr-8">
                 <FoldText
                   text="Your Journey Abroad"
                   splitBy="word"
@@ -328,9 +328,10 @@ export default function Hero({ onBookCounselling }) {
                   fontSize="inherit"
                   fontWeight="inherit"
                   color="inherit"
+                  style={{ letterSpacing: '-0.01em' }}
                 />
               </span>
-              <span className="block text-[#99B6F5]">
+              <span className="block text-[#99B6F5] pl-2 pr-6 md:pl-3 md:pr-8">
                 <FoldText
                   text="Begins Here!"
                   splitBy="word"
@@ -344,6 +345,7 @@ export default function Hero({ onBookCounselling }) {
                   fontSize="inherit"
                   fontWeight="inherit"
                   color="inherit"
+                  style={{ letterSpacing: '-0.01em' }}
                 />
               </span>
             </h1>
